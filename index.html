@@ -1,41 +1,203 @@
 <!DOCTYPE html>
-<html>
+<html lang="fa">
 <head>
-    <title>Trading Backtester</title>
-    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
-    <style>
-        body { margin: 0; padding: 20px; font-family: sans-serif; }
-        #chart { width: 100%; height: 500px; border: 1px solid #ccc; }
-        .controls { margin-top: 10px; }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TradingView Test UI</title>
+
+<!-- سبک‌ها -->
+<style>
+    body {
+        margin: 0;
+        background: #020617;
+        font-family: sans-serif;
+        color: white;
+        direction: rtl;
+    }
+
+    /* نوار شفاف */
+    .topbar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 50px;
+        transition: 0.3s;
+    }
+
+    .topbar.hover {
+        backdrop-filter: blur(20px);
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .gradient-line {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(to right, white, #38bdf8, #d946ef);
+        opacity: 0;
+        transition: 0.3s;
+    }
+
+    .topbar.hover .gradient-line {
+        opacity: 1;
+    }
+
+    /* دکمهٔ جستجو */
+    .search-btn {
+        display: none;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 6px 12px;
+        border-radius: 20px;
+        cursor: pointer;
+        margin: 10px;
+        font-size: 14px;
+        transition: 0.2s;
+    }
+
+    .search-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .topbar.hover .search-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    /* چارت */
+    #chart {
+        position: absolute;
+        top: 50px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #050816;
+    }
+
+    /* پاپ‌آپ */
+    .popup-bg {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        display: none;
+    }
+
+    .popup {
+        width: 350px;
+        background: #020617;
+        border: 1px solid #1f2937;
+        border-radius: 12px;
+        margin: 100px auto;
+        padding: 10px;
+        animation: slideDown 0.25s ease-out;
+    }
+
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .symbol-item {
+        padding: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        border-radius: 6px;
+    }
+
+    .symbol-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+</style>
 </head>
+
 <body>
-    <h2>ابزار بکتست ساده</h2>
-    <input type="file" id="csvFile" accept=".csv" />
-    <div id="chart"></div>
-    <div class="controls">
-        <button onclick="startReplay()">شروع پخش</button>
+
+<!-- نوار بالا -->
+<div class="topbar" id="topbar">
+    <div class="gradient-line"></div>
+    <div class="search-btn" id="openPopup">🔍 نمادها</div>
+</div>
+
+<!-- چارت -->
+<div id="chart"></div>
+
+<!-- پاپ‌آپ -->
+<div class="popup-bg" id="popupBg">
+    <div class="popup">
+        <input id="searchInput" type="text" placeholder="جستجوی نماد..." 
+               style="width:100%; padding:8px; border-radius:6px; background:#030712; color:white; border:1px solid #1f2937;">
+
+        <div id="symbolList" style="max-height:250px; overflow-y:auto; margin-top:10px;"></div>
     </div>
+</div>
 
-    <script>
-        const chart = LightweightCharts.createChart(document.getElementById('chart'), { width: 800, height: 500 });
-        const candleSeries = chart.addCandlestickSeries();
+<!-- TradingView Lightweight -->
+<script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
 
-        document.getElementById('csvFile').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const text = event.target.result;
-                console.log("فایل لود شد، آماده پردازش...");
-                // اینجا کدهای پردازش CSV شما قرار می‌گیرد
-                alert("فایل لود شد!");
-            };
-            reader.readAsText(file);
+<script>
+    const topbar = document.getElementById("topbar");
+    const popupBg = document.getElementById("popupBg");
+    const openPopup = document.getElementById("openPopup");
+    const symbolList = document.getElementById("symbolList");
+    const searchInput = document.getElementById("searchInput");
+
+    const symbols = [
+        { code: "EURUSD", base: "🇪🇺", quote: "🇺🇸", desc: "Euro vs US Dollar", cat: "Major" },
+        { code: "GBPJPY", base: "🇬🇧", quote: "🇯🇵", desc: "British Pound vs Japanese Yen", cat: "Minor" },
+        { code: "USDCHF", base: "🇺🇸", quote: "🇨🇭", desc: "US Dollar vs Swiss Franc", cat: "Major" },
+        { code: "AUDCAD", base: "🇦🇺", quote: "🇨🇦", desc: "Australian Dollar vs Canadian Dollar", cat: "Cross" },
+    ];
+
+    /* Hover نوار */
+    topbar.addEventListener("mouseenter", () => topbar.classList.add("hover"));
+    topbar.addEventListener("mouseleave", () => topbar.classList.remove("hover"));
+
+    /* پاپ‌آپ */
+    openPopup.onclick = () => popupBg.style.display = "block";
+    popupBg.onclick = (e) => { if (e.target === popupBg) popupBg.style.display = "none"; };
+
+    /* لیست نمادها */
+    function renderSymbols(filter = "") {
+        symbolList.innerHTML = "";
+        symbols
+            .filter(s => s.code.toLowerCase().includes(filter.toLowerCase()))
+            .forEach(s => {
+                const item = document.createElement("div");
+                item.className = "symbol-item";
+                item.innerText = `${s.base} ${s.code} ${s.quote} — ${s.desc} (${s.cat})`;
+                item.onclick = () => {
+                    popupBg.style.display = "none";
+                    loadChart();
+                };
+                symbolList.appendChild(item);
+            });
+    }
+
+    searchInput.oninput = () => renderSymbols(searchInput.value);
+    renderSymbols();
+
+    /* چارت */
+    function loadChart() {
+        const chart = LightweightCharts.createChart(document.getElementById("chart"), {
+            layout: { background: { color: "#050816" }, textColor: "white" },
+            width: window.innerWidth,
+            height: window.innerHeight - 50,
         });
 
-        function startReplay() {
-            alert("قابلیت پخش به زودی فعال می‌شود");
-        }
-    </script>
+        const series = chart.addCandlestickSeries();
+        series.setData([
+            { time: 1, open: 1.1, high: 1.2, low: 1.0, close: 1.15 },
+            { time: 2, open: 1.15, high: 1.25, low: 1.1, close: 1.2 },
+            { time: 3, open: 1.2, high: 1.3, low: 1.15, close: 1.28 },
+            { time: 4, open: 1.28, high: 1.32, low: 1.2, close: 1.22 },
+        ]);
+    }
+
+    loadChart();
+</script>
+
 </body>
 </html>

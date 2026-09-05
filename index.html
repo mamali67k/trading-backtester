@@ -24,7 +24,9 @@
   --border:#293443;
   --text:#e8edf4;
   --muted:#8793a3;
+
   --accent:#2962ff;
+
   --green:#16a34a;
   --red:#dc2626;
   --yellow:#f59e0b;
@@ -39,9 +41,12 @@ html,
 body {
 
   margin:0;
+
   width:100%;
   height:100%;
+
   background:var(--bg);
+
   color:var(--text);
 
   font-family:
@@ -71,6 +76,14 @@ button {
 
 }
 
+button:disabled {
+
+  cursor:not-allowed;
+
+  opacity:.55;
+
+}
+
 .app {
 
   width:100vw;
@@ -84,12 +97,16 @@ button {
 }
 
 
-/* HEADER */
+/* =========================================================
+   HEADER
+========================================================= */
 
 .header {
 
   display:flex;
+
   align-items:center;
+
   justify-content:space-between;
 
   padding:
@@ -105,7 +122,9 @@ button {
 .logo {
 
   display:flex;
+
   align-items:center;
+
   gap:10px;
 
 }
@@ -116,6 +135,7 @@ button {
   height:32px;
 
   display:grid;
+
   place-items:center;
 
   border-radius:7px;
@@ -130,6 +150,7 @@ button {
 .logo-title {
 
   font-size:14px;
+
   font-weight:700;
 
 }
@@ -137,6 +158,7 @@ button {
 .logo-sub {
 
   color:var(--muted);
+
   font-size:10px;
 
 }
@@ -144,7 +166,9 @@ button {
 .status {
 
   display:flex;
+
   align-items:center;
+
   gap:7px;
 
   color:var(--muted);
@@ -166,7 +190,9 @@ button {
 }
 
 
-/* MAIN */
+/* =========================================================
+   MAIN
+========================================================= */
 
 .main {
 
@@ -180,7 +206,9 @@ button {
 }
 
 
-/* SIDEBAR */
+/* =========================================================
+   SIDEBAR
+========================================================= */
 
 .sidebar {
 
@@ -207,6 +235,7 @@ button {
   color:var(--muted);
 
   font-size:10px;
+
   font-weight:700;
 
   text-transform:uppercase;
@@ -218,7 +247,9 @@ button {
 }
 
 
-/* DATA */
+/* =========================================================
+   DATA
+========================================================= */
 
 .data-tabs {
 
@@ -237,7 +268,8 @@ button {
 
   padding:8px;
 
-  border:1px solid var(--border);
+  border:
+    1px solid var(--border);
 
   background:
     var(--panel2);
@@ -330,6 +362,12 @@ input[type=file] {
 
 }
 
+.primary.loading {
+
+  opacity:.7;
+
+}
+
 .status-box {
 
   margin-top:8px;
@@ -362,7 +400,9 @@ input[type=file] {
 }
 
 
-/* TOOLS */
+/* =========================================================
+   TOOLS
+========================================================= */
 
 .tools {
 
@@ -393,6 +433,15 @@ input[type=file] {
 
 }
 
+.tool:hover {
+
+  color:white;
+
+  border-color:
+    #526174;
+
+}
+
 .tool.active {
 
   color:white;
@@ -412,7 +461,9 @@ input[type=file] {
 }
 
 
-/* STATS */
+/* =========================================================
+   STATS
+========================================================= */
 
 .stats {
 
@@ -458,11 +509,14 @@ input[type=file] {
 }
 
 
-/* WORKSPACE */
+/* =========================================================
+   WORKSPACE
+========================================================= */
 
 .workspace {
 
   min-width:0;
+
   min-height:0;
 
   display:grid;
@@ -473,7 +527,9 @@ input[type=file] {
 }
 
 
-/* TOOLBAR */
+/* =========================================================
+   TOOLBAR
+========================================================= */
 
 .toolbar {
 
@@ -488,8 +544,7 @@ input[type=file] {
   border-bottom:
     1px solid var(--border);
 
-  background:
-    #0c1118;
+  background:#0c1118;
 
 }
 
@@ -509,6 +564,13 @@ input[type=file] {
   color:var(--text);
 
   font-size:10px;
+
+}
+
+.toolbar button:hover {
+
+  border-color:
+    #526174;
 
 }
 
@@ -545,13 +607,16 @@ input[type=file] {
 }
 
 
-/* CHART */
+/* =========================================================
+   CHART
+========================================================= */
 
 .chart-area {
 
   position:relative;
 
   min-width:0;
+
   min-height:0;
 
   background:
@@ -578,6 +643,8 @@ input[type=file] {
 
   pointer-events:none;
 
+  z-index:10;
+
 }
 
 .chart-message {
@@ -596,10 +663,47 @@ input[type=file] {
 
   pointer-events:none;
 
+  z-index:20;
+
+}
+
+.chart-loading {
+
+  position:absolute;
+
+  top:12px;
+
+  left:50%;
+
+  transform:
+    translateX(-50%);
+
+  z-index:30;
+
+  padding:
+    6px 10px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:6px;
+
+  background:
+    rgba(8,12,17,.92);
+
+  color:
+    #aeb9c8;
+
+  font-size:10px;
+
+  display:none;
+
 }
 
 
-/* BOTTOM */
+/* =========================================================
+   BOTTOM
+========================================================= */
 
 .bottom {
 
@@ -648,12 +752,16 @@ input[type=file] {
 }
 
 
-/* MOBILE */
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media(max-width:850px) {
 
   body {
+
     overflow:auto;
+
   }
 
   .main {
@@ -734,7 +842,9 @@ input[type=file] {
 <aside class="sidebar">
 
 
-<!-- DATA -->
+<!-- =====================================================
+     MARKET DATA
+===================================================== -->
 
 <section class="section">
 
@@ -820,7 +930,7 @@ Data Date End
 <div class="field">
 
 <label>
-Base candles
+Candles
 </label>
 
 <select id="outputsize">
@@ -857,7 +967,7 @@ Load Market Data
   id="dataStatus"
   class="status-box"
 >
-One download creates all local timeframes.
+Select a pair and load the initial timeframe.
 </div>
 
 </div>
@@ -887,7 +997,9 @@ CSV remains local.
 </section>
 
 
-<!-- TIMEFRAME -->
+<!-- =====================================================
+     TIMEFRAME
+===================================================== -->
 
 <section class="section">
 
@@ -952,7 +1064,9 @@ Timeframe
 </section>
 
 
-<!-- DRAWING -->
+<!-- =====================================================
+     DRAWING
+===================================================== -->
 
 <section class="section">
 
@@ -1052,7 +1166,9 @@ Clear All
 </section>
 
 
-<!-- STATS -->
+<!-- =====================================================
+     BACKTEST
+===================================================== -->
 
 <section class="section">
 
@@ -1136,6 +1252,10 @@ P&L
 
 <section class="workspace">
 
+
+<!-- =====================================================
+     TOOLBAR
+===================================================== -->
 
 <div class="toolbar">
 
@@ -1225,6 +1345,10 @@ CLOSE
 </div>
 
 
+<!-- =====================================================
+     CHART AREA
+===================================================== -->
+
 <div
   id="chartArea"
   class="chart-area"
@@ -1237,6 +1361,13 @@ CLOSE
 ></canvas>
 
 <div
+  id="chartLoading"
+  class="chart-loading"
+>
+Loading timeframe...
+</div>
+
+<div
   id="chartMessage"
   class="chart-message"
 >
@@ -1245,6 +1376,10 @@ Load market data to begin.
 
 </div>
 
+
+<!-- =====================================================
+     BOTTOM
+===================================================== -->
 
 <div class="bottom">
 
@@ -1279,48 +1414,93 @@ No data
 "use strict";
 
 
-/*
-|--------------------------------------------------------------------------
-| STATE
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   STATE
+========================================================= */
 
 const state = {
 
-  rawCandles: [],
+  pair:
+    "EUR/USD",
 
-  candles: [],
+  timeframe:
+    1,
 
-  timeframe: 1,
+  candles:
+    [],
 
-  currentIndex: -1,
+  currentIndex:
+    -1,
 
-  position: null,
+  position:
+    null,
 
-  trades: [],
+  trades:
+    [],
 
-  pnl: 0,
+  pnl:
+    0,
 
-  playing: false,
+  playing:
+    false,
 
-  timer: null,
+  timer:
+    null,
 
-  drawingTool: "cursor",
+  drawingTool:
+    "cursor",
 
-  drawings: [],
+  drawings:
+    [],
 
-  drawingStart: null,
+  drawingStart:
+    null,
 
-  drawingPreview: null
+  drawingPreview:
+    null,
+
+  requestId:
+    0,
+
+  loading:
+    false
 
 };
 
 
-/*
-|--------------------------------------------------------------------------
-| DOM
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   TIMEFRAME MAP
+========================================================= */
+
+const TIMEFRAME_MAP = {
+
+  1:
+    "1min",
+
+  5:
+    "5min",
+
+  15:
+    "15min",
+
+  30:
+    "30min",
+
+  60:
+    "1h",
+
+  240:
+    "4h",
+
+  1440:
+    "1day"
+
+};
+
+
+/* =========================================================
+   DOM
+========================================================= */
 
 const chartArea =
   document.getElementById(
@@ -1338,19 +1518,34 @@ const canvas =
   );
 
 const ctx =
-  canvas.getContext("2d");
+  canvas.getContext(
+    "2d"
+  );
 
 const message =
   document.getElementById(
     "chartMessage"
   );
 
+const chartLoading =
+  document.getElementById(
+    "chartLoading"
+  );
 
-/*
-|--------------------------------------------------------------------------
-| CHART
-|--------------------------------------------------------------------------
-*/
+const loadDataButton =
+  document.getElementById(
+    "loadData"
+  );
+
+const dataStatus =
+  document.getElementById(
+    "dataStatus"
+  );
+
+
+/* =========================================================
+   CHART
+========================================================= */
 
 const chart =
   LightweightCharts.createChart(
@@ -1363,7 +1558,8 @@ const chart =
           color:"#080c11"
         },
 
-        textColor:"#8995a5"
+        textColor:
+          "#8995a5"
 
       },
 
@@ -1400,9 +1596,40 @@ const chart =
         borderColor:
           "#293443",
 
-        timeVisible:true,
+        timeVisible:
+          true,
 
-        secondsVisible:false
+        secondsVisible:
+          false
+
+      },
+
+      handleScroll: {
+
+        mouseWheel:
+          true,
+
+        pressedMouseMove:
+          true,
+
+        horzTouchDrag:
+          true,
+
+        vertTouchDrag:
+          true
+
+      },
+
+      handleScale: {
+
+        axisPressedMouseMove:
+          true,
+
+        mouseWheel:
+          true,
+
+        pinch:
+          true
 
       }
 
@@ -1413,26 +1640,30 @@ const chart =
 const series =
   chart.addCandlestickSeries({
 
-    upColor:"#16a34a",
+    upColor:
+      "#16a34a",
 
-    downColor:"#dc2626",
+    downColor:
+      "#dc2626",
 
-    borderUpColor:"#16a34a",
+    borderUpColor:
+      "#16a34a",
 
-    borderDownColor:"#dc2626",
+    borderDownColor:
+      "#dc2626",
 
-    wickUpColor:"#16a34a",
+    wickUpColor:
+      "#16a34a",
 
-    wickDownColor:"#dc2626"
+    wickDownColor:
+      "#dc2626"
 
   });
 
 
-/*
-|--------------------------------------------------------------------------
-| RESIZE
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   RESIZE
+========================================================= */
 
 function resize() {
 
@@ -1441,34 +1672,46 @@ function resize() {
     chartElement.clientHeight
   );
 
+
+  const ratio =
+    window.devicePixelRatio ||
+    1;
+
+
   canvas.width =
     chartArea.clientWidth *
-    window.devicePixelRatio;
+    ratio;
+
 
   canvas.height =
     chartArea.clientHeight *
-    window.devicePixelRatio;
+    ratio;
+
 
   canvas.style.width =
     chartArea.clientWidth +
     "px";
 
+
   canvas.style.height =
     chartArea.clientHeight +
     "px";
 
+
   ctx.setTransform(
-    window.devicePixelRatio,
+    ratio,
     0,
     0,
-    window.devicePixelRatio,
+    ratio,
     0,
     0
   );
 
+
   redrawDrawings();
 
 }
+
 
 window.addEventListener(
   "resize",
@@ -1476,184 +1719,49 @@ window.addEventListener(
 );
 
 
-/*
-|--------------------------------------------------------------------------
-| DATA AGGREGATOR
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   CHART DATA
+========================================================= */
 
-function aggregateCandles(
-  source,
-  minutes
-) {
-
-  if (
-    minutes === 1
-  ) {
-
-    return source.map(
-      candle => ({
-        ...candle
-      })
-    );
-
-  }
-
-
-  const buckets =
-    new Map();
-
-
-  const seconds =
-    minutes * 60;
-
-
-  for (
-    const candle of source
-  ) {
-
-    const bucket =
-      Math.floor(
-        candle.time /
-        seconds
-      ) *
-      seconds;
-
-
-    let item =
-      buckets.get(
-        bucket
-      );
-
-
-    if (!item) {
-
-      item = {
-
-        time:bucket,
-
-        open:candle.open,
-
-        high:candle.high,
-
-        low:candle.low,
-
-        close:candle.close
-
-      };
-
-      buckets.set(
-        bucket,
-        item
-      );
-
-    } else {
-
-      item.high =
-        Math.max(
-          item.high,
-          candle.high
-        );
-
-      item.low =
-        Math.min(
-          item.low,
-          candle.low
-        );
-
-      item.close =
-        candle.close;
-
-    }
-
-  }
-
-
-  return Array.from(
-    buckets.values()
-  ).sort(
-    (a,b) =>
-      a.time - b.time
-  );
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| CHANGE TIMEFRAME
-|--------------------------------------------------------------------------
-*/
-
-function changeTimeframe(
-  minutes
-) {
-
-  state.timeframe =
-    Number(minutes);
-
+function resetBacktestState() {
 
   stopReplay();
-
-
-  /*
-   * IMPORTANT:
-   *
-   * NO API REQUEST.
-   *
-   * Everything happens locally.
-   */
-
-  state.candles =
-    aggregateCandles(
-      state.rawCandles,
-      state.timeframe
-    );
-
 
   state.currentIndex =
     state.candles.length
       ? 0
       : -1;
 
+  state.position =
+    null;
 
-  state.position = null;
+  state.trades =
+    [];
 
-  state.trades = [];
-
-  state.pnl = 0;
-
-
-  renderChart();
-
-
-  updateStats();
-
-  updateReplay();
-
-
-  updateTimeframeUI();
-
-
-  redrawDrawings();
+  state.pnl =
+    0;
 
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| RENDER CHART
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   RENDER
+========================================================= */
 
-function renderChart() {
+function renderChart(
+  fit = true
+) {
 
-  if (!state.candles.length) {
+  if (
+    !state.candles.length
+  ) {
 
     series.setData([]);
 
     message.style.display =
       "grid";
+
+    redrawDrawings();
 
     return;
 
@@ -1677,6 +1785,7 @@ function renderChart() {
 
 
   if (
+    fit &&
     visible.length
   ) {
 
@@ -1685,202 +1794,15 @@ function renderChart() {
 
   }
 
-}
 
-
-/*
-|--------------------------------------------------------------------------
-| LOAD SERVER DATA
-|--------------------------------------------------------------------------
-*/
-
-async function loadAutomatic() {
-
-  const status =
-    document.getElementById(
-      "dataStatus"
-    );
-
-
-  status.textContent =
-    "Downloading base 1-minute dataset...";
-
-
-  status.className =
-    "status-box";
-
-
-  const params =
-    new URLSearchParams();
-
-
-  params.set(
-    "pair",
-    document.getElementById(
-      "pair"
-    ).value
-  );
-
-
-  params.set(
-    "outputsize",
-    document.getElementById(
-      "outputsize"
-    ).value
-  );
-
-
-  const start =
-    document.getElementById(
-      "startDate"
-    ).value;
-
-
-  const end =
-    document.getElementById(
-      "endDate"
-    ).value;
-
-
-  if (start) {
-
-    params.set(
-      "startDate",
-      start
-    );
-
-  }
-
-
-  if (end) {
-
-    params.set(
-      "endDate",
-      end
-    );
-
-  }
-
-
-  try {
-
-    /*
-     * API request
-     *
-     * IMPORTANT:
-     * The API key remains on the server.
-     * The browser only calls our own backend.
-     */
-
-    const apiUrl =
-      `/api/fx/base-candles?${params.toString()}`;
-
-
-    console.log(
-      "REQUESTING:",
-      apiUrl
-    );
-
-
-    const response =
-      await fetch(
-        apiUrl,
-        {
-          method: "GET",
-          headers: {
-            "Accept": "application/json"
-          }
-        }
-      );
-
-
-    const data =
-      await response.json();
-
-
-    if (
-      !response.ok ||
-      !data.ok
-    ) {
-
-      throw new Error(
-        data.error ||
-        "Data request failed."
-      );
-
-    }
-
-
-    state.rawCandles =
-      data.candles;
-
-
-    /*
-     * Generate selected timeframe locally.
-     */
-
-    state.candles =
-      aggregateCandles(
-        state.rawCandles,
-        state.timeframe
-      );
-
-
-    state.currentIndex =
-      state.candles.length
-        ? 0
-        : -1;
-
-
-    state.position = null;
-
-    state.trades = [];
-
-    state.pnl = 0;
-
-
-    renderChart();
-
-    updateStats();
-
-    updateReplay();
-
-
-    status.textContent =
-      `${data.pair} • ${data.count.toLocaleString()} base 1m candles loaded. Timeframes now switch locally.`;
-
-    status.className =
-      "status-box ok";
-
-
-  } catch (error) {
-
-    console.error(error);
-
-    status.textContent =
-      error.message;
-
-    status.className =
-      "status-box error";
-
-  }
+  redrawDrawings();
 
 }
 
 
-document
-  .getElementById("loadData")
-  .addEventListener(
-    "click",
-    loadAutomatic
-  );
-
-
-/*
-|--------------------------------------------------------------------------
-| TIMEFRAME UI
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   UPDATE UI
+========================================================= */
 
 function updateTimeframeUI() {
 
@@ -1901,6 +1823,553 @@ function updateTimeframeUI() {
 
       }
     );
+
+}
+
+
+function updateStats() {
+
+  document.getElementById(
+    "candles"
+  ).textContent =
+    state.candles.length
+      .toLocaleString();
+
+
+  document.getElementById(
+    "position"
+  ).textContent =
+    state.position
+      ? state.position.side
+      : "FLAT";
+
+
+  document.getElementById(
+    "trades"
+  ).textContent =
+    state.trades.length;
+
+
+  document.getElementById(
+    "pnl"
+  ).textContent =
+    state.pnl.toFixed(5);
+
+}
+
+
+function updateReplay() {
+
+  if (
+    !state.candles.length
+  ) {
+
+    document.getElementById(
+      "replayInfo"
+    ).textContent =
+      "No data";
+
+    document.getElementById(
+      "progressFill"
+    ).style.width =
+      "0%";
+
+    return;
+
+  }
+
+
+  const candle =
+    state.candles[
+      state.currentIndex
+    ];
+
+
+  if (!candle) {
+    return;
+  }
+
+
+  const date =
+    new Date(
+      candle.time * 1000
+    );
+
+
+  document.getElementById(
+    "replayInfo"
+  ).textContent =
+    `${state.currentIndex + 1} / ${state.candles.length.toLocaleString()} • ${date.toLocaleString()} • ${state.pair} • ${formatTimeframe(state.timeframe)}`;
+
+
+  const percent =
+    state.candles.length > 1
+      ? (
+          state.currentIndex /
+          (state.candles.length - 1)
+        ) * 100
+      : 100;
+
+
+  document.getElementById(
+    "progressFill"
+  ).style.width =
+    `${percent}%`;
+
+}
+
+
+function formatTimeframe(
+  minutes
+) {
+
+  if (
+    minutes === 60
+  ) {
+    return "1H";
+  }
+
+  if (
+    minutes === 240
+  ) {
+    return "4H";
+  }
+
+  if (
+    minutes === 1440
+  ) {
+    return "1D";
+  }
+
+  return `${minutes}m`;
+
+}
+
+
+/* =========================================================
+   SERVER DATA REQUEST
+========================================================= */
+
+async function fetchTimeframeData(
+  timeframe,
+  options = {}
+) {
+
+  const {
+
+    pair =
+      document.getElementById(
+        "pair"
+      ).value,
+
+    outputsize =
+      document.getElementById(
+        "outputsize"
+      ).value,
+
+    startDate =
+      document.getElementById(
+        "startDate"
+      ).value,
+
+    endDate =
+      document.getElementById(
+        "endDate"
+      ).value
+
+  } = options;
+
+
+  const interval =
+    TIMEFRAME_MAP[
+      Number(timeframe)
+    ];
+
+
+  if (!interval) {
+
+    throw new Error(
+      "Unsupported timeframe."
+    );
+
+  }
+
+
+  const params =
+    new URLSearchParams();
+
+
+  params.set(
+    "pair",
+    pair
+  );
+
+
+  params.set(
+    "interval",
+    interval
+  );
+
+
+  params.set(
+    "outputsize",
+    outputsize
+  );
+
+
+  if (startDate) {
+
+    params.set(
+      "startDate",
+      startDate
+    );
+
+  }
+
+
+  if (endDate) {
+
+    params.set(
+      "endDate",
+      endDate
+    );
+
+  }
+
+
+  const apiUrl =
+    `/api/fx/base-candles?${params.toString()}`;
+
+
+  console.log(
+    "REQUESTING:",
+    apiUrl
+  );
+
+
+  const response =
+    await fetch(
+      apiUrl,
+      {
+
+        method:
+          "GET",
+
+        headers: {
+
+          "Accept":
+            "application/json"
+
+        }
+
+      }
+    );
+
+
+  let data;
+
+
+  try {
+
+    data =
+      await response.json();
+
+  } catch {
+
+    throw new Error(
+      `Server returned HTTP ${response.status}.`
+    );
+
+  }
+
+
+  if (
+    !response.ok ||
+    !data.ok
+  ) {
+
+    throw new Error(
+      data.error ||
+      "Data request failed."
+    );
+
+  }
+
+
+  if (
+    !Array.isArray(
+      data.candles
+    )
+  ) {
+
+    throw new Error(
+      "Server returned invalid candle data."
+    );
+
+  }
+
+
+  return {
+
+    pair:
+      data.pair ||
+      pair,
+
+    interval:
+      data.interval ||
+      interval,
+
+    count:
+      data.count ||
+      data.candles.length,
+
+    candles:
+      data.candles
+
+  };
+
+}
+
+
+/* =========================================================
+   LOAD AUTOMATIC DATA
+========================================================= */
+
+async function loadAutomatic(
+  timeframe = state.timeframe
+) {
+
+  if (
+    state.loading
+  ) {
+
+    return;
+
+  }
+
+
+  const requestId =
+    ++state.requestId;
+
+
+  state.loading =
+    true;
+
+
+  const previousTimeframe =
+    state.timeframe;
+
+
+  state.timeframe =
+    Number(timeframe);
+
+
+  state.pair =
+    document.getElementById(
+      "pair"
+    ).value;
+
+
+  updateTimeframeUI();
+
+
+  chartLoading.style.display =
+    "block";
+
+
+  chartLoading.textContent =
+    `Loading ${formatTimeframe(state.timeframe)} data...`;
+
+
+  dataStatus.textContent =
+    `Downloading ${formatTimeframe(state.timeframe)} data...`;
+
+
+  dataStatus.className =
+    "status-box";
+
+
+  loadDataButton.disabled =
+    true;
+
+
+  loadDataButton.classList.add(
+    "loading"
+  );
+
+
+  try {
+
+    const data =
+      await fetchTimeframeData(
+        state.timeframe
+      );
+
+
+    /*
+     * Ignore stale responses.
+     */
+
+    if (
+      requestId !==
+      state.requestId
+    ) {
+
+      return;
+
+    }
+
+
+    state.pair =
+      data.pair;
+
+
+    state.candles =
+      data.candles;
+
+
+    resetBacktestState();
+
+
+    renderChart(true);
+
+    updateStats();
+
+    updateReplay();
+
+
+    dataStatus.textContent =
+      `${data.pair} • ${formatTimeframe(state.timeframe)} • ${data.count.toLocaleString()} candles loaded from server.`;
+
+
+    dataStatus.className =
+      "status-box ok";
+
+
+  } catch(error) {
+
+    console.error(
+      "TIMEFRAME DATA ERROR:",
+      error
+    );
+
+
+    /*
+     * If the request failed, keep the old
+     * timeframe/data instead of destroying it.
+     */
+
+    state.timeframe =
+      previousTimeframe;
+
+
+    updateTimeframeUI();
+
+
+    dataStatus.textContent =
+      error.message;
+
+    dataStatus.className =
+      "status-box error";
+
+
+  } finally {
+
+    if (
+      requestId ===
+      state.requestId
+    ) {
+
+      state.loading =
+        false;
+
+      chartLoading.style.display =
+        "none";
+
+      loadDataButton.disabled =
+        false;
+
+      loadDataButton.classList.remove(
+        "loading"
+      );
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   INITIAL LOAD BUTTON
+========================================================= */
+
+loadDataButton.addEventListener(
+  "click",
+  () => {
+
+    loadAutomatic(
+      state.timeframe
+    );
+
+  }
+);
+
+
+/* =========================================================
+   TIMEFRAME CHANGE
+========================================================= */
+
+async function changeTimeframe(
+  minutes
+) {
+
+  minutes =
+    Number(minutes);
+
+
+  if (
+    !TIMEFRAME_MAP[minutes]
+  ) {
+
+    return;
+
+  }
+
+
+  /*
+   * IMPORTANT:
+   *
+   * This is intentionally NOT local
+   * aggregation.
+   *
+   * Every timeframe asks the server
+   * for the actual timeframe data.
+   */
+
+  if (
+    state.loading
+  ) {
+
+    return;
+
+  }
+
+
+  if (
+    !document.getElementById(
+      "pair"
+    ).value
+  ) {
+
+    return;
+
+  }
+
+
+  await loadAutomatic(
+    minutes
+  );
 
 }
 
@@ -1927,20 +2396,24 @@ document
   );
 
 
-/*
-|--------------------------------------------------------------------------
-| MANUAL CSV
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   MANUAL CSV
+========================================================= */
 
-function parseCSV(text) {
+function parseCSV(
+  text
+) {
 
   const lines =
     text
-      .replace(/\r/g,"")
+      .replace(
+        /\r/g,
+        ""
+      )
       .split("\n")
       .map(
-        x => x.trim()
+        x =>
+          x.trim()
       )
       .filter(Boolean);
 
@@ -1961,7 +2434,8 @@ function parseCSV(text) {
       .split(",")
       .map(
         x =>
-          x.trim()
+          x
+            .trim()
             .toLowerCase()
       );
 
@@ -1978,7 +2452,9 @@ function parseCSV(text) {
             name
           );
 
-        if (index !== -1) {
+        if (
+          index !== -1
+        ) {
 
           return index;
 
@@ -1999,17 +2475,29 @@ function parseCSV(text) {
       "date"
     ]);
 
+
   const oi =
-    find(["open"]);
+    find([
+      "open"
+    ]);
+
 
   const hi =
-    find(["high"]);
+    find([
+      "high"
+    ]);
+
 
   const li =
-    find(["low"]);
+    find([
+      "low"
+    ]);
+
 
   const ci =
-    find(["close"]);
+    find([
+      "close"
+    ]);
 
 
   if (
@@ -2027,12 +2515,13 @@ function parseCSV(text) {
   }
 
 
-  const result = [];
+  const result =
+    [];
 
 
   for (
-    let i=1;
-    i<lines.length;
+    let i = 1;
+    i < lines.length;
     i++
   ) {
 
@@ -2047,26 +2536,45 @@ function parseCSV(text) {
 
 
     const open =
-      Number(p[oi]);
+      Number(
+        p[oi]
+      );
+
 
     const high =
-      Number(p[hi]);
+      Number(
+        p[hi]
+      );
+
 
     const low =
-      Number(p[li]);
+      Number(
+        p[li]
+      );
+
 
     const close =
-      Number(p[ci]);
+      Number(
+        p[ci]
+      );
 
 
     if (
       !Number.isFinite(
         timestamp
       ) ||
-      !Number.isFinite(open) ||
-      !Number.isFinite(high) ||
-      !Number.isFinite(low) ||
-      !Number.isFinite(close)
+      !Number.isFinite(
+        open
+      ) ||
+      !Number.isFinite(
+        high
+      ) ||
+      !Number.isFinite(
+        low
+      ) ||
+      !Number.isFinite(
+        close
+      )
     ) {
 
       continue;
@@ -2114,8 +2622,13 @@ document
       const file =
         event.target.files?.[0];
 
-      if (!file) {
+
+      if (
+        !file
+      ) {
+
         return;
+
       }
 
 
@@ -2125,24 +2638,20 @@ document
           await file.text();
 
 
-        state.rawCandles =
-          parseCSV(text);
-
-
         state.candles =
-          aggregateCandles(
-            state.rawCandles,
-            state.timeframe
+          parseCSV(
+            text
           );
 
 
-        state.currentIndex =
-          state.candles.length
-            ? 0
-            : -1;
+        state.pair =
+          "CSV";
 
 
-        renderChart();
+        resetBacktestState();
+
+
+        renderChart(true);
 
         updateStats();
 
@@ -2156,7 +2665,7 @@ document
 
 
         status.textContent =
-          `${state.rawCandles.length.toLocaleString()} base candles loaded.`;
+          `${state.candles.length.toLocaleString()} candles loaded locally from CSV.`;
 
         status.className =
           "status-box ok";
@@ -2169,17 +2678,20 @@ document
         ).textContent =
           error.message;
 
+        document.getElementById(
+          "manualStatus"
+        ).className =
+          "status-box error";
+
       }
 
     }
   );
 
 
-/*
-|--------------------------------------------------------------------------
-| REPLAY
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   REPLAY
+========================================================= */
 
 function renderReplay() {
 
@@ -2243,11 +2755,15 @@ function startReplay() {
     state.playing ||
     !state.candles.length
   ) {
+
     return;
+
   }
 
 
-  state.playing = true;
+  state.playing =
+    true;
+
 
   document.getElementById(
     "play"
@@ -2255,29 +2771,34 @@ function startReplay() {
     "⏸ Pause";
 
 
-  const loop = () => {
+  const loop =
+    () => {
 
-    if (!state.playing) {
-      return;
-    }
+      if (
+        !state.playing
+      ) {
+
+        return;
+
+      }
 
 
-    next();
+      next();
 
 
-    if (
-      state.playing
-    ) {
+      if (
+        state.playing
+      ) {
 
-      state.timer =
-        setTimeout(
-          loop,
-          500
-        );
+        state.timer =
+          setTimeout(
+            loop,
+            500
+          );
 
-    }
+      }
 
-  };
+    };
 
 
   loop();
@@ -2287,7 +2808,9 @@ function startReplay() {
 
 function stopReplay() {
 
-  state.playing = false;
+  state.playing =
+    false;
+
 
   document.getElementById(
     "play"
@@ -2295,13 +2818,17 @@ function stopReplay() {
     "▶ Play";
 
 
-  if (state.timer) {
+  if (
+    state.timer
+  ) {
 
     clearTimeout(
       state.timer
     );
 
-    state.timer = null;
+
+    state.timer =
+      null;
 
   }
 
@@ -2346,11 +2873,9 @@ document
   );
 
 
-/*
-|--------------------------------------------------------------------------
-| TRADING
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   TRADING
+========================================================= */
 
 function currentCandle() {
 
@@ -2373,7 +2898,9 @@ function openPosition(
     !candle ||
     state.position
   ) {
+
     return;
+
   }
 
 
@@ -2405,16 +2932,19 @@ function closePosition() {
     !candle ||
     !state.position
   ) {
+
     return;
+
   }
 
 
-  const p =
+  const position =
     state.position;
 
 
   const direction =
-    p.side === "LONG"
+    position.side ===
+    "LONG"
       ? 1
       : -1;
 
@@ -2422,21 +2952,22 @@ function closePosition() {
   const pnl =
     (
       candle.close -
-      p.entry
+      position.entry
     ) *
     direction;
 
 
-  state.pnl += pnl;
+  state.pnl +=
+    pnl;
 
 
   state.trades.push({
 
     side:
-      p.side,
+      position.side,
 
     entry:
-      p.entry,
+      position.entry,
 
     exit:
       candle.close,
@@ -2446,7 +2977,8 @@ function closePosition() {
   });
 
 
-  state.position = null;
+  state.position =
+    null;
 
 
   updateStats();
@@ -2459,7 +2991,9 @@ document
   .addEventListener(
     "click",
     () =>
-      openPosition("LONG")
+      openPosition(
+        "LONG"
+      )
   );
 
 
@@ -2468,7 +3002,9 @@ document
   .addEventListener(
     "click",
     () =>
-      openPosition("SHORT")
+      openPosition(
+        "SHORT"
+      )
   );
 
 
@@ -2480,104 +3016,9 @@ document
   );
 
 
-/*
-|--------------------------------------------------------------------------
-| STATS
-|--------------------------------------------------------------------------
-*/
-
-function updateStats() {
-
-  document.getElementById(
-    "candles"
-  ).textContent =
-    state.candles.length
-      .toLocaleString();
-
-
-  document.getElementById(
-    "position"
-  ).textContent =
-    state.position
-      ? state.position.side
-      : "FLAT";
-
-
-  document.getElementById(
-    "trades"
-  ).textContent =
-    state.trades.length;
-
-
-  document.getElementById(
-    "pnl"
-  ).textContent =
-    state.pnl.toFixed(5);
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| REPLAY UI
-|--------------------------------------------------------------------------
-*/
-
-function updateReplay() {
-
-  if (
-    !state.candles.length
-  ) {
-
-    document.getElementById(
-      "replayInfo"
-    ).textContent =
-      "No data";
-
-    return;
-
-  }
-
-
-  const candle =
-    state.candles[
-      state.currentIndex
-    ];
-
-
-  const date =
-    new Date(
-      candle.time * 1000
-    );
-
-
-  document.getElementById(
-    "replayInfo"
-  ).textContent =
-    `${state.currentIndex + 1} / ${state.candles.length.toLocaleString()} • ${date.toLocaleString()}`;
-
-
-  const percent =
-    state.candles.length > 1
-      ? state.currentIndex /
-        (state.candles.length - 1) *
-        100
-      : 100;
-
-
-  document.getElementById(
-    "progressFill"
-  ).style.width =
-    `${percent}%`;
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| DRAWING ENGINE
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   DRAWING TOOL
+========================================================= */
 
 function setDrawingTool(
   tool
@@ -2604,19 +3045,10 @@ function setDrawingTool(
     );
 
 
-  if (
+  canvas.style.pointerEvents =
     tool === "cursor"
-  ) {
-
-    canvas.style.pointerEvents =
-      "none";
-
-  } else {
-
-    canvas.style.pointerEvents =
-      "auto";
-
-  }
+      ? "none"
+      : "auto";
 
 }
 
@@ -2643,18 +3075,18 @@ document
   );
 
 
-/*
-|--------------------------------------------------------------------------
-| PRICE / TIME CONVERSION
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   PRICE / TIME CONVERSION
+========================================================= */
 
 function coordinateToTime(
   x
 ) {
 
   return chart.timeScale()
-    .coordinateToTime(x);
+    .coordinateToTime(
+      x
+    );
 
 }
 
@@ -2693,16 +3125,15 @@ function priceToY(
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| DRAW CANVAS
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   DRAWING RENDER
+========================================================= */
 
 function redrawDrawings() {
 
   const width =
     chartArea.clientWidth;
+
 
   const height =
     chartArea.clientHeight;
@@ -2742,35 +3173,46 @@ function redrawDrawings() {
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| DRAW OBJECT
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   DRAW OBJECT
+========================================================= */
 
 function drawObject(
   d,
-  preview=false
+  preview = false
 ) {
 
   const x1 =
-    timeToX(d.t1);
+    timeToX(
+      d.t1
+    );
+
 
   const y1 =
-    priceToY(d.p1);
+    priceToY(
+      d.p1
+    );
+
 
   const x2 =
-    timeToX(d.t2);
+    timeToX(
+      d.t2
+    );
+
 
   const y2 =
-    priceToY(d.p2);
+    priceToY(
+      d.p2
+    );
 
 
   if (
     x1 === null ||
     y1 === null
   ) {
+
     return;
+
   }
 
 
@@ -2790,10 +3232,6 @@ function drawObject(
   ctx.fillStyle =
     "rgba(41,98,255,.12)";
 
-
-  /*
-   * HORIZONTAL
-   */
 
   if (
     d.type ===
@@ -2817,10 +3255,6 @@ function drawObject(
   }
 
 
-  /*
-   * VERTICAL
-   */
-
   else if (
     d.type ===
     "vertical"
@@ -2842,10 +3276,6 @@ function drawObject(
 
   }
 
-
-  /*
-   * TREND
-   */
 
   else if (
     d.type ===
@@ -2869,10 +3299,6 @@ function drawObject(
   }
 
 
-  /*
-   * RAY
-   */
-
   else if (
     d.type ===
     "ray"
@@ -2881,6 +3307,7 @@ function drawObject(
     const dx =
       x2 - x1;
 
+
     const dy =
       y2 - y1;
 
@@ -2888,18 +3315,13 @@ function drawObject(
     let endX =
       chartArea.clientWidth;
 
-    let endY =
-      y1 +
-      (
-        endX -
-        x1
-      ) *
-      dy /
-      dx;
+
+    let endY;
 
 
     if (
-      dx === 0
+      Math.abs(dx) <
+      0.00001
     ) {
 
       endX =
@@ -2907,6 +3329,17 @@ function drawObject(
 
       endY =
         chartArea.clientHeight;
+
+    } else {
+
+      endY =
+        y1 +
+        (
+          endX -
+          x1
+        ) *
+        dy /
+        dx;
 
     }
 
@@ -2928,10 +3361,6 @@ function drawObject(
   }
 
 
-  /*
-   * RECTANGLE
-   */
-
   else if (
     d.type ===
     "rectangle"
@@ -2943,16 +3372,19 @@ function drawObject(
         x2
       );
 
+
     const top =
       Math.min(
         y1,
         y2
       );
 
+
     const width =
       Math.abs(
         x2 - x1
       );
+
 
     const height =
       Math.abs(
@@ -2978,23 +3410,27 @@ function drawObject(
   }
 
 
-  /*
-   * FIB
-   */
-
   else if (
     d.type ===
     "fib"
   ) {
 
     const levels = [
+
       0,
+
       .236,
+
       .382,
+
       .5,
+
       .618,
+
       .786,
+
       1
+
     ];
 
 
@@ -3021,7 +3457,9 @@ function drawObject(
       if (
         y === null
       ) {
+
         continue;
+
       }
 
 
@@ -3049,8 +3487,10 @@ function drawObject(
       ctx.fillStyle =
         "#9aa8ba";
 
+
       ctx.font =
         "10px Arial";
+
 
       ctx.fillText(
         `${(
@@ -3067,10 +3507,6 @@ function drawObject(
 
   }
 
-
-  /*
-   * MEASURE
-   */
 
   else if (
     d.type ===
@@ -3093,12 +3529,16 @@ function drawObject(
 
 
     const change =
-      (
-        d.p2 -
-        d.p1
-      ) /
-      d.p1 *
-      100;
+      d.p1 !== 0
+        ? (
+            (
+              d.p2 -
+              d.p1
+            ) /
+            d.p1
+          ) *
+          100
+        : 0;
 
 
     const distance =
@@ -3116,6 +3556,7 @@ function drawObject(
     ctx.fillStyle =
       "#d7dee8";
 
+
     ctx.font =
       "11px Arial";
 
@@ -3128,10 +3569,6 @@ function drawObject(
 
   }
 
-
-  /*
-   * ARROW
-   */
 
   else if (
     d.type ===
@@ -3148,10 +3585,6 @@ function drawObject(
   }
 
 
-  /*
-   * TEXT
-   */
-
   else if (
     d.type ===
     "text"
@@ -3160,8 +3593,10 @@ function drawObject(
     ctx.fillStyle =
       "#e8edf4";
 
+
     ctx.font =
       "12px Arial";
+
 
     ctx.fillText(
       d.text ||
@@ -3178,11 +3613,9 @@ function drawObject(
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| ARROW
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   ARROW
+========================================================= */
 
 function drawArrow(
   x1,
@@ -3224,6 +3657,7 @@ function drawArrow(
     y2
   );
 
+
   ctx.lineTo(
     x2 -
       size *
@@ -3231,7 +3665,6 @@ function drawArrow(
         angle -
         Math.PI / 6
       ),
-
     y2 -
       size *
       Math.sin(
@@ -3240,6 +3673,7 @@ function drawArrow(
       )
   );
 
+
   ctx.lineTo(
     x2 -
       size *
@@ -3247,7 +3681,6 @@ function drawArrow(
         angle +
         Math.PI / 6
       ),
-
     y2 -
       size *
       Math.sin(
@@ -3255,22 +3688,23 @@ function drawArrow(
         Math.PI / 6
       )
   );
+
 
   ctx.closePath();
 
+
   ctx.fillStyle =
     "#d7dee8";
+
 
   ctx.fill();
 
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| MOUSE DRAWING
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   MOUSE DRAWING
+========================================================= */
 
 canvas.addEventListener(
   "mousedown",
@@ -3280,7 +3714,9 @@ canvas.addEventListener(
       state.drawingTool ===
       "cursor"
     ) {
+
       return;
+
     }
 
 
@@ -3314,7 +3750,9 @@ canvas.addEventListener(
       time === null ||
       price === null
     ) {
+
       return;
+
     }
 
 
@@ -3364,7 +3802,9 @@ canvas.addEventListener(
     if (
       !state.drawingStart
     ) {
+
       return;
+
     }
 
 
@@ -3398,7 +3838,9 @@ canvas.addEventListener(
       time === null ||
       price === null
     ) {
+
       return;
+
     }
 
 
@@ -3435,7 +3877,9 @@ canvas.addEventListener(
     if (
       !state.drawingStart
     ) {
+
       return;
+
     }
 
 
@@ -3503,10 +3947,6 @@ canvas.addEventListener(
     };
 
 
-    /*
-     * Text tool.
-     */
-
     if (
       state.drawingTool ===
       "text"
@@ -3550,6 +3990,7 @@ canvas.addEventListener(
     state.drawingStart =
       null;
 
+
     state.drawingPreview =
       null;
 
@@ -3560,11 +4001,9 @@ canvas.addEventListener(
 );
 
 
-/*
-|--------------------------------------------------------------------------
-| UNDO
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   UNDO / CLEAR
+========================================================= */
 
 document
   .getElementById(
@@ -3582,12 +4021,6 @@ document
   );
 
 
-/*
-|--------------------------------------------------------------------------
-| CLEAR
-|--------------------------------------------------------------------------
-*/
-
 document
   .getElementById(
     "clearDrawings"
@@ -3604,14 +4037,14 @@ document
   );
 
 
-/*
-|--------------------------------------------------------------------------
-| TABS
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   TABS
+========================================================= */
 
 document
-  .getElementById("autoTab")
+  .getElementById(
+    "autoTab"
+  )
   .addEventListener(
     "click",
     () => {
@@ -3624,6 +4057,7 @@ document
           "active"
         );
 
+
       document
         .getElementById(
           "manualTab"
@@ -3632,16 +4066,20 @@ document
           "active"
         );
 
+
       document
         .getElementById(
           "autoPanel"
-        ).style.display =
+        )
+        .style.display =
         "block";
+
 
       document
         .getElementById(
           "manualPanel"
-        ).style.display =
+        )
+        .style.display =
         "none";
 
     }
@@ -3649,7 +4087,9 @@ document
 
 
 document
-  .getElementById("manualTab")
+  .getElementById(
+    "manualTab"
+  )
   .addEventListener(
     "click",
     () => {
@@ -3662,6 +4102,7 @@ document
           "active"
         );
 
+
       document
         .getElementById(
           "autoTab"
@@ -3670,27 +4111,29 @@ document
           "active"
         );
 
+
       document
         .getElementById(
           "autoPanel"
-        ).style.display =
+        )
+        .style.display =
         "none";
+
 
       document
         .getElementById(
           "manualPanel"
-        ).style.display =
+        )
+        .style.display =
         "block";
 
     }
   );
 
 
-/*
-|--------------------------------------------------------------------------
-| HEALTH
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   HEALTH
+========================================================= */
 
 async function health() {
 
@@ -3706,12 +4149,38 @@ async function health() {
       await response.json();
 
 
-    document.getElementById(
-      "systemStatus"
-    ).textContent =
+    const status =
+      document.getElementById(
+        "systemStatus"
+      );
+
+
+    if (
+      response.ok &&
       data.automaticData
-        ? "Automatic FX data online"
-        : "Manual mode";
+    ) {
+
+      status.textContent =
+        "Automatic FX data online";
+
+
+      document.getElementById(
+        "statusDot"
+      ).style.background =
+        "#16a34a";
+
+    } else {
+
+      status.textContent =
+        "Manual mode";
+
+
+      document.getElementById(
+        "statusDot"
+      ).style.background =
+        "#f59e0b";
+
+    }
 
   } catch {
 
@@ -3720,16 +4189,20 @@ async function health() {
     ).textContent =
       "Backend unavailable";
 
+
+    document.getElementById(
+      "statusDot"
+    ).style.background =
+      "#dc2626";
+
   }
 
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| KEYBOARD
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   KEYBOARD
+========================================================= */
 
 document.addEventListener(
   "keydown",
@@ -3739,7 +4212,19 @@ document.addEventListener(
       event.target.tagName ===
       "INPUT"
     ) {
+
       return;
+
+    }
+
+
+    if (
+      event.target.tagName ===
+      "SELECT"
+    ) {
+
+      return;
+
     }
 
 
@@ -3770,6 +4255,7 @@ document.addEventListener(
 
       event.preventDefault();
 
+
       state.playing
         ? stopReplay()
         : startReplay();
@@ -3780,19 +4266,20 @@ document.addEventListener(
 );
 
 
-/*
-|--------------------------------------------------------------------------
-| INITIALIZE
-|--------------------------------------------------------------------------
-*/
+/* =========================================================
+   INITIALIZE
+========================================================= */
 
 setDrawingTool(
   "cursor"
 );
 
+
 updateStats();
 
 updateReplay();
+
+updateTimeframeUI();
 
 health();
 

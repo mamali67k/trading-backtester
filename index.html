@@ -1,1033 +1,1318 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <meta
-    name="description"
-    content="Professional FX Trading Backtester"
-  >
-
-  <title>Trading Backtester</title>
-
-  <script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
-
-  <style>
-    :root {
-      --bg: #0b0f14;
-      --panel: #111720;
-      --panel2: #151d28;
-      --border: #273241;
-      --text: #e7edf5;
-      --muted: #8c98a8;
-      --accent: #3b82f6;
-      --green: #22c55e;
-      --red: #ef4444;
-      --yellow: #f59e0b;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--bg);
-      color: var(--text);
-      font-family:
-        Inter,
-        Arial,
-        Helvetica,
-        sans-serif;
-    }
-
-    body {
-      overflow: hidden;
-    }
-
-    button,
-    select,
-    input {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    .app {
-      display: grid;
-      grid-template-rows: 64px 1fr;
-      width: 100vw;
-      height: 100vh;
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Header
-    |--------------------------------------------------------------------------
-    */
-
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 18px;
-      border-bottom: 1px solid var(--border);
-      background: #0d1219;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .brand-mark {
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
-      background: var(--accent);
-      display: grid;
-      place-items: center;
-      font-weight: 800;
-    }
-
-    .brand-title {
-      font-weight: 700;
-      font-size: 15px;
-    }
-
-    .brand-subtitle {
-      color: var(--muted);
-      font-size: 11px;
-      margin-top: 2px;
-    }
-
-    .system-status {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--green);
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Main layout
-    |--------------------------------------------------------------------------
-    */
-
-    .main {
-      display: grid;
-      grid-template-columns: 320px minmax(0, 1fr);
-      min-height: 0;
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Sidebar
-    |--------------------------------------------------------------------------
-    */
-
-    .sidebar {
-      min-width: 0;
-      overflow-y: auto;
-      border-right: 1px solid var(--border);
-      background: var(--panel);
-      padding: 16px;
-    }
-
-    .section {
-      margin-bottom: 18px;
-    }
-
-    .section-title {
-      margin-bottom: 10px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .data-tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-      margin-bottom: 12px;
-    }
-
-    .tab {
-      border: 1px solid var(--border);
-      background: var(--panel2);
-      color: var(--muted);
-      padding: 9px;
-      border-radius: 7px;
-      font-size: 12px;
-    }
-
-    .tab.active {
-      color: white;
-      border-color: var(--accent);
-      background: rgba(59, 130, 246, 0.12);
-    }
-
-    .data-panel {
-      border: 1px solid var(--border);
-      border-radius: 9px;
-      padding: 12px;
-      background: #0e141c;
-    }
-
-    .field {
-      margin-bottom: 11px;
-    }
-
-    .field:last-child {
-      margin-bottom: 0;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 5px;
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    select,
-    input[type="date"],
-    input[type="file"] {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: 7px;
-      background: #0a0f15;
-      color: var(--text);
-      padding: 9px;
-      outline: none;
-    }
-
-    select:focus,
-    input:focus {
-      border-color: var(--accent);
-    }
-
-    .primary-btn {
-      width: 100%;
-      border: 0;
-      border-radius: 7px;
-      padding: 10px 12px;
-      background: var(--accent);
-      color: white;
-      font-weight: 700;
-      margin-top: 10px;
-    }
-
-    .primary-btn:hover {
-      filter: brightness(1.08);
-    }
-
-    .secondary-btn {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: 7px;
-      padding: 9px 12px;
-      background: var(--panel2);
-      color: var(--text);
-      margin-top: 8px;
-    }
-
-    .drop-zone {
-      border: 1px dashed #3a4655;
-      border-radius: 8px;
-      padding: 18px 10px;
-      text-align: center;
-      color: var(--muted);
-      font-size: 12px;
-      transition: 0.15s ease;
-    }
-
-    .drop-zone.dragover {
-      border-color: var(--accent);
-      background: rgba(59, 130, 246, 0.08);
-    }
-
-    .data-status {
-      margin-top: 10px;
-      padding: 9px;
-      border-radius: 7px;
-      background: #0a0f15;
-      border: 1px solid var(--border);
-      font-size: 11px;
-      line-height: 1.5;
-      color: var(--muted);
-    }
-
-    .data-status.success {
-      color: #9be7b0;
-      border-color: rgba(34, 197, 94, 0.3);
-    }
-
-    .data-status.error {
-      color: #ffb4b4;
-      border-color: rgba(239, 68, 68, 0.3);
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Stats
-    |--------------------------------------------------------------------------
-    */
-
-    .stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 7px;
-    }
-
-    .stat {
-      padding: 10px;
-      background: var(--panel2);
-      border: 1px solid var(--border);
-      border-radius: 7px;
-    }
-
-    .stat-label {
-      color: var(--muted);
-      font-size: 10px;
-    }
-
-    .stat-value {
-      margin-top: 4px;
-      font-size: 15px;
-      font-weight: 700;
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Workspace
-    |--------------------------------------------------------------------------
-    */
-
-    .workspace {
-      min-width: 0;
-      min-height: 0;
-      display: grid;
-      grid-template-rows: 48px minmax(0, 1fr) 58px;
-    }
-
-    .toolbar {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      padding: 7px 10px;
-      border-bottom: 1px solid var(--border);
-      background: #0d1219;
-    }
-
-    .toolbar button {
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: var(--panel2);
-      color: var(--text);
-      padding: 7px 11px;
-      font-size: 11px;
-    }
-
-    .toolbar button:hover {
-      border-color: #465467;
-    }
-
-    .toolbar .buy {
-      color: #8df0a9;
-    }
-
-    .toolbar .sell {
-      color: #ff9b9b;
-    }
-
-    .toolbar .close {
-      color: #f5c66a;
-    }
-
-    .toolbar-spacer {
-      flex: 1;
-    }
-
-    .speed {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    .speed select {
-      width: auto;
-      padding: 6px 8px;
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Chart
-    |--------------------------------------------------------------------------
-    */
-
-    .chart-wrap {
-      position: relative;
-      min-width: 0;
-      min-height: 0;
-      background: #0a0f15;
-    }
-
-    #chart {
-      position: absolute;
-      inset: 0;
-    }
-
-    .chart-empty {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      pointer-events: none;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Replay footer
-    |--------------------------------------------------------------------------
-    */
-
-    .replay-bar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-top: 1px solid var(--border);
-      background: #0d1219;
-    }
-
-    .replay-info {
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    .replay-progress {
-      flex: 1;
-      height: 4px;
-      border-radius: 4px;
-      background: #26303c;
-      overflow: hidden;
-    }
-
-    .replay-progress-fill {
-      width: 0%;
-      height: 100%;
-      background: var(--accent);
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Responsive
-    |--------------------------------------------------------------------------
-    */
-
-    @media (max-width: 850px) {
-      body {
-        overflow: auto;
-      }
-
-      .app {
-        height: auto;
-        min-height: 100vh;
-      }
-
-      .main {
-        grid-template-columns: 1fr;
-      }
-
-      .sidebar {
-        border-right: 0;
-        border-bottom: 1px solid var(--border);
-      }
-
-      .workspace {
-        height: 70vh;
-      }
-    }
-  </style>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>Trading Backtester</title>
+
+<script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
+
+<style>
+
+:root {
+
+  --bg:#080c11;
+  --panel:#10161f;
+  --panel2:#151d27;
+  --border:#293443;
+  --text:#e8edf4;
+  --muted:#8793a3;
+  --accent:#2962ff;
+  --green:#16a34a;
+  --red:#dc2626;
+  --yellow:#f59e0b;
+
+}
+
+* {
+  box-sizing:border-box;
+}
+
+html,
+body {
+
+  margin:0;
+  width:100%;
+  height:100%;
+  background:var(--bg);
+  color:var(--text);
+
+  font-family:
+    Inter,
+    Arial,
+    sans-serif;
+
+}
+
+body {
+
+  overflow:hidden;
+
+}
+
+button,
+select,
+input {
+
+  font:inherit;
+
+}
+
+button {
+
+  cursor:pointer;
+
+}
+
+.app {
+
+  width:100vw;
+  height:100vh;
+
+  display:grid;
+
+  grid-template-rows:
+    58px 1fr;
+
+}
+
+
+/* HEADER */
+
+.header {
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:
+    0 16px;
+
+  background:#0c1118;
+
+  border-bottom:
+    1px solid var(--border);
+
+}
+
+.logo {
+
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+}
+
+.logo-box {
+
+  width:32px;
+  height:32px;
+
+  display:grid;
+  place-items:center;
+
+  border-radius:7px;
+
+  background:
+    var(--accent);
+
+  font-weight:800;
+
+}
+
+.logo-title {
+
+  font-size:14px;
+  font-weight:700;
+
+}
+
+.logo-sub {
+
+  color:var(--muted);
+  font-size:10px;
+
+}
+
+.status {
+
+  display:flex;
+  align-items:center;
+  gap:7px;
+
+  color:var(--muted);
+
+  font-size:11px;
+
+}
+
+.status-dot {
+
+  width:7px;
+  height:7px;
+
+  border-radius:50%;
+
+  background:
+    var(--green);
+
+}
+
+
+/* MAIN */
+
+.main {
+
+  display:grid;
+
+  grid-template-columns:
+    285px 1fr;
+
+  min-height:0;
+
+}
+
+
+/* SIDEBAR */
+
+.sidebar {
+
+  overflow-y:auto;
+
+  padding:12px;
+
+  background:
+    var(--panel);
+
+  border-right:
+    1px solid var(--border);
+
+}
+
+.section {
+
+  margin-bottom:16px;
+
+}
+
+.title {
+
+  color:var(--muted);
+
+  font-size:10px;
+  font-weight:700;
+
+  text-transform:uppercase;
+
+  letter-spacing:.08em;
+
+  margin-bottom:8px;
+
+}
+
+
+/* DATA */
+
+.data-tabs {
+
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:5px;
+
+  margin-bottom:8px;
+
+}
+
+.tab {
+
+  padding:8px;
+
+  border:1px solid var(--border);
+
+  background:
+    var(--panel2);
+
+  color:var(--muted);
+
+  border-radius:6px;
+
+}
+
+.tab.active {
+
+  color:white;
+
+  border-color:
+    var(--accent);
+
+  background:
+    rgba(41,98,255,.12);
+
+}
+
+.data-box {
+
+  padding:10px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:7px;
+
+  background:
+    #0d131b;
+
+}
+
+.field {
+
+  margin-bottom:9px;
+
+}
+
+label {
+
+  display:block;
+
+  color:var(--muted);
+
+  font-size:10px;
+
+  margin-bottom:4px;
+
+}
+
+select,
+input[type=date],
+input[type=file] {
+
+  width:100%;
+
+  padding:8px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:6px;
+
+  background:#080d13;
+
+  color:var(--text);
+
+}
+
+.primary {
+
+  width:100%;
+
+  border:0;
+
+  border-radius:6px;
+
+  padding:9px;
+
+  background:
+    var(--accent);
+
+  color:white;
+
+  font-weight:700;
+
+}
+
+.status-box {
+
+  margin-top:8px;
+
+  padding:8px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:6px;
+
+  color:var(--muted);
+
+  font-size:10px;
+
+  line-height:1.5;
+
+}
+
+.status-box.ok {
+
+  color:#8de0a4;
+
+}
+
+.status-box.error {
+
+  color:#ff9c9c;
+
+}
+
+
+/* TOOLS */
+
+.tools {
+
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:5px;
+
+}
+
+.tool {
+
+  padding:7px 5px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:5px;
+
+  background:
+    var(--panel2);
+
+  color:var(--muted);
+
+  font-size:10px;
+
+}
+
+.tool.active {
+
+  color:white;
+
+  border-color:
+    var(--accent);
+
+  background:
+    rgba(41,98,255,.15);
+
+}
+
+.tool-danger {
+
+  color:#ff9c9c;
+
+}
+
+
+/* STATS */
+
+.stats {
+
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:5px;
+
+}
+
+.stat {
+
+  padding:8px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:6px;
+
+  background:
+    var(--panel2);
+
+}
+
+.stat-label {
+
+  color:var(--muted);
+
+  font-size:9px;
+
+}
+
+.stat-value {
+
+  margin-top:3px;
+
+  font-size:13px;
+
+  font-weight:700;
+
+}
+
+
+/* WORKSPACE */
+
+.workspace {
+
+  min-width:0;
+  min-height:0;
+
+  display:grid;
+
+  grid-template-rows:
+    42px 1fr 50px;
+
+}
+
+
+/* TOOLBAR */
+
+.toolbar {
+
+  display:flex;
+
+  align-items:center;
+
+  gap:5px;
+
+  padding:5px 8px;
+
+  border-bottom:
+    1px solid var(--border);
+
+  background:
+    #0c1118;
+
+}
+
+.toolbar button {
+
+  padding:
+    6px 9px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:5px;
+
+  background:
+    var(--panel2);
+
+  color:var(--text);
+
+  font-size:10px;
+
+}
+
+.toolbar-spacer {
+
+  flex:1;
+
+}
+
+.tf-buttons {
+
+  display:flex;
+
+  gap:3px;
+
+}
+
+.tf {
+
+  min-width:37px;
+
+}
+
+.tf.active {
+
+  background:
+    rgba(41,98,255,.2);
+
+  border-color:
+    var(--accent);
+
+  color:white;
+
+}
+
+
+/* CHART */
+
+.chart-area {
+
+  position:relative;
+
+  min-width:0;
+  min-height:0;
+
+  background:
+    #080c11;
+
+}
+
+#chart {
+
+  position:absolute;
+
+  inset:0;
+
+}
+
+#drawingCanvas {
+
+  position:absolute;
+
+  inset:0;
+
+  width:100%;
+  height:100%;
+
+  pointer-events:none;
+
+}
+
+.chart-message {
+
+  position:absolute;
+
+  inset:0;
+
+  display:grid;
+
+  place-items:center;
+
+  color:var(--muted);
+
+  font-size:12px;
+
+  pointer-events:none;
+
+}
+
+
+/* BOTTOM */
+
+.bottom {
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  padding:8px 12px;
+
+  background:#0c1118;
+
+  border-top:
+    1px solid var(--border);
+
+}
+
+.bottom-info {
+
+  color:var(--muted);
+
+  font-size:10px;
+
+}
+
+.progress {
+
+  flex:1;
+
+  height:3px;
+
+  background:#27303b;
+
+}
+
+.progress-fill {
+
+  height:100%;
+
+  width:0;
+
+  background:
+    var(--accent);
+
+}
+
+
+/* MOBILE */
+
+@media(max-width:850px) {
+
+  body {
+    overflow:auto;
+  }
+
+  .main {
+
+    grid-template-columns:1fr;
+
+  }
+
+  .sidebar {
+
+    border-right:0;
+
+    border-bottom:
+      1px solid var(--border);
+
+  }
+
+  .workspace {
+
+    height:70vh;
+
+  }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
 <div class="app">
 
-  <!-- HEADER -->
 
-  <header class="header">
+<header class="header">
 
-    <div class="brand">
+  <div class="logo">
 
-      <div class="brand-mark">
-        TB
+    <div class="logo-box">
+      TB
+    </div>
+
+    <div>
+
+      <div class="logo-title">
+        Trading Backtester
       </div>
 
-      <div>
-        <div class="brand-title">
-          Trading Backtester
-        </div>
-
-        <div class="brand-subtitle">
-          FX Research & Replay Platform
-        </div>
+      <div class="logo-sub">
+        FX Research & Replay
       </div>
 
     </div>
 
-    <div class="system-status">
+  </div>
 
-      <span class="status-dot"></span>
 
-      <span id="systemStatus">
-        Checking system...
-      </span>
+  <div class="status">
 
-    </div>
+    <span
+      id="statusDot"
+      class="status-dot"
+    ></span>
 
-  </header>
+    <span id="systemStatus">
+      Connecting...
+    </span>
 
+  </div>
 
-  <!-- MAIN -->
+</header>
 
-  <main class="main">
 
-    <!-- SIDEBAR -->
+<main class="main">
 
-    <aside class="sidebar">
 
-      <!-- DATA -->
+<aside class="sidebar">
 
-      <section class="section">
 
-        <div class="section-title">
-          Market Data
-        </div>
+<!-- DATA -->
 
-        <div class="data-tabs">
+<section class="section">
 
-          <button
-            id="automaticTab"
-            class="tab active"
-            type="button"
-          >
-            Automatic
-          </button>
+<div class="title">
+Market Data
+</div>
 
-          <button
-            id="manualTab"
-            class="tab"
-            type="button"
-          >
-            Manual CSV
-          </button>
 
-        </div>
+<div class="data-tabs">
 
+<button
+  id="autoTab"
+  class="tab active"
+>
+Automatic
+</button>
 
-        <!-- AUTOMATIC -->
+<button
+  id="manualTab"
+  class="tab"
+>
+Manual CSV
+</button>
 
-        <div
-          id="automaticPanel"
-          class="data-panel"
-        >
+</div>
 
-          <div class="field">
 
-            <label>
-              FX Pair
-            </label>
+<div
+  id="autoPanel"
+  class="data-box"
+>
 
-            <select id="pair">
 
-              <option value="EUR/USD">
-                EUR/USD
-              </option>
+<div class="field">
 
-              <option value="GBP/USD">
-                GBP/USD
-              </option>
+<label>
+FX Pair
+</label>
 
-              <option value="USD/JPY">
-                USD/JPY
-              </option>
+<select id="pair">
 
-              <option value="USD/CHF">
-                USD/CHF
-              </option>
+<option>EUR/USD</option>
+<option>GBP/USD</option>
+<option>USD/JPY</option>
+<option>USD/CHF</option>
+<option>AUD/USD</option>
+<option>USD/CAD</option>
+<option>NZD/USD</option>
 
-              <option value="AUD/USD">
-                AUD/USD
-              </option>
+</select>
 
-              <option value="USD/CAD">
-                USD/CAD
-              </option>
+</div>
 
-              <option value="NZD/USD">
-                NZD/USD
-              </option>
 
-            </select>
+<div class="field">
 
-          </div>
+<label>
+Data Date Start
+</label>
 
+<input
+  id="startDate"
+  type="date"
+>
 
-          <div class="field">
+</div>
 
-            <label>
-              Timeframe
-            </label>
 
-            <select id="interval">
+<div class="field">
 
-              <option value="1min">
-                1 Minute
-              </option>
+<label>
+Data Date End
+</label>
 
-              <option value="5min">
-                5 Minutes
-              </option>
+<input
+  id="endDate"
+  type="date"
+>
 
-              <option value="15min">
-                15 Minutes
-              </option>
+</div>
 
-              <option value="30min">
-                30 Minutes
-              </option>
 
-              <option value="1h" selected>
-                1 Hour
-              </option>
+<div class="field">
 
-              <option value="4h">
-                4 Hours
-              </option>
+<label>
+Base candles
+</label>
 
-              <option value="1day">
-                1 Day
-              </option>
+<select id="outputsize">
 
-            </select>
+<option value="1000">
+1,000
+</option>
 
-          </div>
+<option value="2500">
+2,500
+</option>
 
+<option
+  value="5000"
+  selected
+>
+5,000
+</option>
 
-          <div class="field">
+</select>
 
-            <label>
-              Start Date
-            </label>
+</div>
 
-            <input
-              id="startDate"
-              type="date"
-            >
 
-          </div>
+<button
+  id="loadData"
+  class="primary"
+>
+Load Market Data
+</button>
 
 
-          <div class="field">
+<div
+  id="dataStatus"
+  class="status-box"
+>
+One download creates all local timeframes.
+</div>
 
-            <label>
-              End Date
-            </label>
+</div>
 
-            <input
-              id="endDate"
-              type="date"
-            >
 
-          </div>
+<div
+  id="manualPanel"
+  class="data-box"
+  style="display:none"
+>
 
+<input
+  id="csv"
+  type="file"
+  accept=".csv,text/csv"
+>
 
-          <div class="field">
+<div
+  id="manualStatus"
+  class="status-box"
+>
+CSV remains local.
+</div>
 
-            <label>
-              Maximum candles
-            </label>
+</div>
 
-            <select id="outputsize">
+</section>
 
-              <option value="500">
-                500
-              </option>
 
-              <option value="1000">
-                1,000
-              </option>
+<!-- TIMEFRAME -->
 
-              <option value="2500">
-                2,500
-              </option>
+<section class="section">
 
-              <option value="5000" selected>
-                5,000
-              </option>
+<div class="title">
+Timeframe
+</div>
 
-            </select>
 
-          </div>
+<div class="tools">
 
+<button
+  class="tool tf-btn active"
+  data-tf="1"
+>
+1m
+</button>
+
+<button
+  class="tool tf-btn"
+  data-tf="5"
+>
+5m
+</button>
+
+<button
+  class="tool tf-btn"
+  data-tf="15"
+>
+15m
+</button>
+
+<button
+  class="tool tf-btn"
+  data-tf="30"
+>
+30m
+</button>
+
+<button
+  class="tool tf-btn"
+  data-tf="60"
+>
+1H
+</button>
+
+<button
+  class="tool tf-btn"
+  data-tf="240"
+>
+4H
+</button>
+
+<button
+  class="tool tf-btn"
+  data-tf="1440"
+>
+1D
+</button>
+
+</div>
+
+</section>
+
+
+<!-- DRAWING -->
+
+<section class="section">
+
+<div class="title">
+Drawing Tools
+</div>
+
+
+<div class="tools">
+
+<button
+  class="tool draw-btn active"
+  data-tool="cursor"
+>
+Cursor
+</button>
 
-          <button
-            id="fetchAutomatic"
-            class="primary-btn"
-            type="button"
-          >
-            Fetch Market Data
-          </button>
+<button
+  class="tool draw-btn"
+  data-tool="horizontal"
+>
+Horizontal
+</button>
+
+<button
+  class="tool draw-btn"
+  data-tool="vertical"
+>
+Vertical
+</button>
 
+<button
+  class="tool draw-btn"
+  data-tool="trend"
+>
+Trend Line
+</button>
+
+<button
+  class="tool draw-btn"
+  data-tool="ray"
+>
+Ray
+</button>
 
-          <div
-            id="automaticStatus"
-            class="data-status"
-          >
-            Ready.
-          </div>
+<button
+  class="tool draw-btn"
+  data-tool="rectangle"
+>
+Rectangle
+</button>
 
-        </div>
+<button
+  class="tool draw-btn"
+  data-tool="fib"
+>
+Fib Retracement
+</button>
 
+<button
+  class="tool draw-btn"
+  data-tool="measure"
+>
+Measure
+</button>
 
-        <!-- MANUAL -->
+<button
+  class="tool draw-btn"
+  data-tool="arrow"
+>
+Arrow
+</button>
 
-        <div
-          id="manualPanel"
-          class="data-panel"
-          style="display:none"
-        >
+<button
+  class="tool draw-btn"
+  data-tool="text"
+>
+Text
+</button>
 
-          <div
-            id="dropZone"
-            class="drop-zone"
-          >
+<button
+  id="undoDrawing"
+  class="tool"
+>
+Undo
+</button>
 
-            Drop CSV file here
+<button
+  id="clearDrawings"
+  class="tool tool-danger"
+>
+Clear All
+</button>
 
-            <br>
+</div>
 
-            or
+</section>
 
-            <br><br>
 
-            <input
-              id="csvFile"
-              type="file"
-              accept=".csv,text/csv"
-            >
+<!-- STATS -->
 
-          </div>
+<section class="section">
 
+<div class="title">
+Backtest
+</div>
 
-          <div
-            id="manualStatus"
-            class="data-status"
-          >
-            CSV stays in your browser.
-          </div>
 
-        </div>
+<div class="stats">
 
-      </section>
+<div class="stat">
 
+<div class="stat-label">
+Candles
+</div>
 
-      <!-- STATS -->
+<div
+  id="candles"
+  class="stat-value"
+>
+0
+</div>
 
-      <section class="section">
+</div>
 
-        <div class="section-title">
-          Backtest Statistics
-        </div>
 
-        <div class="stats">
+<div class="stat">
 
-          <div class="stat">
+<div class="stat-label">
+Position
+</div>
 
-            <div class="stat-label">
-              Candles
-            </div>
+<div
+  id="position"
+  class="stat-value"
+>
+FLAT
+</div>
 
-            <div
-              id="statCandles"
-              class="stat-value"
-            >
-              0
-            </div>
+</div>
 
-          </div>
 
+<div class="stat">
 
-          <div class="stat">
+<div class="stat-label">
+Trades
+</div>
 
-            <div class="stat-label">
-              Position
-            </div>
+<div
+  id="trades"
+  class="stat-value"
+>
+0
+</div>
 
-            <div
-              id="statPosition"
-              class="stat-value"
-            >
-              FLAT
-            </div>
+</div>
 
-          </div>
 
+<div class="stat">
 
-          <div class="stat">
+<div class="stat-label">
+P&L
+</div>
 
-            <div class="stat-label">
-              Trades
-            </div>
+<div
+  id="pnl"
+  class="stat-value"
+>
+0.00000
+</div>
 
-            <div
-              id="statTrades"
-              class="stat-value"
-            >
-              0
-            </div>
+</div>
 
-          </div>
+</div>
 
+</section>
 
-          <div class="stat">
 
-            <div class="stat-label">
-              P&L
-            </div>
+</aside>
 
-            <div
-              id="statPnl"
-              class="stat-value"
-            >
-              0.00
-            </div>
 
-          </div>
+<section class="workspace">
 
 
-          <div class="stat">
+<div class="toolbar">
 
-            <div class="stat-label">
-              Win Rate
-            </div>
 
-            <div
-              id="statWinRate"
-              class="stat-value"
-            >
-              0%
-            </div>
+<button id="prev">
+◀
+</button>
 
-          </div>
+<button id="next">
+▶
+</button>
 
+<button id="play">
+▶ Play
+</button>
 
-          <div class="stat">
 
-            <div class="stat-label">
-              Max DD
-            </div>
+<div class="toolbar-spacer"></div>
 
-            <div
-              id="statDrawdown"
-              class="stat-value"
-            >
-              0.00
-            </div>
 
-          </div>
+<div class="tf-buttons">
 
-        </div>
+<button
+  class="tf active"
+  data-tf="1"
+>
+1m
+</button>
 
-      </section>
+<button
+  class="tf"
+  data-tf="5"
+>
+5m
+</button>
 
-    </aside>
+<button
+  class="tf"
+  data-tf="15"
+>
+15m
+</button>
 
+<button
+  class="tf"
+  data-tf="30"
+>
+30m
+</button>
 
-    <!-- WORKSPACE -->
+<button
+  class="tf"
+  data-tf="60"
+>
+1H
+</button>
 
-    <section class="workspace">
+<button
+  class="tf"
+  data-tf="240"
+>
+4H
+</button>
 
-      <div class="toolbar">
+<button
+  class="tf"
+  data-tf="1440"
+>
+1D
+</button>
 
-        <button
-          id="previousCandle"
-          type="button"
-        >
-          ◀ Previous
-        </button>
+</div>
 
-        <button
-          id="nextCandle"
-          type="button"
-        >
-          Next ▶
-        </button>
 
-        <button
-          id="playReplay"
-          type="button"
-        >
-          ▶ Play
-        </button>
+<button id="buy">
+BUY
+</button>
 
-        <div class="toolbar-spacer"></div>
+<button id="sell">
+SELL
+</button>
 
-        <div class="speed">
+<button id="close">
+CLOSE
+</button>
 
-          Speed
+</div>
 
-          <select id="speed">
 
-            <option value="2000">
-              1x
-            </option>
+<div
+  id="chartArea"
+  class="chart-area"
+>
 
-            <option value="1000">
-              2x
-            </option>
+<div id="chart"></div>
 
-            <option value="500">
-              4x
-            </option>
+<canvas
+  id="drawingCanvas"
+></canvas>
 
-            <option value="250">
-              8x
-            </option>
+<div
+  id="chartMessage"
+  class="chart-message"
+>
+Load market data to begin.
+</div>
 
-            <option value="100">
-              20x
-            </option>
+</div>
 
-          </select>
 
-        </div>
+<div class="bottom">
 
-        <button
-          id="buy"
-          class="buy"
-          type="button"
-        >
-          BUY
-        </button>
+<div
+  id="replayInfo"
+  class="bottom-info"
+>
+No data
+</div>
 
-        <button
-          id="sell"
-          class="sell"
-          type="button"
-        >
-          SELL
-        </button>
+<div class="progress">
 
-        <button
-          id="closePosition"
-          class="close"
-          type="button"
-        >
-          CLOSE
-        </button>
+<div
+  id="progressFill"
+  class="progress-fill"
+></div>
 
-      </div>
+</div>
 
+</div>
 
-      <div class="chart-wrap">
 
-        <div id="chart"></div>
+</section>
 
-        <div
-          id="chartEmpty"
-          class="chart-empty"
-        >
-          Load market data to begin.
-        </div>
-
-      </div>
-
-
-      <div class="replay-bar">
-
-        <div
-          id="replayInfo"
-          class="replay-info"
-        >
-          No data
-        </div>
-
-        <div class="replay-progress">
-
-          <div
-            id="replayProgressFill"
-            class="replay-progress-fill"
-          ></div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
+</main>
 
 </div>
 
 
 <script>
+
 "use strict";
+
 
 /*
 |--------------------------------------------------------------------------
-| Application state
+| STATE
 |--------------------------------------------------------------------------
 */
 
 const state = {
+
+  rawCandles: [],
+
   candles: [],
-  visibleCandles: [],
+
+  timeframe: 1,
+
   currentIndex: -1,
 
   position: null,
 
   trades: [],
 
-  realizedPnl: 0,
+  pnl: 0,
 
-  equity: 0,
+  playing: false,
 
-  peakEquity: 0,
+  timer: null,
 
-  maxDrawdown: 0,
+  drawingTool: "cursor",
 
-  isPlaying: false,
+  drawings: [],
 
-  playTimer: null
+  drawingStart: null,
+
+  drawingPreview: null
+
 };
 
 
@@ -1037,401 +1322,590 @@ const state = {
 |--------------------------------------------------------------------------
 */
 
+const chartArea =
+  document.getElementById(
+    "chartArea"
+  );
+
 const chartElement =
-  document.getElementById("chart");
+  document.getElementById(
+    "chart"
+  );
 
-const chartEmpty =
-  document.getElementById("chartEmpty");
+const canvas =
+  document.getElementById(
+    "drawingCanvas"
+  );
 
-const automaticTab =
-  document.getElementById("automaticTab");
+const ctx =
+  canvas.getContext("2d");
 
-const manualTab =
-  document.getElementById("manualTab");
+const message =
+  document.getElementById(
+    "chartMessage"
+  );
 
-const automaticPanel =
-  document.getElementById("automaticPanel");
 
-const manualPanel =
-  document.getElementById("manualPanel");
-
-const pair =
-  document.getElementById("pair");
-
-const interval =
-  document.getElementById("interval");
-
-const startDate =
-  document.getElementById("startDate");
-
-const endDate =
-  document.getElementById("endDate");
-
-const outputsize =
-  document.getElementById("outputsize");
-
-const fetchAutomatic =
-  document.getElementById("fetchAutomatic");
-
-const automaticStatus =
-  document.getElementById("automaticStatus");
-
-const csvFile =
-  document.getElementById("csvFile");
-
-const dropZone =
-  document.getElementById("dropZone");
-
-const manualStatus =
-  document.getElementById("manualStatus");
-
-const previousCandle =
-  document.getElementById("previousCandle");
-
-const nextCandle =
-  document.getElementById("nextCandle");
-
-const playReplay =
-  document.getElementById("playReplay");
-
-const speed =
-  document.getElementById("speed");
-
-const buy =
-  document.getElementById("buy");
-
-const sell =
-  document.getElementById("sell");
-
-const closePosition =
-  document.getElementById("closePosition");
+/*
+|--------------------------------------------------------------------------
+| CHART
+|--------------------------------------------------------------------------
+*/
 
 const chart =
   LightweightCharts.createChart(
     chartElement,
     {
+
       layout: {
+
         background: {
-          color: "#0a0f15"
+          color:"#080c11"
         },
 
-        textColor: "#9aa6b2"
+        textColor:"#8995a5"
+
       },
 
       grid: {
+
         vertLines: {
-          color: "#18212b"
+          color:"#17202a"
         },
 
         horzLines: {
-          color: "#18212b"
+          color:"#17202a"
         }
-      },
 
-      rightPriceScale: {
-        borderColor: "#273241"
-      },
-
-      timeScale: {
-        borderColor: "#273241",
-        timeVisible: true,
-        secondsVisible: false
       },
 
       crosshair: {
+
         mode:
-          LightweightCharts.CrosshairMode.Normal
+          LightweightCharts
+            .CrosshairMode
+            .Normal
+
+      },
+
+      rightPriceScale: {
+
+        borderColor:
+          "#293443"
+
+      },
+
+      timeScale: {
+
+        borderColor:
+          "#293443",
+
+        timeVisible:true,
+
+        secondsVisible:false
+
       }
+
     }
   );
 
 
-const candleSeries =
+const series =
   chart.addCandlestickSeries({
-    upColor: "#22c55e",
-    downColor: "#ef4444",
-    borderUpColor: "#22c55e",
-    borderDownColor: "#ef4444",
-    wickUpColor: "#22c55e",
-    wickDownColor: "#ef4444"
+
+    upColor:"#16a34a",
+
+    downColor:"#dc2626",
+
+    borderUpColor:"#16a34a",
+
+    borderDownColor:"#dc2626",
+
+    wickUpColor:"#16a34a",
+
+    wickDownColor:"#dc2626"
+
   });
 
 
 /*
 |--------------------------------------------------------------------------
-| Resize
+| RESIZE
 |--------------------------------------------------------------------------
 */
 
-function resizeChart() {
+function resize() {
 
-  chart.applyOptions({
-    width: chartElement.clientWidth,
-    height: chartElement.clientHeight
-  });
+  chart.resize(
+    chartElement.clientWidth,
+    chartElement.clientHeight
+  );
+
+  canvas.width =
+    chartArea.clientWidth *
+    window.devicePixelRatio;
+
+  canvas.height =
+    chartArea.clientHeight *
+    window.devicePixelRatio;
+
+  canvas.style.width =
+    chartArea.clientWidth +
+    "px";
+
+  canvas.style.height =
+    chartArea.clientHeight +
+    "px";
+
+  ctx.setTransform(
+    window.devicePixelRatio,
+    0,
+    0,
+    window.devicePixelRatio,
+    0,
+    0
+  );
+
+  redrawDrawings();
 
 }
 
 window.addEventListener(
   "resize",
-  resizeChart
-);
-
-resizeChart();
-
-
-/*
-|--------------------------------------------------------------------------
-| Tabs
-|--------------------------------------------------------------------------
-*/
-
-automaticTab.addEventListener(
-  "click",
-  () => {
-
-    automaticTab.classList.add("active");
-    manualTab.classList.remove("active");
-
-    automaticPanel.style.display = "block";
-    manualPanel.style.display = "none";
-
-  }
-);
-
-
-manualTab.addEventListener(
-  "click",
-  () => {
-
-    manualTab.classList.add("active");
-    automaticTab.classList.remove("active");
-
-    manualPanel.style.display = "block";
-    automaticPanel.style.display = "none";
-
-  }
+  resize
 );
 
 
 /*
 |--------------------------------------------------------------------------
-| Status helpers
+| DATA AGGREGATOR
 |--------------------------------------------------------------------------
 */
 
-function setAutomaticStatus(
-  message,
-  type = ""
+function aggregateCandles(
+  source,
+  minutes
 ) {
 
-  automaticStatus.textContent = message;
+  if (
+    minutes === 1
+  ) {
 
-  automaticStatus.className =
-    "data-status";
+    return source.map(
+      candle => ({
+        ...candle
+      })
+    );
 
-  if (type) {
-    automaticStatus.classList.add(type);
   }
 
-}
+
+  const buckets =
+    new Map();
 
 
-function setManualStatus(
-  message,
-  type = ""
-) {
-
-  manualStatus.textContent = message;
-
-  manualStatus.className =
-    "data-status";
-
-  if (type) {
-    manualStatus.classList.add(type);
-  }
-
-}
+  const seconds =
+    minutes * 60;
 
 
-/*
-|--------------------------------------------------------------------------
-| System health
-|--------------------------------------------------------------------------
-*/
+  for (
+    const candle of source
+  ) {
 
-async function checkSystem() {
+    const bucket =
+      Math.floor(
+        candle.time /
+        seconds
+      ) *
+      seconds;
 
-  const status =
-    document.getElementById("systemStatus");
 
-  try {
+    let item =
+      buckets.get(
+        bucket
+      );
 
-    const response =
-      await fetch("/api/health");
 
-    const data =
-      await response.json();
+    if (!item) {
 
-    if (
-      response.ok &&
-      data.ok
-    ) {
+      item = {
 
-      if (data.automaticData) {
+        time:bucket,
 
-        status.textContent =
-          "Automatic FX data online";
+        open:candle.open,
 
-      } else {
+        high:candle.high,
 
-        status.textContent =
-          "Manual data mode";
+        low:candle.low,
 
-      }
+        close:candle.close
+
+      };
+
+      buckets.set(
+        bucket,
+        item
+      );
 
     } else {
 
-      status.textContent =
-        "System unavailable";
+      item.high =
+        Math.max(
+          item.high,
+          candle.high
+        );
+
+      item.low =
+        Math.min(
+          item.low,
+          candle.low
+        );
+
+      item.close =
+        candle.close;
 
     }
 
-  } catch (error) {
+  }
 
-    status.textContent =
-      "Backend unavailable";
+
+  return Array.from(
+    buckets.values()
+  ).sort(
+    (a,b) =>
+      a.time - b.time
+  );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CHANGE TIMEFRAME
+|--------------------------------------------------------------------------
+*/
+
+function changeTimeframe(
+  minutes
+) {
+
+  state.timeframe =
+    Number(minutes);
+
+
+  stopReplay();
+
+
+  /*
+   * IMPORTANT:
+   *
+   * NO API REQUEST.
+   *
+   * Everything happens locally.
+   */
+
+  state.candles =
+    aggregateCandles(
+      state.rawCandles,
+      state.timeframe
+    );
+
+
+  state.currentIndex =
+    state.candles.length
+      ? 0
+      : -1;
+
+
+  state.position = null;
+
+  state.trades = [];
+
+  state.pnl = 0;
+
+
+  renderChart();
+
+
+  updateStats();
+
+  updateReplay();
+
+
+  updateTimeframeUI();
+
+
+  redrawDrawings();
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| RENDER CHART
+|--------------------------------------------------------------------------
+*/
+
+function renderChart() {
+
+  if (!state.candles.length) {
+
+    series.setData([]);
+
+    message.style.display =
+      "grid";
+
+    return;
+
+  }
+
+
+  message.style.display =
+    "none";
+
+
+  const visible =
+    state.candles.slice(
+      0,
+      state.currentIndex + 1
+    );
+
+
+  series.setData(
+    visible
+  );
+
+
+  if (
+    visible.length
+  ) {
+
+    chart.timeScale()
+      .fitContent();
 
   }
 
 }
 
-checkSystem();
-
 
 /*
 |--------------------------------------------------------------------------
-| Fetch automatic data
+| LOAD SERVER DATA
 |--------------------------------------------------------------------------
 */
 
-async function loadAutomaticData() {
+async function loadAutomatic() {
 
-  setAutomaticStatus(
-    "Requesting market data...",
-    ""
+  const status =
+    document.getElementById(
+      "dataStatus"
+    );
+
+
+  status.textContent =
+    "Downloading base 1-minute dataset...";
+
+
+  status.className =
+    "status-box";
+
+
+  const params =
+    new URLSearchParams();
+
+
+  params.set(
+    "pair",
+    document.getElementById(
+      "pair"
+    ).value
   );
 
-  fetchAutomatic.disabled = true;
+
+  params.set(
+    "outputsize",
+    document.getElementById(
+      "outputsize"
+    ).value
+  );
+
+
+  const start =
+    document.getElementById(
+      "startDate"
+    ).value;
+
+
+  const end =
+    document.getElementById(
+      "endDate"
+    ).value;
+
+
+  if (start) {
+
+    params.set(
+      "startDate",
+      start
+    );
+
+  }
+
+
+  if (end) {
+
+    params.set(
+      "endDate",
+      end
+    );
+
+  }
+
 
   try {
 
-    const params =
-      new URLSearchParams();
-
-    params.set(
-      "pair",
-      pair.value
-    );
-
-    params.set(
-      "interval",
-      interval.value
-    );
-
-    params.set(
-      "outputsize",
-      outputsize.value
-    );
-
-    if (startDate.value) {
-
-      params.set(
-        "startDate",
-        startDate.value
-      );
-
-    }
-
-    if (endDate.value) {
-
-      params.set(
-        "endDate",
-        endDate.value
-      );
-
-    }
-
     const response =
       await fetch(
-        `/api/fx/candles?${params.toString()}`
+        `/api/fx/base-candles?${params}`
       );
+
 
     const data =
       await response.json();
 
-    if (!response.ok || !data.ok) {
-
-      throw new Error(
-        data.error ||
-        "Unable to load market data."
-      );
-
-    }
 
     if (
-      !Array.isArray(data.candles) ||
-      !data.candles.length
+      !response.ok ||
+      !data.ok
     ) {
 
       throw new Error(
-        "No valid candles received."
+        data.error ||
+        "Data request failed."
       );
 
     }
 
-    loadCandles(
-      data.candles
-    );
 
-    const cacheText =
-      data.cached
-        ? " • cached"
-        : "";
+    state.rawCandles =
+      data.candles;
 
-    setAutomaticStatus(
-      `${data.pair} • ${data.interval} • ${data.count.toLocaleString()} candles${cacheText}`,
-      "success"
-    );
+
+    /*
+     * Generate selected timeframe locally.
+     */
+
+    state.candles =
+      aggregateCandles(
+        state.rawCandles,
+        state.timeframe
+      );
+
+
+    state.currentIndex =
+      state.candles.length
+        ? 0
+        : -1;
+
+
+    state.position = null;
+
+    state.trades = [];
+
+    state.pnl = 0;
+
+
+    renderChart();
+
+    updateStats();
+
+    updateReplay();
+
+
+    status.textContent =
+      `${data.pair} • ${data.count.toLocaleString()} base 1m candles loaded. Timeframes now switch locally.`;
+
+    status.className =
+      "status-box ok";
+
 
   } catch (error) {
 
     console.error(error);
 
-    setAutomaticStatus(
-      error.message ||
-      "Automatic data request failed.",
-      "error"
-    );
+    status.textContent =
+      error.message;
 
-  } finally {
-
-    fetchAutomatic.disabled = false;
+    status.className =
+      "status-box error";
 
   }
 
 }
 
 
-fetchAutomatic.addEventListener(
-  "click",
-  loadAutomaticData
-);
+document
+  .getElementById("loadData")
+  .addEventListener(
+    "click",
+    loadAutomatic
+  );
 
 
 /*
 |--------------------------------------------------------------------------
-| CSV parser
+| TIMEFRAME UI
+|--------------------------------------------------------------------------
+*/
+
+function updateTimeframeUI() {
+
+  document
+    .querySelectorAll(
+      ".tf-btn,.tf"
+    )
+    .forEach(
+      button => {
+
+        button.classList.toggle(
+          "active",
+          Number(
+            button.dataset.tf
+          ) ===
+          state.timeframe
+        );
+
+      }
+    );
+
+}
+
+
+document
+  .querySelectorAll(
+    ".tf-btn,.tf"
+  )
+  .forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          changeTimeframe(
+            button.dataset.tf
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+/*
+|--------------------------------------------------------------------------
+| MANUAL CSV
 |--------------------------------------------------------------------------
 */
 
@@ -1439,443 +1913,302 @@ function parseCSV(text) {
 
   const lines =
     text
-      .replace(/\r\n/g, "\n")
-      .replace(/\r/g, "\n")
+      .replace(/\r/g,"")
       .split("\n")
       .map(
-        line => line.trim()
+        x => x.trim()
       )
       .filter(Boolean);
 
-  if (lines.length < 2) {
+
+  if (
+    lines.length < 2
+  ) {
 
     throw new Error(
-      "CSV file does not contain enough rows."
+      "CSV is empty."
     );
 
   }
+
 
   const headers =
     lines[0]
       .split(",")
       .map(
-        x => x.trim().toLowerCase()
+        x =>
+          x.trim()
+            .toLowerCase()
       );
 
-  function findHeader(names) {
 
-    for (const name of names) {
+  const find =
+    names => {
 
-      const index =
-        headers.indexOf(name);
+      for (
+        const name of names
+      ) {
 
-      if (index !== -1) {
-        return index;
+        const index =
+          headers.indexOf(
+            name
+          );
+
+        if (index !== -1) {
+
+          return index;
+
+        }
+
       }
 
-    }
+      return -1;
 
-    return -1;
-  }
+    };
 
-  const timeIndex =
-    findHeader([
+
+  const ti =
+    find([
       "time",
       "timestamp",
       "datetime",
       "date"
     ]);
 
-  const openIndex =
-    findHeader(["open"]);
+  const oi =
+    find(["open"]);
 
-  const highIndex =
-    findHeader(["high"]);
+  const hi =
+    find(["high"]);
 
-  const lowIndex =
-    findHeader(["low"]);
+  const li =
+    find(["low"]);
 
-  const closeIndex =
-    findHeader(["close"]);
+  const ci =
+    find(["close"]);
+
 
   if (
-    timeIndex === -1 ||
-    openIndex === -1 ||
-    highIndex === -1 ||
-    lowIndex === -1 ||
-    closeIndex === -1
+    ti < 0 ||
+    oi < 0 ||
+    hi < 0 ||
+    li < 0 ||
+    ci < 0
   ) {
 
     throw new Error(
-      "CSV must contain time, open, high, low and close columns."
+      "CSV requires time, open, high, low and close."
     );
 
   }
 
+
   const result = [];
 
+
   for (
-    let i = 1;
-    i < lines.length;
+    let i=1;
+    i<lines.length;
     i++
   ) {
 
-    const parts =
+    const p =
       lines[i].split(",");
+
 
     const timestamp =
       new Date(
-        parts[timeIndex]
+        p[ti]
       ).getTime();
 
+
     const open =
-      Number(parts[openIndex]);
+      Number(p[oi]);
 
     const high =
-      Number(parts[highIndex]);
+      Number(p[hi]);
 
     const low =
-      Number(parts[lowIndex]);
+      Number(p[li]);
 
     const close =
-      Number(parts[closeIndex]);
+      Number(p[ci]);
+
 
     if (
-      !Number.isFinite(timestamp) ||
+      !Number.isFinite(
+        timestamp
+      ) ||
       !Number.isFinite(open) ||
       !Number.isFinite(high) ||
       !Number.isFinite(low) ||
       !Number.isFinite(close)
     ) {
+
       continue;
+
     }
 
-    if (
-      high < low ||
-      open > high ||
-      open < low ||
-      close > high ||
-      close < low
-    ) {
-      continue;
-    }
 
     result.push({
-      time: Math.floor(
-        timestamp / 1000
-      ),
+
+      time:
+        Math.floor(
+          timestamp / 1000
+        ),
+
       open,
+
       high,
+
       low,
+
       close
+
     });
 
   }
 
+
   result.sort(
-    (a, b) =>
+    (a,b) =>
       a.time - b.time
   );
 
-  const unique = [];
 
-  let lastTime = null;
-
-  for (const candle of result) {
-
-    if (
-      candle.time === lastTime
-    ) {
-      continue;
-    }
-
-    unique.push(candle);
-
-    lastTime = candle.time;
-
-  }
-
-  return unique;
+  return result;
 
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| CSV loading
-|--------------------------------------------------------------------------
-*/
+document
+  .getElementById("csv")
+  .addEventListener(
+    "change",
+    async event => {
 
-async function loadCSVFile(file) {
+      const file =
+        event.target.files?.[0];
 
-  if (!file) {
-    return;
-  }
+      if (!file) {
+        return;
+      }
 
-  if (
-    file.size >
-    25 * 1024 * 1024
-  ) {
 
-    setManualStatus(
-      "CSV file is larger than 25 MB.",
-      "error"
-    );
+      try {
 
-    return;
+        const text =
+          await file.text();
 
-  }
 
-  try {
+        state.rawCandles =
+          parseCSV(text);
 
-    const text =
-      await file.text();
 
-    const candles =
-      parseCSV(text);
+        state.candles =
+          aggregateCandles(
+            state.rawCandles,
+            state.timeframe
+          );
 
-    if (!candles.length) {
 
-      throw new Error(
-        "No valid OHLC candles found."
-      );
+        state.currentIndex =
+          state.candles.length
+            ? 0
+            : -1;
+
+
+        renderChart();
+
+        updateStats();
+
+        updateReplay();
+
+
+        const status =
+          document.getElementById(
+            "manualStatus"
+          );
+
+
+        status.textContent =
+          `${state.rawCandles.length.toLocaleString()} base candles loaded.`;
+
+        status.className =
+          "status-box ok";
+
+
+      } catch(error) {
+
+        document.getElementById(
+          "manualStatus"
+        ).textContent =
+          error.message;
+
+      }
 
     }
-
-    if (
-      candles.length > 200000
-    ) {
-
-      throw new Error(
-        "Maximum supported rows: 200,000."
-      );
-
-    }
-
-    loadCandles(candles);
-
-    setManualStatus(
-      `${candles.length.toLocaleString()} candles loaded successfully.`,
-      "success"
-    );
-
-  } catch (error) {
-
-    console.error(error);
-
-    setManualStatus(
-      error.message ||
-      "CSV import failed.",
-      "error"
-    );
-
-  }
-
-}
-
-
-csvFile.addEventListener(
-  "change",
-  event => {
-
-    const file =
-      event.target.files?.[0];
-
-    loadCSVFile(file);
-
-  }
-);
+  );
 
 
 /*
 |--------------------------------------------------------------------------
-| Drag & drop
+| REPLAY
 |--------------------------------------------------------------------------
 */
 
-dropZone.addEventListener(
-  "dragover",
-  event => {
+function renderReplay() {
 
-    event.preventDefault();
-
-    dropZone.classList.add(
-      "dragover"
-    );
-
-  }
-);
-
-dropZone.addEventListener(
-  "dragleave",
-  () => {
-
-    dropZone.classList.remove(
-      "dragover"
-    );
-
-  }
-);
-
-dropZone.addEventListener(
-  "drop",
-  event => {
-
-    event.preventDefault();
-
-    dropZone.classList.remove(
-      "dragover"
-    );
-
-    const file =
-      event.dataTransfer.files?.[0];
-
-    if (!file) {
-      return;
-    }
-
-    loadCSVFile(file);
-
-  }
-);
-
-
-/*
-|--------------------------------------------------------------------------
-| Load candles
-|--------------------------------------------------------------------------
-*/
-
-function loadCandles(candles) {
-
-  stopReplay();
-
-  state.candles =
-    candles.map(c => ({
-      time: c.time,
-      open: c.open,
-      high: c.high,
-      low: c.low,
-      close: c.close
-    }));
-
-  state.visibleCandles = [];
-
-  state.currentIndex = -1;
-
-  state.position = null;
-
-  state.trades = [];
-
-  state.realizedPnl = 0;
-
-  state.equity = 0;
-
-  state.peakEquity = 0;
-
-  state.maxDrawdown = 0;
-
-  candleSeries.setData([]);
-
-  chart.timeScale().fitContent();
-
-  chartEmpty.style.display =
-    "none";
-
-  updateStats();
-
-  updateReplayUI();
-
-  /*
-   * Start replay at first candle.
-   */
-  if (state.candles.length) {
-
-    state.currentIndex = 0;
-
-    state.visibleCandles = [
-      state.candles[0]
-    ];
-
-    candleSeries.setData(
-      state.visibleCandles
-    );
-
-    updateReplayUI();
-
-  }
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| Replay
-|--------------------------------------------------------------------------
-*/
-
-function renderCurrentReplay() {
-
-  if (
-    state.currentIndex < 0
-  ) {
-    return;
-  }
-
-  state.visibleCandles =
+  const visible =
     state.candles.slice(
       0,
       state.currentIndex + 1
     );
 
-  candleSeries.setData(
-    state.visibleCandles
+
+  series.setData(
+    visible
   );
 
-  updateReplayUI();
+
+  updateReplay();
+
+  redrawDrawings();
 
 }
 
 
 function next() {
 
-  if (!state.candles.length) {
-    return;
-  }
-
   if (
-    state.currentIndex >=
+    state.currentIndex <
     state.candles.length - 1
   ) {
 
+    state.currentIndex++;
+
+    renderReplay();
+
+  } else {
+
     stopReplay();
 
-    return;
-
   }
-
-  state.currentIndex++;
-
-  renderCurrentReplay();
 
 }
 
 
 function previous() {
 
-  if (!state.candles.length) {
-    return;
-  }
-
   if (
-    state.currentIndex <= 0
+    state.currentIndex > 0
   ) {
-    return;
+
+    state.currentIndex--;
+
+    renderReplay();
+
   }
-
-  state.currentIndex--;
-
-  renderCurrentReplay();
 
 }
 
@@ -1883,150 +2216,166 @@ function previous() {
 function startReplay() {
 
   if (
-    state.isPlaying ||
+    state.playing ||
     !state.candles.length
   ) {
     return;
   }
 
-  state.isPlaying = true;
 
-  playReplay.textContent =
+  state.playing = true;
+
+  document.getElementById(
+    "play"
+  ).textContent =
     "⏸ Pause";
 
-  const tick = () => {
 
-    if (!state.isPlaying) {
+  const loop = () => {
+
+    if (!state.playing) {
       return;
     }
 
-    if (
-      state.currentIndex >=
-      state.candles.length - 1
-    ) {
-
-      stopReplay();
-
-      return;
-
-    }
 
     next();
 
-    state.playTimer =
-      setTimeout(
-        tick,
-        Number(speed.value)
-      );
+
+    if (
+      state.playing
+    ) {
+
+      state.timer =
+        setTimeout(
+          loop,
+          500
+        );
+
+    }
 
   };
 
-  tick();
+
+  loop();
 
 }
 
 
 function stopReplay() {
 
-  state.isPlaying = false;
+  state.playing = false;
 
-  playReplay.textContent =
+  document.getElementById(
+    "play"
+  ).textContent =
     "▶ Play";
 
-  if (state.playTimer) {
+
+  if (state.timer) {
 
     clearTimeout(
-      state.playTimer
+      state.timer
     );
 
-    state.playTimer = null;
+    state.timer = null;
 
   }
 
 }
 
 
-previousCandle.addEventListener(
-  "click",
-  previous
-);
+document
+  .getElementById("next")
+  .addEventListener(
+    "click",
+    next
+  );
 
-nextCandle.addEventListener(
-  "click",
-  next
-);
 
-playReplay.addEventListener(
-  "click",
-  () => {
+document
+  .getElementById("prev")
+  .addEventListener(
+    "click",
+    previous
+  );
 
-    if (state.isPlaying) {
 
-      stopReplay();
+document
+  .getElementById("play")
+  .addEventListener(
+    "click",
+    () => {
 
-    } else {
+      if (
+        state.playing
+      ) {
 
-      startReplay();
+        stopReplay();
+
+      } else {
+
+        startReplay();
+
+      }
 
     }
-
-  }
-);
+  );
 
 
 /*
 |--------------------------------------------------------------------------
-| Trading
+| TRADING
 |--------------------------------------------------------------------------
 */
 
-function getCurrentCandle() {
+function currentCandle() {
 
-  if (
-    state.currentIndex < 0
-  ) {
-    return null;
-  }
-
-  return (
-    state.candles[
-      state.currentIndex
-    ] || null
-  );
+  return state.candles[
+    state.currentIndex
+  ];
 
 }
 
 
-function openPosition(side) {
+function openPosition(
+  side
+) {
 
   const candle =
-    getCurrentCandle();
+    currentCandle();
 
-  if (!candle) {
+
+  if (
+    !candle ||
+    state.position
+  ) {
     return;
   }
 
-  if (state.position) {
-    return;
-  }
 
   state.position = {
+
     side,
+
     entry:
       candle.close,
+
     time:
       candle.time
+
   };
+
 
   updateStats();
 
 }
 
 
-function closeCurrentPosition() {
+function closePosition() {
 
   const candle =
-    getCurrentCandle();
+    currentCandle();
+
 
   if (
     !candle ||
@@ -2035,182 +2384,1326 @@ function closeCurrentPosition() {
     return;
   }
 
-  const position =
+
+  const p =
     state.position;
 
+
   const direction =
-    position.side === "LONG"
+    p.side === "LONG"
       ? 1
       : -1;
+
 
   const pnl =
     (
       candle.close -
-      position.entry
-    ) * direction;
+      p.entry
+    ) *
+    direction;
 
-  state.realizedPnl += pnl;
+
+  state.pnl += pnl;
+
 
   state.trades.push({
+
     side:
-      position.side,
+      p.side,
+
     entry:
-      position.entry,
+      p.entry,
+
     exit:
       candle.close,
+
     pnl
+
   });
 
+
   state.position = null;
+
 
   updateStats();
 
 }
 
 
-buy.addEventListener(
-  "click",
-  () => openPosition("LONG")
-);
+document
+  .getElementById("buy")
+  .addEventListener(
+    "click",
+    () =>
+      openPosition("LONG")
+  );
 
-sell.addEventListener(
-  "click",
-  () => openPosition("SHORT")
-);
 
-closePosition.addEventListener(
-  "click",
-  closeCurrentPosition
-);
+document
+  .getElementById("sell")
+  .addEventListener(
+    "click",
+    () =>
+      openPosition("SHORT")
+  );
+
+
+document
+  .getElementById("close")
+  .addEventListener(
+    "click",
+    closePosition
+  );
 
 
 /*
 |--------------------------------------------------------------------------
-| Stats
+| STATS
 |--------------------------------------------------------------------------
 */
 
 function updateStats() {
 
-  const candles =
-    state.candles.length;
-
   document.getElementById(
-    "statCandles"
+    "candles"
   ).textContent =
-    candles.toLocaleString();
+    state.candles.length
+      .toLocaleString();
+
 
   document.getElementById(
-    "statPosition"
+    "position"
   ).textContent =
     state.position
       ? state.position.side
       : "FLAT";
 
+
   document.getElementById(
-    "statTrades"
+    "trades"
   ).textContent =
     state.trades.length;
 
-  document.getElementById(
-    "statPnl"
-  ).textContent =
-    state.realizedPnl.toFixed(5);
-
-  const wins =
-    state.trades.filter(
-      trade =>
-        trade.pnl > 0
-    ).length;
-
-  const winRate =
-    state.trades.length
-      ? (
-          wins /
-          state.trades.length *
-          100
-        )
-      : 0;
 
   document.getElementById(
-    "statWinRate"
+    "pnl"
   ).textContent =
-    `${winRate.toFixed(1)}%`;
-
-  document.getElementById(
-    "statDrawdown"
-  ).textContent =
-    state.maxDrawdown.toFixed(5);
+    state.pnl.toFixed(5);
 
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| Replay UI
+| REPLAY UI
 |--------------------------------------------------------------------------
 */
 
-function updateReplayUI() {
+function updateReplay() {
 
-  if (!state.candles.length) {
+  if (
+    !state.candles.length
+  ) {
 
     document.getElementById(
       "replayInfo"
     ).textContent =
       "No data";
 
-    document.getElementById(
-      "replayProgressFill"
-    ).style.width =
-      "0%";
-
     return;
 
   }
 
-  const current =
-    Math.max(
-      0,
-      state.currentIndex
-    );
-
-  const total =
-    state.candles.length;
-
-  const progress =
-    total > 1
-      ? (
-          current /
-          (total - 1) *
-          100
-        )
-      : 100;
 
   const candle =
-    state.candles[current];
+    state.candles[
+      state.currentIndex
+    ];
+
 
   const date =
     new Date(
       candle.time * 1000
     );
 
+
   document.getElementById(
     "replayInfo"
   ).textContent =
-    `${current + 1} / ${total.toLocaleString()} • ${date.toLocaleString()}`;
+    `${state.currentIndex + 1} / ${state.candles.length.toLocaleString()} • ${date.toLocaleString()}`;
+
+
+  const percent =
+    state.candles.length > 1
+      ? state.currentIndex /
+        (state.candles.length - 1) *
+        100
+      : 100;
+
 
   document.getElementById(
-    "replayProgressFill"
+    "progressFill"
   ).style.width =
-    `${progress}%`;
+    `${percent}%`;
 
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| Keyboard shortcuts
+| DRAWING ENGINE
+|--------------------------------------------------------------------------
+*/
+
+function setDrawingTool(
+  tool
+) {
+
+  state.drawingTool =
+    tool;
+
+
+  document
+    .querySelectorAll(
+      ".draw-btn"
+    )
+    .forEach(
+      button => {
+
+        button.classList.toggle(
+          "active",
+          button.dataset.tool ===
+          tool
+        );
+
+      }
+    );
+
+
+  if (
+    tool === "cursor"
+  ) {
+
+    canvas.style.pointerEvents =
+      "none";
+
+  } else {
+
+    canvas.style.pointerEvents =
+      "auto";
+
+  }
+
+}
+
+
+document
+  .querySelectorAll(
+    ".draw-btn"
+  )
+  .forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          setDrawingTool(
+            button.dataset.tool
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+/*
+|--------------------------------------------------------------------------
+| PRICE / TIME CONVERSION
+|--------------------------------------------------------------------------
+*/
+
+function coordinateToTime(
+  x
+) {
+
+  return chart.timeScale()
+    .coordinateToTime(x);
+
+}
+
+
+function coordinateToPrice(
+  y
+) {
+
+  return series.coordinateToPrice(
+    y
+  );
+
+}
+
+
+function timeToX(
+  time
+) {
+
+  return chart.timeScale()
+    .timeToCoordinate(
+      time
+    );
+
+}
+
+
+function priceToY(
+  price
+) {
+
+  return series.priceToCoordinate(
+    price
+  );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DRAW CANVAS
+|--------------------------------------------------------------------------
+*/
+
+function redrawDrawings() {
+
+  const width =
+    chartArea.clientWidth;
+
+  const height =
+    chartArea.clientHeight;
+
+
+  ctx.clearRect(
+    0,
+    0,
+    width,
+    height
+  );
+
+
+  for (
+    const drawing of
+    state.drawings
+  ) {
+
+    drawObject(
+      drawing
+    );
+
+  }
+
+
+  if (
+    state.drawingPreview
+  ) {
+
+    drawObject(
+      state.drawingPreview,
+      true
+    );
+
+  }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DRAW OBJECT
+|--------------------------------------------------------------------------
+*/
+
+function drawObject(
+  d,
+  preview=false
+) {
+
+  const x1 =
+    timeToX(d.t1);
+
+  const y1 =
+    priceToY(d.p1);
+
+  const x2 =
+    timeToX(d.t2);
+
+  const y2 =
+    priceToY(d.p2);
+
+
+  if (
+    x1 === null ||
+    y1 === null
+  ) {
+    return;
+  }
+
+
+  ctx.save();
+
+
+  ctx.lineWidth =
+    1.5;
+
+
+  ctx.strokeStyle =
+    preview
+      ? "#8aa4ff"
+      : "#d7dee8";
+
+
+  ctx.fillStyle =
+    "rgba(41,98,255,.12)";
+
+
+  /*
+   * HORIZONTAL
+   */
+
+  if (
+    d.type ===
+    "horizontal"
+  ) {
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      0,
+      y1
+    );
+
+    ctx.lineTo(
+      chartArea.clientWidth,
+      y1
+    );
+
+    ctx.stroke();
+
+  }
+
+
+  /*
+   * VERTICAL
+   */
+
+  else if (
+    d.type ===
+    "vertical"
+  ) {
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      x1,
+      0
+    );
+
+    ctx.lineTo(
+      x1,
+      chartArea.clientHeight
+    );
+
+    ctx.stroke();
+
+  }
+
+
+  /*
+   * TREND
+   */
+
+  else if (
+    d.type ===
+    "trend"
+  ) {
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      x1,
+      y1
+    );
+
+    ctx.lineTo(
+      x2,
+      y2
+    );
+
+    ctx.stroke();
+
+  }
+
+
+  /*
+   * RAY
+   */
+
+  else if (
+    d.type ===
+    "ray"
+  ) {
+
+    const dx =
+      x2 - x1;
+
+    const dy =
+      y2 - y1;
+
+
+    let endX =
+      chartArea.clientWidth;
+
+    let endY =
+      y1 +
+      (
+        endX -
+        x1
+      ) *
+      dy /
+      dx;
+
+
+    if (
+      dx === 0
+    ) {
+
+      endX =
+        x1;
+
+      endY =
+        chartArea.clientHeight;
+
+    }
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      x1,
+      y1
+    );
+
+    ctx.lineTo(
+      endX,
+      endY
+    );
+
+    ctx.stroke();
+
+  }
+
+
+  /*
+   * RECTANGLE
+   */
+
+  else if (
+    d.type ===
+    "rectangle"
+  ) {
+
+    const left =
+      Math.min(
+        x1,
+        x2
+      );
+
+    const top =
+      Math.min(
+        y1,
+        y2
+      );
+
+    const width =
+      Math.abs(
+        x2 - x1
+      );
+
+    const height =
+      Math.abs(
+        y2 - y1
+      );
+
+
+    ctx.fillRect(
+      left,
+      top,
+      width,
+      height
+    );
+
+
+    ctx.strokeRect(
+      left,
+      top,
+      width,
+      height
+    );
+
+  }
+
+
+  /*
+   * FIB
+   */
+
+  else if (
+    d.type ===
+    "fib"
+  ) {
+
+    const levels = [
+      0,
+      .236,
+      .382,
+      .5,
+      .618,
+      .786,
+      1
+    ];
+
+
+    for (
+      const level of
+      levels
+    ) {
+
+      const price =
+        d.p1 +
+        (
+          d.p2 -
+          d.p1
+        ) *
+        level;
+
+
+      const y =
+        priceToY(
+          price
+        );
+
+
+      if (
+        y === null
+      ) {
+        continue;
+      }
+
+
+      ctx.beginPath();
+
+      ctx.moveTo(
+        Math.min(
+          x1,
+          x2
+        ),
+        y
+      );
+
+      ctx.lineTo(
+        Math.max(
+          x1,
+          x2
+        ),
+        y
+      );
+
+      ctx.stroke();
+
+
+      ctx.fillStyle =
+        "#9aa8ba";
+
+      ctx.font =
+        "10px Arial";
+
+      ctx.fillText(
+        `${(
+          level * 100
+        ).toFixed(1)}%`,
+        Math.min(
+          x1,
+          x2
+        ) + 4,
+        y - 3
+      );
+
+    }
+
+  }
+
+
+  /*
+   * MEASURE
+   */
+
+  else if (
+    d.type ===
+    "measure"
+  ) {
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      x1,
+      y1
+    );
+
+    ctx.lineTo(
+      x2,
+      y2
+    );
+
+    ctx.stroke();
+
+
+    const change =
+      (
+        d.p2 -
+        d.p1
+      ) /
+      d.p1 *
+      100;
+
+
+    const distance =
+      Math.abs(
+        d.t2 -
+        d.t1
+      );
+
+
+    const hours =
+      distance /
+      3600;
+
+
+    ctx.fillStyle =
+      "#d7dee8";
+
+    ctx.font =
+      "11px Arial";
+
+
+    ctx.fillText(
+      `${change.toFixed(2)}% • ${hours.toFixed(2)}h`,
+      x2 + 5,
+      y2 - 5
+    );
+
+  }
+
+
+  /*
+   * ARROW
+   */
+
+  else if (
+    d.type ===
+    "arrow"
+  ) {
+
+    drawArrow(
+      x1,
+      y1,
+      x2,
+      y2
+    );
+
+  }
+
+
+  /*
+   * TEXT
+   */
+
+  else if (
+    d.type ===
+    "text"
+  ) {
+
+    ctx.fillStyle =
+      "#e8edf4";
+
+    ctx.font =
+      "12px Arial";
+
+    ctx.fillText(
+      d.text ||
+      "Text",
+      x1,
+      y1
+    );
+
+  }
+
+
+  ctx.restore();
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ARROW
+|--------------------------------------------------------------------------
+*/
+
+function drawArrow(
+  x1,
+  y1,
+  x2,
+  y2
+) {
+
+  const angle =
+    Math.atan2(
+      y2 - y1,
+      x2 - x1
+    );
+
+
+  const size =
+    9;
+
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    x1,
+    y1
+  );
+
+  ctx.lineTo(
+    x2,
+    y2
+  );
+
+  ctx.stroke();
+
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    x2,
+    y2
+  );
+
+  ctx.lineTo(
+    x2 -
+      size *
+      Math.cos(
+        angle -
+        Math.PI / 6
+      ),
+
+    y2 -
+      size *
+      Math.sin(
+        angle -
+        Math.PI / 6
+      )
+  );
+
+  ctx.lineTo(
+    x2 -
+      size *
+      Math.cos(
+        angle +
+        Math.PI / 6
+      ),
+
+    y2 -
+      size *
+      Math.sin(
+        angle +
+        Math.PI / 6
+      )
+  );
+
+  ctx.closePath();
+
+  ctx.fillStyle =
+    "#d7dee8";
+
+  ctx.fill();
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| MOUSE DRAWING
+|--------------------------------------------------------------------------
+*/
+
+canvas.addEventListener(
+  "mousedown",
+  event => {
+
+    if (
+      state.drawingTool ===
+      "cursor"
+    ) {
+      return;
+    }
+
+
+    const rect =
+      canvas.getBoundingClientRect();
+
+
+    const x =
+      event.clientX -
+      rect.left;
+
+
+    const y =
+      event.clientY -
+      rect.top;
+
+
+    const time =
+      coordinateToTime(
+        x
+      );
+
+
+    const price =
+      coordinateToPrice(
+        y
+      );
+
+
+    if (
+      time === null ||
+      price === null
+    ) {
+      return;
+    }
+
+
+    state.drawingStart = {
+
+      x,
+
+      y,
+
+      time,
+
+      price
+
+    };
+
+
+    state.drawingPreview = {
+
+      type:
+        state.drawingTool,
+
+      t1:
+        time,
+
+      p1:
+        price,
+
+      t2:
+        time,
+
+      p2:
+        price
+
+    };
+
+
+    redrawDrawings();
+
+  }
+);
+
+
+canvas.addEventListener(
+  "mousemove",
+  event => {
+
+    if (
+      !state.drawingStart
+    ) {
+      return;
+    }
+
+
+    const rect =
+      canvas.getBoundingClientRect();
+
+
+    const x =
+      event.clientX -
+      rect.left;
+
+
+    const y =
+      event.clientY -
+      rect.top;
+
+
+    const time =
+      coordinateToTime(
+        x
+      );
+
+
+    const price =
+      coordinateToPrice(
+        y
+      );
+
+
+    if (
+      time === null ||
+      price === null
+    ) {
+      return;
+    }
+
+
+    state.drawingPreview = {
+
+      type:
+        state.drawingTool,
+
+      t1:
+        state.drawingStart.time,
+
+      p1:
+        state.drawingStart.price,
+
+      t2:
+        time,
+
+      p2:
+        price
+
+    };
+
+
+    redrawDrawings();
+
+  }
+);
+
+
+canvas.addEventListener(
+  "mouseup",
+  event => {
+
+    if (
+      !state.drawingStart
+    ) {
+      return;
+    }
+
+
+    const rect =
+      canvas.getBoundingClientRect();
+
+
+    const x =
+      event.clientX -
+      rect.left;
+
+
+    const y =
+      event.clientY -
+      rect.top;
+
+
+    const time =
+      coordinateToTime(
+        x
+      );
+
+
+    const price =
+      coordinateToPrice(
+        y
+      );
+
+
+    if (
+      time === null ||
+      price === null
+    ) {
+
+      state.drawingStart =
+        null;
+
+      state.drawingPreview =
+        null;
+
+      redrawDrawings();
+
+      return;
+
+    }
+
+
+    const drawing = {
+
+      type:
+        state.drawingTool,
+
+      t1:
+        state.drawingStart.time,
+
+      p1:
+        state.drawingStart.price,
+
+      t2:
+        time,
+
+      p2:
+        price
+
+    };
+
+
+    /*
+     * Text tool.
+     */
+
+    if (
+      state.drawingTool ===
+      "text"
+    ) {
+
+      const text =
+        prompt(
+          "Enter text:"
+        );
+
+
+      if (
+        text
+      ) {
+
+        drawing.text =
+          text;
+
+      } else {
+
+        state.drawingStart =
+          null;
+
+        state.drawingPreview =
+          null;
+
+        redrawDrawings();
+
+        return;
+
+      }
+
+    }
+
+
+    state.drawings.push(
+      drawing
+    );
+
+
+    state.drawingStart =
+      null;
+
+    state.drawingPreview =
+      null;
+
+
+    redrawDrawings();
+
+  }
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| UNDO
+|--------------------------------------------------------------------------
+*/
+
+document
+  .getElementById(
+    "undoDrawing"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      state.drawings.pop();
+
+      redrawDrawings();
+
+    }
+  );
+
+
+/*
+|--------------------------------------------------------------------------
+| CLEAR
+|--------------------------------------------------------------------------
+*/
+
+document
+  .getElementById(
+    "clearDrawings"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      state.drawings = [];
+
+      redrawDrawings();
+
+    }
+  );
+
+
+/*
+|--------------------------------------------------------------------------
+| TABS
+|--------------------------------------------------------------------------
+*/
+
+document
+  .getElementById("autoTab")
+  .addEventListener(
+    "click",
+    () => {
+
+      document
+        .getElementById(
+          "autoTab"
+        )
+        .classList.add(
+          "active"
+        );
+
+      document
+        .getElementById(
+          "manualTab"
+        )
+        .classList.remove(
+          "active"
+        );
+
+      document
+        .getElementById(
+          "autoPanel"
+        ).style.display =
+        "block";
+
+      document
+        .getElementById(
+          "manualPanel"
+        ).style.display =
+        "none";
+
+    }
+  );
+
+
+document
+  .getElementById("manualTab")
+  .addEventListener(
+    "click",
+    () => {
+
+      document
+        .getElementById(
+          "manualTab"
+        )
+        .classList.add(
+          "active"
+        );
+
+      document
+        .getElementById(
+          "autoTab"
+        )
+        .classList.remove(
+          "active"
+        );
+
+      document
+        .getElementById(
+          "autoPanel"
+        ).style.display =
+        "none";
+
+      document
+        .getElementById(
+          "manualPanel"
+        ).style.display =
+        "block";
+
+    }
+  );
+
+
+/*
+|--------------------------------------------------------------------------
+| HEALTH
+|--------------------------------------------------------------------------
+*/
+
+async function health() {
+
+  try {
+
+    const response =
+      await fetch(
+        "/api/health"
+      );
+
+
+    const data =
+      await response.json();
+
+
+    document.getElementById(
+      "systemStatus"
+    ).textContent =
+      data.automaticData
+        ? "Automatic FX data online"
+        : "Manual mode";
+
+  } catch {
+
+    document.getElementById(
+      "systemStatus"
+    ).textContent =
+      "Backend unavailable";
+
+  }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| KEYBOARD
 |--------------------------------------------------------------------------
 */
 
@@ -2225,33 +3718,37 @@ document.addEventListener(
       return;
     }
 
+
     if (
-      event.code === "ArrowRight"
+      event.key ===
+      "ArrowRight"
     ) {
 
       next();
 
     }
 
+
     if (
-      event.code === "ArrowLeft"
+      event.key ===
+      "ArrowLeft"
     ) {
 
       previous();
 
     }
 
+
     if (
-      event.code === "Space"
+      event.code ===
+      "Space"
     ) {
 
       event.preventDefault();
 
-      if (state.isPlaying) {
-        stopReplay();
-      } else {
-        startReplay();
-      }
+      state.playing
+        ? stopReplay()
+        : startReplay();
 
     }
 
@@ -2261,14 +3758,24 @@ document.addEventListener(
 
 /*
 |--------------------------------------------------------------------------
-| Initial state
+| INITIALIZE
 |--------------------------------------------------------------------------
 */
 
+setDrawingTool(
+  "cursor"
+);
+
 updateStats();
-updateReplayUI();
+
+updateReplay();
+
+health();
+
+resize();
 
 </script>
 
 </body>
+
 </html>

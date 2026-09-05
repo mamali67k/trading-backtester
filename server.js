@@ -22,19 +22,26 @@ app.use(
 
 app.use(express.json({ limit: "100kb" }));
 
-const limiter = rateLimit({
+
+/*
+|--------------------------------------------------------------------------
+| RATE LIMIT
+|--------------------------------------------------------------------------
+*/
+
+const apiLimiter = rateLimit({
   windowMs: 60 * 1000,
   limit: 30,
-  standardHeaders: "draft-8",
+  standardHeaders: true,
   legacyHeaders: false
 });
 
-app.use("/api/", limiter);
+app.use("/api", apiLimiter);
 
 
 /*
 |--------------------------------------------------------------------------
-| FX PAIRS
+| SUPPORTED PAIRS
 |--------------------------------------------------------------------------
 */
 
@@ -51,21 +58,7 @@ const PAIRS = [
 
 /*
 |--------------------------------------------------------------------------
-| IMPORTANT
-|
-| The server always downloads ONE BASE TIMEFRAME.
-|
-| Frontend creates:
-|
-| 1m
-| 5m
-| 15m
-| 30m
-| 1h
-| 4h
-| 1d
-|
-| locally.
+| BASE DATA
 |--------------------------------------------------------------------------
 */
 
@@ -73,25 +66,62 @@ const BASE_INTERVAL = "1min";
 
 const MAX_CANDLES = 5000;
 
-const CACHE_TTL = 60 * 60 * 1000;
+
+/*
+|--------------------------------------------------------------------------
+| CACHE
+|--------------------------------------------------------------------------
+*/
 
 const cache = new Map();
+
+const CACHE_TTL = 60 * 60 * 1000;
 
 
 /*
 |--------------------------------------------------------------------------
-| HEALTH
+| ROOT TEST
+|--------------------------------------------------------------------------
+*/
+
+app.get("/", (req, res) => {
+
+  res.sendFile(
+    path.join(
+      __dirname,
+      "index.html"
+    )
+  );
+
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| HEALTH CHECK
 |--------------------------------------------------------------------------
 */
 
 app.get("/api/health", (req, res) => {
 
   res.json({
+
     ok: true,
-    automaticData: Boolean(API_KEY),
-    baseInterval: BASE_INTERVAL,
-    pairs: PAIRS,
-    timestamp: new Date().toISOString()
+
+    server: "Trading Backtester",
+
+    automaticData:
+      Boolean(API_KEY),
+
+    baseInterval:
+      BASE_INTERVAL,
+
+    pairs:
+      PAIRS,
+
+    time:
+      new Date().toISOString()
+
   });
 
 });
@@ -99,15 +129,41 @@ app.get("/api/health", (req, res) => {
 
 /*
 |--------------------------------------------------------------------------
-| PAIRS
+| API TEST
+|--------------------------------------------------------------------------
+*/
+
+app.get("/api/test", (req, res) => {
+
+  res.json({
+
+    ok: true,
+
+    message:
+      "API endpoint is working.",
+
+    time:
+      new Date().toISOString()
+
+  });
+
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| FX PAIRS
 |--------------------------------------------------------------------------
 */
 
 app.get("/api/fx/pairs", (req, res) => {
 
   res.json({
+
     ok: true,
+
     pairs: PAIRS
+
   });
 
 });
@@ -115,58 +171,90 @@ app.get("/api/fx/pairs", (req, res) => {
 
 /*
 |--------------------------------------------------------------------------
-| VALIDATION
+| NUMBER
 |--------------------------------------------------------------------------
 */
 
-function validPair(pair) {
+function toNumber(value) {
 
-  return PAIRS.includes(pair);
+  const result =
+    Number(value);
 
-}
+  if (
+    Number.isFinite(result)
+  ) {
 
+    return result;
 
-function number(value) {
+  }
 
-  const n = Number(value);
-
-  return Number.isFinite(n)
-    ? n
-    : null;
+  return null;
 
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| NORMALIZE
+| NORMALIZE PROVIDER DATA
 |--------------------------------------------------------------------------
 */
 
-function normalize(values) {
+function normalizeCandles(values) {
 
-  if (!Array.isArray(values)) {
+  if (
+    !Array.isArray(values)
+  ) {
 
     return [];
 
   }
 
-  const result = [];
 
-  for (const row of values) {
+  const candles = [];
 
-    const time = new Date(
-      `${row.datetime}Z`
-    ).getTime();
 
-    const open = number(row.open);
-    const high = number(row.high);
-    const low = number(row.low);
-    const close = number(row.close);
+  for (
+    const row of values
+  ) {
 
-    if (!Number.isFinite(time)) {
+    if (
+      !row.datetime
+    ) {
+
       continue;
+
     }
+
+
+    const timestamp =
+      new Date(
+        `${row.datetime}Z`
+      ).getTime();
+
+
+    const open =
+      toNumber(row.open);
+
+    const high =
+      toNumber(row.high);
+
+    const low =
+      toNumber(row.low);
+
+    const close =
+      toNumber(row.close);
+
+
+    if (
+      !Number.isFinite(
+        timestamp
+      )
+    ) {
+
+      continue;
+
+    }
+
 
     if (
       open === null ||
@@ -179,10 +267,27 @@ function normalize(values) {
 
     }
 
+
     if (
-      high < low ||
+      high < low
+    ) {
+
+      continue;
+
+    }
+
+
+    if (
       open < low ||
-      open > high ||
+      open > high
+    ) {
+
+      continue;
+
+    }
+
+
+    if (
       close < low ||
       close > high
     ) {
@@ -191,38 +296,65 @@ function normalize(values) {
 
     }
 
-    result.push({
-      time: Math.floor(time / 1000),
+
+    candles.push({
+
+      time:
+        Math.floor(
+          timestamp / 1000
+        ),
+
       open,
+
       high,
+
       low,
+
       close
+
     });
 
   }
 
 
-  result.sort(
+  candles.sort(
     (a, b) =>
       a.time - b.time
   );
 
 
+  /*
+   * Remove duplicates.
+   */
+
   const unique = [];
 
-  let last = null;
+  let lastTime = null;
 
-  for (const candle of result) {
 
-    if (candle.time === last) {
+  for (
+    const candle of candles
+  ) {
+
+    if (
+      candle.time ===
+      lastTime
+    ) {
+
       continue;
+
     }
 
-    unique.push(candle);
 
-    last = candle.time;
+    unique.push(
+      candle
+    );
+
+    lastTime =
+      candle.time;
 
   }
+
 
   return unique;
 
@@ -231,30 +363,46 @@ function normalize(values) {
 
 /*
 |--------------------------------------------------------------------------
-| CACHE KEY
+| API CACHE
 |--------------------------------------------------------------------------
 */
 
-function cacheKey(
-  pair,
-  startDate,
-  endDate,
-  outputsize
+function getCache(
+  key
 ) {
 
-  return [
-    pair,
-    startDate || "",
-    endDate || "",
-    outputsize
-  ].join("|");
+  const item =
+    cache.get(key);
+
+
+  if (!item) {
+
+    return null;
+
+  }
+
+
+  if (
+    Date.now() -
+    item.createdAt >
+    CACHE_TTL
+  ) {
+
+    cache.delete(key);
+
+    return null;
+
+  }
+
+
+  return item.data;
 
 }
 
 
 /*
 |--------------------------------------------------------------------------
-| BASE DATA API
+| FX BASE CANDLES
 |--------------------------------------------------------------------------
 */
 
@@ -262,18 +410,35 @@ app.get(
   "/api/fx/base-candles",
   async (req, res) => {
 
+    console.log(
+      "FX DATA REQUEST:",
+      req.query
+    );
+
+
     try {
+
+      /*
+       * API KEY
+       */
 
       if (!API_KEY) {
 
         return res.status(503).json({
+
           ok: false,
+
           error:
-            "TWELVE_DATA_API_KEY is not configured."
+            "TWELVE_DATA_API_KEY is not configured on Railway."
+
         });
 
       }
 
+
+      /*
+       * PAIR
+       */
 
       const pair =
         String(
@@ -283,40 +448,44 @@ app.get(
         .toUpperCase();
 
 
-      if (!validPair(pair)) {
+      if (
+        !PAIRS.includes(pair)
+      ) {
 
         return res.status(400).json({
+
           ok: false,
+
           error:
-            "Unsupported FX pair."
+            "Unsupported FX pair.",
+
+          availablePairs:
+            PAIRS
+
         });
 
       }
 
 
-      const startDate =
-        req.query.startDate
-          ? String(req.query.startDate)
-          : "";
-
-
-      const endDate =
-        req.query.endDate
-          ? String(req.query.endDate)
-          : "";
-
+      /*
+       * OUTPUT SIZE
+       */
 
       let outputsize =
-        Number(
-          req.query.outputsize || MAX_CANDLES
+        parseInt(
+          req.query.outputsize ||
+          "5000",
+          10
         );
 
 
       if (
-        !Number.isInteger(outputsize)
+        !Number.isInteger(
+          outputsize
+        )
       ) {
 
-        outputsize = MAX_CANDLES;
+        outputsize = 5000;
 
       }
 
@@ -331,33 +500,63 @@ app.get(
         );
 
 
-      const key =
-        cacheKey(
-          pair,
-          startDate,
-          endDate,
-          outputsize
-        );
+      /*
+       * DATES
+       */
+
+      const startDate =
+        req.query.startDate
+          ? String(
+              req.query.startDate
+            )
+          : "";
+
+
+      const endDate =
+        req.query.endDate
+          ? String(
+              req.query.endDate
+            )
+          : "";
+
+
+      /*
+       * CACHE KEY
+       */
+
+      const cacheKey = [
+        pair,
+        startDate,
+        endDate,
+        outputsize
+      ].join("|");
 
 
       const cached =
-        cache.get(key);
+        getCache(cacheKey);
 
 
-      if (
-        cached &&
-        Date.now() -
-          cached.createdAt <
-          CACHE_TTL
-      ) {
+      if (cached) {
+
+        console.log(
+          "RETURNING CACHED DATA"
+        );
+
 
         return res.json({
-          ...cached.data,
+
+          ...cached,
+
           cached: true
+
         });
 
       }
 
+
+      /*
+       * PROVIDER URL
+       */
 
       const url =
         new URL(
@@ -389,7 +588,9 @@ app.get(
       );
 
 
-      if (startDate) {
+      if (
+        startDate
+      ) {
 
         url.searchParams.set(
           "start_date",
@@ -399,7 +600,9 @@ app.get(
       }
 
 
-      if (endDate) {
+      if (
+        endDate
+      ) {
 
         url.searchParams.set(
           "end_date",
@@ -416,11 +619,30 @@ app.get(
 
         url.searchParams.set(
           "outputsize",
-          String(outputsize)
+          String(
+            outputsize
+          )
         );
 
       }
 
+
+      console.log(
+        "REQUESTING PROVIDER:"
+      );
+
+      console.log(
+        `PAIR=${pair}`
+      );
+
+      console.log(
+        `INTERVAL=${BASE_INTERVAL}`
+      );
+
+
+      /*
+       * FETCH
+       */
 
       const controller =
         new AbortController();
@@ -430,82 +652,130 @@ app.get(
         setTimeout(
           () =>
             controller.abort(),
-          15000
+          20000
         );
 
 
-      let response;
+      let providerResponse;
+
 
       try {
 
-        response =
+        providerResponse =
           await fetch(
             url,
             {
+
               method: "GET",
+
               headers: {
+
                 Accept:
                   "application/json"
+
               },
+
               signal:
                 controller.signal
+
             }
           );
 
       } finally {
 
-        clearTimeout(timeout);
+        clearTimeout(
+          timeout
+        );
 
       }
 
 
-      const data =
-        await response.json();
+      const providerData =
+        await providerResponse.json();
 
 
-      if (!response.ok) {
+      /*
+       * PROVIDER ERROR
+       */
+
+      if (
+        !providerResponse.ok
+      ) {
+
+        console.error(
+          "PROVIDER HTTP ERROR:",
+          providerData
+        );
+
 
         return res.status(502).json({
+
           ok: false,
+
           error:
-            "Market provider request failed."
+            "Market data provider HTTP error."
+
         });
 
       }
 
 
       if (
-        data.status === "error"
+        providerData.status ===
+        "error"
       ) {
 
-        return res.status(502).json({
-          ok: false,
-          error:
-            data.message ||
-            "Market provider returned an error."
-        });
-
-      }
-
-
-      const candles =
-        normalize(
-          data.values
+        console.error(
+          "PROVIDER API ERROR:",
+          providerData
         );
 
 
-      if (!candles.length) {
+        return res.status(502).json({
 
-        return res.status(404).json({
           ok: false,
+
           error:
-            "No valid market data."
+            providerData.message ||
+            "Market data provider returned an error."
+
         });
 
       }
 
 
+      /*
+       * NORMALIZE
+       */
+
+      const candles =
+        normalizeCandles(
+          providerData.values
+        );
+
+
+      if (
+        candles.length === 0
+      ) {
+
+        return res.status(404).json({
+
+          ok: false,
+
+          error:
+            "Provider returned no valid candles."
+
+        });
+
+      }
+
+
+      /*
+       * RESULT
+       */
+
       const result = {
+
         ok: true,
 
         pair,
@@ -525,18 +795,30 @@ app.get(
           new Date().toISOString(),
 
         cached: false
+
       };
 
 
+      /*
+       * SAVE CACHE
+       */
+
       cache.set(
-        key,
+        cacheKey,
         {
+
           createdAt:
             Date.now(),
 
           data:
             result
+
         }
+      );
+
+
+      console.log(
+        `SUCCESS: ${candles.length} candles`
       );
 
 
@@ -548,7 +830,7 @@ app.get(
     } catch (error) {
 
       console.error(
-        "BASE DATA ERROR:",
+        "FX DATA ERROR:",
         error
       );
 
@@ -559,18 +841,24 @@ app.get(
       ) {
 
         return res.status(504).json({
+
           ok: false,
+
           error:
-            "Market data request timed out."
+            "Market data provider timed out."
+
         });
 
       }
 
 
       return res.status(500).json({
+
         ok: false,
+
         error:
           "Internal server error."
+
       });
 
     }
@@ -589,7 +877,7 @@ app.use(
   express.static(
     __dirname,
     {
-      index: "index.html"
+      index: false
     }
   )
 );
@@ -597,35 +885,25 @@ app.use(
 
 /*
 |--------------------------------------------------------------------------
-| SPA FALLBACK
+| UNKNOWN API ROUTES
 |--------------------------------------------------------------------------
 */
 
-app.get(
-  "*splat",
+app.use(
+  "/api",
   (req, res) => {
 
-    if (
-      req.path.startsWith(
-        "/api/"
-      )
-    ) {
+    res.status(404).json({
 
-      return res.status(404).json({
-        ok: false,
-        error:
-          "API endpoint not found."
-      });
+      ok: false,
 
-    }
+      error:
+        "API endpoint not found.",
 
+      path:
+        req.originalUrl
 
-    res.sendFile(
-      path.join(
-        __dirname,
-        "index.html"
-      )
-    );
+    });
 
   }
 );
@@ -643,19 +921,31 @@ app.listen(
   () => {
 
     console.log(
-      `Trading Backtester running on ${PORT}`
+      "================================"
     );
 
     console.log(
-      `Base market interval: ${BASE_INTERVAL}`
+      "TRADING BACKTESTER SERVER"
     );
 
     console.log(
-      `Automatic data: ${
+      `PORT: ${PORT}`
+    );
+
+    console.log(
+      `AUTOMATIC DATA: ${
         API_KEY
           ? "ENABLED"
           : "DISABLED"
       }`
+    );
+
+    console.log(
+      `BASE INTERVAL: ${BASE_INTERVAL}`
+    );
+
+    console.log(
+      "================================"
     );
 
   }

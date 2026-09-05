@@ -1764,9 +1764,33 @@ async function loadAutomatic() {
 
   try {
 
+    /*
+     * API request
+     *
+     * IMPORTANT:
+     * The API key remains on the server.
+     * The browser only calls our own backend.
+     */
+
+    const apiUrl =
+      `/api/fx/base-candles?${params.toString()}`;
+
+
+    console.log(
+      "REQUESTING:",
+      apiUrl
+    );
+
+
     const response =
       await fetch(
-        `/api/fx/base-candles?${params}`
+        apiUrl,
+        {
+          method: "GET",
+          headers: {
+            "Accept": "application/json"
+          }
+        }
       );
 
 

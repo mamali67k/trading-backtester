@@ -1,889 +1,1000 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
 
-<title>Trading Backtester</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
-<!--
-  Lightweight Charts
-  نسخه ثابت برای جلوگیری از تغییرات ناگهانی CDN
--->
-<script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
+  <meta
+    name="description"
+    content="Professional FX Trading Backtester"
+  >
 
-<style>
-:root {
-    --bg: #020617;
-    --panel: #0b1220;
-    --panel-2: #111827;
-    --border: rgba(148,163,184,.16);
-    --text: #f8fafc;
-    --muted: #94a3b8;
-    --accent: #38bdf8;
-    --green: #22c55e;
-    --red: #ef4444;
-    --yellow: #f59e0b;
-    --shadow: 0 15px 50px rgba(0,0,0,.35);
-}
+  <title>Trading Backtester</title>
 
-* {
-    box-sizing: border-box;
-}
+  <script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
 
-html,
-body {
-    width: 100%;
-    height: 100%;
-}
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --panel: #111720;
+      --panel2: #151d28;
+      --border: #273241;
+      --text: #e7edf5;
+      --muted: #8c98a8;
+      --accent: #3b82f6;
+      --green: #22c55e;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+    }
 
-body {
-    margin: 0;
-    overflow: hidden;
-    background:
-        radial-gradient(circle at 50% -20%, rgba(56,189,248,.08), transparent 35%),
-        var(--bg);
-    color: var(--text);
-    font-family:
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family:
         Inter,
-        "Segoe UI",
-        Tahoma,
         Arial,
+        Helvetica,
         sans-serif;
-}
-
-/* =========================================================
-   APP
-========================================================= */
-
-.app {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-/* =========================================================
-   TOP BAR
-========================================================= */
-
-.topbar {
-    position: relative;
-    height: 58px;
-    min-height: 58px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 18px;
-    border-bottom: 1px solid var(--border);
-    background: rgba(2,6,23,.78);
-    backdrop-filter: blur(18px);
-    z-index: 20;
-}
-
-.topbar::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(56,189,248,.65),
-        transparent
-    );
-}
-
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.logo {
-    width: 34px;
-    height: 34px;
-    border: 1px solid rgba(56,189,248,.5);
-    border-radius: 9px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--accent);
-    background: rgba(56,189,248,.07);
-    font-weight: 800;
-}
-
-.brand-name {
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: .2px;
-}
-
-.brand-version {
-    font-size: 10px;
-    color: var(--muted);
-    margin-top: 2px;
-}
-
-.top-status {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--muted);
-    font-size: 11px;
-}
-
-.status-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 12px rgba(34,197,94,.7);
-}
-
-/* =========================================================
-   MAIN
-========================================================= */
-
-.main {
-    flex: 1;
-    min-height: 0;
-    display: flex;
-}
-
-/* =========================================================
-   LEFT PANEL
-========================================================= */
-
-.sidebar {
-    width: 285px;
-    min-width: 285px;
-    border-left: 1px solid var(--border);
-    background: rgba(11,18,32,.82);
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-}
-
-.sidebar-section {
-    padding: 15px;
-    border-bottom: 1px solid var(--border);
-}
-
-.section-title {
-    color: var(--muted);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: .8px;
-    margin-bottom: 10px;
-}
-
-/* =========================================================
-   FILE UPLOAD
-========================================================= */
-
-.file-drop {
-    border: 1px dashed rgba(148,163,184,.28);
-    border-radius: 10px;
-    padding: 15px;
-    text-align: center;
-    cursor: pointer;
-    transition: .2s;
-    background: rgba(255,255,255,.015);
-}
-
-.file-drop:hover,
-.file-drop.dragging {
-    border-color: var(--accent);
-    background: rgba(56,189,248,.05);
-}
-
-.file-drop-title {
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.file-drop-subtitle {
-    color: var(--muted);
-    font-size: 10px;
-    margin-top: 5px;
-}
-
-#csvInput {
-    display: none;
-}
-
-/* =========================================================
-   CONTROLS
-========================================================= */
-
-.control-row {
-    display: flex;
-    gap: 7px;
-    margin-bottom: 8px;
-}
-
-.control-row:last-child {
-    margin-bottom: 0;
-}
-
-button,
-select,
-input {
-    font: inherit;
-}
-
-button,
-select {
-    height: 35px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--panel-2);
-    color: var(--text);
-}
-
-button {
-    cursor: pointer;
-    padding: 0 11px;
-    transition: .15s;
-}
-
-button:hover:not(:disabled) {
-    border-color: rgba(56,189,248,.45);
-    background: rgba(56,189,248,.08);
-}
-
-button:active:not(:disabled) {
-    transform: translateY(1px);
-}
-
-button:disabled {
-    cursor: not-allowed;
-    opacity: .38;
-}
-
-select {
-    padding: 0 8px;
-    outline: none;
-}
-
-.primary {
-    background: rgba(56,189,248,.12);
-    border-color: rgba(56,189,248,.3);
-}
-
-.buy {
-    flex: 1;
-    color: #86efac;
-}
-
-.sell {
-    flex: 1;
-    color: #fca5a5;
-}
-
-.danger {
-    color: #fca5a5;
-}
-
-/* =========================================================
-   INFO
-========================================================= */
-
-.info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 7px;
-}
-
-.info-card {
-    min-height: 58px;
-    padding: 9px;
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    background: rgba(255,255,255,.015);
-}
-
-.info-label {
-    color: var(--muted);
-    font-size: 9px;
-}
-
-.info-value {
-    margin-top: 5px;
-    font-size: 13px;
-    font-weight: 700;
-    direction: ltr;
-    text-align: right;
-}
-
-/* =========================================================
-   POSITION
-========================================================= */
-
-.position-box {
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    padding: 10px;
-    background: rgba(255,255,255,.015);
-}
-
-.position-status {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 11px;
-}
-
-.position-badge {
-    padding: 3px 7px;
-    border-radius: 5px;
-    font-size: 9px;
-    font-weight: 700;
-}
-
-.position-none {
-    color: var(--muted);
-}
-
-.position-buy {
-    color: #86efac;
-    background: rgba(34,197,94,.1);
-}
-
-.position-sell {
-    color: #fca5a5;
-    background: rgba(239,68,68,.1);
-}
-
-/* =========================================================
-   CHART AREA
-========================================================= */
-
-.chart-area {
-    flex: 1;
-    min-width: 0;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-}
-
-.chart-toolbar {
-    height: 43px;
-    min-height: 43px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0 12px;
-    background: rgba(11,18,32,.6);
-}
-
-.symbol {
-    font-weight: 700;
-    font-size: 12px;
-}
-
-.timeframe {
-    color: var(--muted);
-    font-size: 11px;
-}
-
-.toolbar-spacer {
-    flex: 1;
-}
-
-.candle-counter {
-    font-size: 10px;
-    color: var(--muted);
-    direction: ltr;
-}
-
-.chart-container {
-    flex: 1;
-    min-height: 0;
-    position: relative;
-}
-
-#chart {
-    position: absolute;
-    inset: 0;
-}
-
-/* =========================================================
-   BOTTOM STATUS
-========================================================= */
-
-.bottom-bar {
-    height: 30px;
-    min-height: 30px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 12px;
-    color: var(--muted);
-    font-size: 9px;
-    background: rgba(2,6,23,.9);
-}
-
-#message {
-    direction: rtl;
-}
-
-.ltr {
-    direction: ltr;
-}
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 900px) {
+    }
 
     body {
-        overflow: auto;
+      overflow: hidden;
+    }
+
+    button,
+    select,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
     }
 
     .app {
-        height: auto;
-        min-height: 100vh;
+      display: grid;
+      grid-template-rows: 64px 1fr;
+      width: 100vw;
+      height: 100vh;
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Header
+    |--------------------------------------------------------------------------
+    */
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--border);
+      background: #0d1219;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: var(--accent);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+
+    .brand-title {
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .brand-subtitle {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .system-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Main layout
+    |--------------------------------------------------------------------------
+    */
 
     .main {
-        flex-direction: column;
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      min-height: 0;
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Sidebar
+    |--------------------------------------------------------------------------
+    */
 
     .sidebar {
-        width: 100%;
-        min-width: 0;
-        max-height: none;
-        order: 2;
+      min-width: 0;
+      overflow-y: auto;
+      border-right: 1px solid var(--border);
+      background: var(--panel);
+      padding: 16px;
     }
 
-    .chart-area {
-        height: 65vh;
-        min-height: 450px;
-        order: 1;
+    .section {
+      margin-bottom: 18px;
     }
 
-    .top-status {
-        display: none;
+    .section-title {
+      margin-bottom: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
     }
-}
-</style>
+
+    .data-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .tab {
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      color: var(--muted);
+      padding: 9px;
+      border-radius: 7px;
+      font-size: 12px;
+    }
+
+    .tab.active {
+      color: white;
+      border-color: var(--accent);
+      background: rgba(59, 130, 246, 0.12);
+    }
+
+    .data-panel {
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 12px;
+      background: #0e141c;
+    }
+
+    .field {
+      margin-bottom: 11px;
+    }
+
+    .field:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    select,
+    input[type="date"],
+    input[type="file"] {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: #0a0f15;
+      color: var(--text);
+      padding: 9px;
+      outline: none;
+    }
+
+    select:focus,
+    input:focus {
+      border-color: var(--accent);
+    }
+
+    .primary-btn {
+      width: 100%;
+      border: 0;
+      border-radius: 7px;
+      padding: 10px 12px;
+      background: var(--accent);
+      color: white;
+      font-weight: 700;
+      margin-top: 10px;
+    }
+
+    .primary-btn:hover {
+      filter: brightness(1.08);
+    }
+
+    .secondary-btn {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 9px 12px;
+      background: var(--panel2);
+      color: var(--text);
+      margin-top: 8px;
+    }
+
+    .drop-zone {
+      border: 1px dashed #3a4655;
+      border-radius: 8px;
+      padding: 18px 10px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      transition: 0.15s ease;
+    }
+
+    .drop-zone.dragover {
+      border-color: var(--accent);
+      background: rgba(59, 130, 246, 0.08);
+    }
+
+    .data-status {
+      margin-top: 10px;
+      padding: 9px;
+      border-radius: 7px;
+      background: #0a0f15;
+      border: 1px solid var(--border);
+      font-size: 11px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .data-status.success {
+      color: #9be7b0;
+      border-color: rgba(34, 197, 94, 0.3);
+    }
+
+    .data-status.error {
+      color: #ffb4b4;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Stats
+    |--------------------------------------------------------------------------
+    */
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+    }
+
+    .stat {
+      padding: 10px;
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .stat-value {
+      margin-top: 4px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Workspace
+    |--------------------------------------------------------------------------
+    */
+
+    .workspace {
+      min-width: 0;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: 48px minmax(0, 1fr) 58px;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 10px;
+      border-bottom: 1px solid var(--border);
+      background: #0d1219;
+    }
+
+    .toolbar button {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--panel2);
+      color: var(--text);
+      padding: 7px 11px;
+      font-size: 11px;
+    }
+
+    .toolbar button:hover {
+      border-color: #465467;
+    }
+
+    .toolbar .buy {
+      color: #8df0a9;
+    }
+
+    .toolbar .sell {
+      color: #ff9b9b;
+    }
+
+    .toolbar .close {
+      color: #f5c66a;
+    }
+
+    .toolbar-spacer {
+      flex: 1;
+    }
+
+    .speed {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .speed select {
+      width: auto;
+      padding: 6px 8px;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Chart
+    |--------------------------------------------------------------------------
+    */
+
+    .chart-wrap {
+      position: relative;
+      min-width: 0;
+      min-height: 0;
+      background: #0a0f15;
+    }
+
+    #chart {
+      position: absolute;
+      inset: 0;
+    }
+
+    .chart-empty {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Replay footer
+    |--------------------------------------------------------------------------
+    */
+
+    .replay-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-top: 1px solid var(--border);
+      background: #0d1219;
+    }
+
+    .replay-info {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .replay-progress {
+      flex: 1;
+      height: 4px;
+      border-radius: 4px;
+      background: #26303c;
+      overflow: hidden;
+    }
+
+    .replay-progress-fill {
+      width: 0%;
+      height: 100%;
+      background: var(--accent);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Responsive
+    |--------------------------------------------------------------------------
+    */
+
+    @media (max-width: 850px) {
+      body {
+        overflow: auto;
+      }
+
+      .app {
+        height: auto;
+        min-height: 100vh;
+      }
+
+      .main {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .workspace {
+        height: 70vh;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
 <div class="app">
 
-    <!-- =====================================================
-         TOP BAR
-    ====================================================== -->
+  <!-- HEADER -->
 
-    <header class="topbar">
+  <header class="header">
 
-        <div class="brand">
+    <div class="brand">
 
-            <div class="logo">
-                TB
-            </div>
+      <div class="brand-mark">
+        TB
+      </div>
 
-            <div>
-                <div class="brand-name">
-                    Trading Backtester
-                </div>
-
-                <div class="brand-version">
-                    Local Engine · v0.1
-                </div>
-            </div>
-
+      <div>
+        <div class="brand-title">
+          Trading Backtester
         </div>
 
-        <div class="top-status">
-
-            <span class="status-dot"></span>
-
-            <span>
-                Engine Ready
-            </span>
-
+        <div class="brand-subtitle">
+          FX Research & Replay Platform
         </div>
-
-    </header>
-
-
-    <!-- =====================================================
-         MAIN
-    ====================================================== -->
-
-    <div class="main">
-
-        <!-- =================================================
-             SIDEBAR
-        ================================================== -->
-
-        <aside class="sidebar">
-
-            <!-- DATA -->
-
-            <section class="sidebar-section">
-
-                <div class="section-title">
-                    MARKET DATA
-                </div>
-
-                <label
-                    class="file-drop"
-                    id="fileDrop"
-                    for="csvInput"
-                >
-
-                    <div class="file-drop-title">
-                        انتخاب فایل CSV
-                    </div>
-
-                    <div class="file-drop-subtitle">
-                        OHLC · حداکثر 25MB
-                    </div>
-
-                </label>
-
-                <input
-                    id="csvInput"
-                    type="file"
-                    accept=".csv,text/csv"
-                >
-
-            </section>
-
-
-            <!-- REPLAY -->
-
-            <section class="sidebar-section">
-
-                <div class="section-title">
-                    REPLAY
-                </div>
-
-                <div class="control-row">
-
-                    <button
-                        id="resetBtn"
-                        disabled
-                    >
-                        ↻
-                    </button>
-
-                    <button
-                        id="prevBtn"
-                        disabled
-                    >
-                        ◀
-                    </button>
-
-                    <button
-                        id="playBtn"
-                        class="primary"
-                        disabled
-                        style="flex:1"
-                    >
-                        ▶ پخش
-                    </button>
-
-                    <button
-                        id="nextBtn"
-                        disabled
-                    >
-                        ▶
-                    </button>
-
-                </div>
-
-                <div class="control-row">
-
-                    <select
-                        id="speed"
-                        style="width:100%"
-                        disabled
-                    >
-
-                        <option value="1200">
-                            سرعت 1x
-                        </option>
-
-                        <option value="600">
-                            سرعت 2x
-                        </option>
-
-                        <option value="300">
-                            سرعت 4x
-                        </option>
-
-                        <option value="120">
-                            سرعت 10x
-                        </option>
-
-                        <option value="50">
-                            سرعت 20x
-                        </option>
-
-                    </select>
-
-                </div>
-
-            </section>
-
-
-            <!-- TRADING -->
-
-            <section class="sidebar-section">
-
-                <div class="section-title">
-                    TRADING
-                </div>
-
-                <div class="control-row">
-
-                    <button
-                        id="buyBtn"
-                        class="buy"
-                        disabled
-                    >
-                        BUY
-                    </button>
-
-                    <button
-                        id="sellBtn"
-                        class="sell"
-                        disabled
-                    >
-                        SELL
-                    </button>
-
-                </div>
-
-                <div class="control-row">
-
-                    <button
-                        id="closeBtn"
-                        class="danger"
-                        style="width:100%"
-                        disabled
-                    >
-                        CLOSE POSITION
-                    </button>
-
-                </div>
-
-            </section>
-
-
-            <!-- POSITION -->
-
-            <section class="sidebar-section">
-
-                <div class="section-title">
-                    POSITION
-                </div>
-
-                <div class="position-box">
-
-                    <div class="position-status">
-
-                        <span>
-                            وضعیت
-                        </span>
-
-                        <span
-                            id="positionBadge"
-                            class="position-badge position-none"
-                        >
-                            NO POSITION
-                        </span>
-
-                    </div>
-
-                    <div class="info-grid" style="margin-top:8px">
-
-                        <div class="info-card">
-
-                            <div class="info-label">
-                                Entry
-                            </div>
-
-                            <div
-                                id="entryPrice"
-                                class="info-value"
-                            >
-                                —
-                            </div>
-
-                        </div>
-
-                        <div class="info-card">
-
-                            <div class="info-label">
-                                Current
-                            </div>
-
-                            <div
-                                id="currentPrice"
-                                class="info-value"
-                            >
-                                —
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- STATISTICS -->
-
-            <section class="sidebar-section">
-
-                <div class="section-title">
-                    PERFORMANCE
-                </div>
-
-                <div class="info-grid">
-
-                    <div class="info-card">
-
-                        <div class="info-label">
-                            P&L
-                        </div>
-
-                        <div
-                            id="pnl"
-                            class="info-value"
-                        >
-                            0.00
-                        </div>
-
-                    </div>
-
-                    <div class="info-card">
-
-                        <div class="info-label">
-                            TRADES
-                        </div>
-
-                        <div
-                            id="tradeCount"
-                            class="info-value"
-                        >
-                            0
-                        </div>
-
-                    </div>
-
-                    <div class="info-card">
-
-                        <div class="info-label">
-                            WIN RATE
-                        </div>
-
-                        <div
-                            id="winRate"
-                            class="info-value"
-                        >
-                            0%
-                        </div>
-
-                    </div>
-
-                    <div class="info-card">
-
-                        <div class="info-label">
-                            MAX DD
-                        </div>
-
-                        <div
-                            id="drawdown"
-                            class="info-value"
-                        >
-                            0.00
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-        </aside>
-
-
-        <!-- =================================================
-             CHART
-        ================================================== -->
-
-        <section class="chart-area">
-
-            <div class="chart-toolbar">
-
-                <span
-                    id="symbol"
-                    class="symbol"
-                >
-                    NO DATA
-                </span>
-
-                <span
-                    id="timeframe"
-                    class="timeframe"
-                >
-                    —
-                </span>
-
-                <div class="toolbar-spacer"></div>
-
-                <span
-                    id="candleCounter"
-                    class="candle-counter"
-                >
-                    0 / 0
-                </span>
-
-            </div>
-
-
-            <div class="chart-container">
-
-                <div id="chart"></div>
-
-            </div>
-
-        </section>
+      </div>
 
     </div>
 
+    <div class="system-status">
 
-    <!-- =====================================================
-         BOTTOM
-    ====================================================== -->
+      <span class="status-dot"></span>
 
-    <footer class="bottom-bar">
+      <span id="systemStatus">
+        Checking system...
+      </span>
 
-        <span id="message">
-            برای شروع، یک فایل CSV انتخاب کنید.
-        </span>
+    </div>
 
-        <span class="ltr">
-            BACKTESTER
-        </span>
+  </header>
 
-    </footer>
+
+  <!-- MAIN -->
+
+  <main class="main">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+      <!-- DATA -->
+
+      <section class="section">
+
+        <div class="section-title">
+          Market Data
+        </div>
+
+        <div class="data-tabs">
+
+          <button
+            id="automaticTab"
+            class="tab active"
+            type="button"
+          >
+            Automatic
+          </button>
+
+          <button
+            id="manualTab"
+            class="tab"
+            type="button"
+          >
+            Manual CSV
+          </button>
+
+        </div>
+
+
+        <!-- AUTOMATIC -->
+
+        <div
+          id="automaticPanel"
+          class="data-panel"
+        >
+
+          <div class="field">
+
+            <label>
+              FX Pair
+            </label>
+
+            <select id="pair">
+
+              <option value="EUR/USD">
+                EUR/USD
+              </option>
+
+              <option value="GBP/USD">
+                GBP/USD
+              </option>
+
+              <option value="USD/JPY">
+                USD/JPY
+              </option>
+
+              <option value="USD/CHF">
+                USD/CHF
+              </option>
+
+              <option value="AUD/USD">
+                AUD/USD
+              </option>
+
+              <option value="USD/CAD">
+                USD/CAD
+              </option>
+
+              <option value="NZD/USD">
+                NZD/USD
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              Timeframe
+            </label>
+
+            <select id="interval">
+
+              <option value="1min">
+                1 Minute
+              </option>
+
+              <option value="5min">
+                5 Minutes
+              </option>
+
+              <option value="15min">
+                15 Minutes
+              </option>
+
+              <option value="30min">
+                30 Minutes
+              </option>
+
+              <option value="1h" selected>
+                1 Hour
+              </option>
+
+              <option value="4h">
+                4 Hours
+              </option>
+
+              <option value="1day">
+                1 Day
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              Start Date
+            </label>
+
+            <input
+              id="startDate"
+              type="date"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              End Date
+            </label>
+
+            <input
+              id="endDate"
+              type="date"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              Maximum candles
+            </label>
+
+            <select id="outputsize">
+
+              <option value="500">
+                500
+              </option>
+
+              <option value="1000">
+                1,000
+              </option>
+
+              <option value="2500">
+                2,500
+              </option>
+
+              <option value="5000" selected>
+                5,000
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <button
+            id="fetchAutomatic"
+            class="primary-btn"
+            type="button"
+          >
+            Fetch Market Data
+          </button>
+
+
+          <div
+            id="automaticStatus"
+            class="data-status"
+          >
+            Ready.
+          </div>
+
+        </div>
+
+
+        <!-- MANUAL -->
+
+        <div
+          id="manualPanel"
+          class="data-panel"
+          style="display:none"
+        >
+
+          <div
+            id="dropZone"
+            class="drop-zone"
+          >
+
+            Drop CSV file here
+
+            <br>
+
+            or
+
+            <br><br>
+
+            <input
+              id="csvFile"
+              type="file"
+              accept=".csv,text/csv"
+            >
+
+          </div>
+
+
+          <div
+            id="manualStatus"
+            class="data-status"
+          >
+            CSV stays in your browser.
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- STATS -->
+
+      <section class="section">
+
+        <div class="section-title">
+          Backtest Statistics
+        </div>
+
+        <div class="stats">
+
+          <div class="stat">
+
+            <div class="stat-label">
+              Candles
+            </div>
+
+            <div
+              id="statCandles"
+              class="stat-value"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div class="stat">
+
+            <div class="stat-label">
+              Position
+            </div>
+
+            <div
+              id="statPosition"
+              class="stat-value"
+            >
+              FLAT
+            </div>
+
+          </div>
+
+
+          <div class="stat">
+
+            <div class="stat-label">
+              Trades
+            </div>
+
+            <div
+              id="statTrades"
+              class="stat-value"
+            >
+              0
+            </div>
+
+          </div>
+
+
+          <div class="stat">
+
+            <div class="stat-label">
+              P&L
+            </div>
+
+            <div
+              id="statPnl"
+              class="stat-value"
+            >
+              0.00
+            </div>
+
+          </div>
+
+
+          <div class="stat">
+
+            <div class="stat-label">
+              Win Rate
+            </div>
+
+            <div
+              id="statWinRate"
+              class="stat-value"
+            >
+              0%
+            </div>
+
+          </div>
+
+
+          <div class="stat">
+
+            <div class="stat-label">
+              Max DD
+            </div>
+
+            <div
+              id="statDrawdown"
+              class="stat-value"
+            >
+              0.00
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </aside>
+
+
+    <!-- WORKSPACE -->
+
+    <section class="workspace">
+
+      <div class="toolbar">
+
+        <button
+          id="previousCandle"
+          type="button"
+        >
+          ◀ Previous
+        </button>
+
+        <button
+          id="nextCandle"
+          type="button"
+        >
+          Next ▶
+        </button>
+
+        <button
+          id="playReplay"
+          type="button"
+        >
+          ▶ Play
+        </button>
+
+        <div class="toolbar-spacer"></div>
+
+        <div class="speed">
+
+          Speed
+
+          <select id="speed">
+
+            <option value="2000">
+              1x
+            </option>
+
+            <option value="1000">
+              2x
+            </option>
+
+            <option value="500">
+              4x
+            </option>
+
+            <option value="250">
+              8x
+            </option>
+
+            <option value="100">
+              20x
+            </option>
+
+          </select>
+
+        </div>
+
+        <button
+          id="buy"
+          class="buy"
+          type="button"
+        >
+          BUY
+        </button>
+
+        <button
+          id="sell"
+          class="sell"
+          type="button"
+        >
+          SELL
+        </button>
+
+        <button
+          id="closePosition"
+          class="close"
+          type="button"
+        >
+          CLOSE
+        </button>
+
+      </div>
+
+
+      <div class="chart-wrap">
+
+        <div id="chart"></div>
+
+        <div
+          id="chartEmpty"
+          class="chart-empty"
+        >
+          Load market data to begin.
+        </div>
+
+      </div>
+
+
+      <div class="replay-bar">
+
+        <div
+          id="replayInfo"
+          class="replay-info"
+        >
+          No data
+        </div>
+
+        <div class="replay-progress">
+
+          <div
+            id="replayProgressFill"
+            class="replay-progress-fill"
+          ></div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
 
 </div>
 
@@ -891,1518 +1002,1271 @@ select {
 <script>
 "use strict";
 
-/* ============================================================
-   CONFIG
-============================================================ */
-
-const CONFIG = {
-
-    MAX_FILE_SIZE:
-        25 * 1024 * 1024,
-
-    MAX_ROWS:
-        200000,
-
-    DEFAULT_CAPITAL:
-        10000
-
-};
-
-
-/* ============================================================
-   DOM
-============================================================ */
-
-const $ = id =>
-    document.getElementById(id);
-
-
-/* ============================================================
-   APPLICATION STATE
-============================================================ */
+/*
+|--------------------------------------------------------------------------
+| Application state
+|--------------------------------------------------------------------------
+*/
 
 const state = {
+  candles: [],
+  visibleCandles: [],
+  currentIndex: -1,
 
-    candles: [],
+  position: null,
 
-    visibleCandles: [],
+  trades: [],
 
-    currentIndex: -1,
+  realizedPnl: 0,
 
-    timer: null,
+  equity: 0,
 
-    position: null,
+  peakEquity: 0,
 
-    trades: [],
+  maxDrawdown: 0,
 
-    realizedPnL: 0,
+  isPlaying: false,
 
-    equity: CONFIG.DEFAULT_CAPITAL,
-
-    peakEquity: CONFIG.DEFAULT_CAPITAL,
-
-    maxDrawdown: 0,
-
-    fileName: null
-
+  playTimer: null
 };
 
 
-/* ============================================================
-   CHART
-============================================================ */
+/*
+|--------------------------------------------------------------------------
+| DOM
+|--------------------------------------------------------------------------
+*/
 
 const chartElement =
-    $("chart");
+  document.getElementById("chart");
+
+const chartEmpty =
+  document.getElementById("chartEmpty");
+
+const automaticTab =
+  document.getElementById("automaticTab");
+
+const manualTab =
+  document.getElementById("manualTab");
+
+const automaticPanel =
+  document.getElementById("automaticPanel");
+
+const manualPanel =
+  document.getElementById("manualPanel");
+
+const pair =
+  document.getElementById("pair");
+
+const interval =
+  document.getElementById("interval");
+
+const startDate =
+  document.getElementById("startDate");
+
+const endDate =
+  document.getElementById("endDate");
+
+const outputsize =
+  document.getElementById("outputsize");
+
+const fetchAutomatic =
+  document.getElementById("fetchAutomatic");
+
+const automaticStatus =
+  document.getElementById("automaticStatus");
+
+const csvFile =
+  document.getElementById("csvFile");
+
+const dropZone =
+  document.getElementById("dropZone");
+
+const manualStatus =
+  document.getElementById("manualStatus");
+
+const previousCandle =
+  document.getElementById("previousCandle");
+
+const nextCandle =
+  document.getElementById("nextCandle");
+
+const playReplay =
+  document.getElementById("playReplay");
+
+const speed =
+  document.getElementById("speed");
+
+const buy =
+  document.getElementById("buy");
+
+const sell =
+  document.getElementById("sell");
+
+const closePosition =
+  document.getElementById("closePosition");
 
 const chart =
-    LightweightCharts.createChart(
-        chartElement,
-        {
+  LightweightCharts.createChart(
+    chartElement,
+    {
+      layout: {
+        background: {
+          color: "#0a0f15"
+        },
 
-            layout: {
+        textColor: "#9aa6b2"
+      },
 
-                background: {
-                    color: "#0b1220"
-                },
+      grid: {
+        vertLines: {
+          color: "#18212b"
+        },
 
-                textColor: "#94a3b8"
-
-            },
-
-            grid: {
-
-                vertLines: {
-                    color: "rgba(148,163,184,.06)"
-                },
-
-                horzLines: {
-                    color: "rgba(148,163,184,.06)"
-                }
-
-            },
-
-            crosshair: {
-
-                mode:
-                    LightweightCharts.CrosshairMode.Normal
-
-            },
-
-            rightPriceScale: {
-
-                borderColor:
-                    "rgba(148,163,184,.15)"
-
-            },
-
-            timeScale: {
-
-                borderColor:
-                    "rgba(148,163,184,.15)",
-
-                timeVisible: true,
-
-                secondsVisible: false
-
-            },
-
-            handleScroll: true,
-
-            handleScale: true
-
+        horzLines: {
+          color: "#18212b"
         }
-    );
+      },
+
+      rightPriceScale: {
+        borderColor: "#273241"
+      },
+
+      timeScale: {
+        borderColor: "#273241",
+        timeVisible: true,
+        secondsVisible: false
+      },
+
+      crosshair: {
+        mode:
+          LightweightCharts.CrosshairMode.Normal
+      }
+    }
+  );
 
 
 const candleSeries =
-    chart.addCandlestickSeries({
-
-        upColor: "#22c55e",
-
-        downColor: "#ef4444",
-
-        borderUpColor: "#22c55e",
-
-        borderDownColor: "#ef4444",
-
-        wickUpColor: "#22c55e",
-
-        wickDownColor: "#ef4444"
-
-    });
+  chart.addCandlestickSeries({
+    upColor: "#22c55e",
+    downColor: "#ef4444",
+    borderUpColor: "#22c55e",
+    borderDownColor: "#ef4444",
+    wickUpColor: "#22c55e",
+    wickDownColor: "#ef4444"
+  });
 
 
-/* ============================================================
-   RESPONSIVE CHART
-============================================================ */
+/*
+|--------------------------------------------------------------------------
+| Resize
+|--------------------------------------------------------------------------
+*/
 
 function resizeChart() {
 
-    chart.applyOptions({
-
-        width:
-            chartElement.clientWidth,
-
-        height:
-            chartElement.clientHeight
-
-    });
+  chart.applyOptions({
+    width: chartElement.clientWidth,
+    height: chartElement.clientHeight
+  });
 
 }
 
 window.addEventListener(
-    "resize",
-    resizeChart
+  "resize",
+  resizeChart
 );
 
-setTimeout(
-    resizeChart,
-    100
+resizeChart();
+
+
+/*
+|--------------------------------------------------------------------------
+| Tabs
+|--------------------------------------------------------------------------
+*/
+
+automaticTab.addEventListener(
+  "click",
+  () => {
+
+    automaticTab.classList.add("active");
+    manualTab.classList.remove("active");
+
+    automaticPanel.style.display = "block";
+    manualPanel.style.display = "none";
+
+  }
 );
 
 
-/* ============================================================
-   MESSAGE
-============================================================ */
+manualTab.addEventListener(
+  "click",
+  () => {
 
-function setMessage(
-    text,
-    type = "normal"
+    manualTab.classList.add("active");
+    automaticTab.classList.remove("active");
+
+    manualPanel.style.display = "block";
+    automaticPanel.style.display = "none";
+
+  }
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| Status helpers
+|--------------------------------------------------------------------------
+*/
+
+function setAutomaticStatus(
+  message,
+  type = ""
 ) {
 
-    const element =
-        $("message");
+  automaticStatus.textContent = message;
 
-    element.textContent =
-        text;
+  automaticStatus.className =
+    "data-status";
 
-    if (type === "error") {
+  if (type) {
+    automaticStatus.classList.add(type);
+  }
 
-        element.style.color =
-            "#fca5a5";
+}
 
-    } else if (type === "success") {
 
-        element.style.color =
-            "#86efac";
+function setManualStatus(
+  message,
+  type = ""
+) {
+
+  manualStatus.textContent = message;
+
+  manualStatus.className =
+    "data-status";
+
+  if (type) {
+    manualStatus.classList.add(type);
+  }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| System health
+|--------------------------------------------------------------------------
+*/
+
+async function checkSystem() {
+
+  const status =
+    document.getElementById("systemStatus");
+
+  try {
+
+    const response =
+      await fetch("/api/health");
+
+    const data =
+      await response.json();
+
+    if (
+      response.ok &&
+      data.ok
+    ) {
+
+      if (data.automaticData) {
+
+        status.textContent =
+          "Automatic FX data online";
+
+      } else {
+
+        status.textContent =
+          "Manual data mode";
+
+      }
 
     } else {
 
-        element.style.color =
-            "";
+      status.textContent =
+        "System unavailable";
 
     }
 
-}
+  } catch (error) {
 
+    status.textContent =
+      "Backend unavailable";
 
-/* ============================================================
-   NUMBER
-============================================================ */
-
-function number(value) {
-
-    const n =
-        Number(
-            String(value)
-                .trim()
-                .replace(/,/g, "")
-        );
-
-    return Number.isFinite(n)
-        ? n
-        : NaN;
+  }
 
 }
 
+checkSystem();
 
-/* ============================================================
-   HEADER NORMALIZATION
-============================================================ */
 
-function normalizeHeader(value) {
+/*
+|--------------------------------------------------------------------------
+| Fetch automatic data
+|--------------------------------------------------------------------------
+*/
 
-    return String(value)
-        .trim()
-        .toLowerCase()
-        .replace(
-            /[\s\-]+/g,
-            "_"
-        );
+async function loadAutomaticData() {
+
+  setAutomaticStatus(
+    "Requesting market data...",
+    ""
+  );
+
+  fetchAutomatic.disabled = true;
+
+  try {
+
+    const params =
+      new URLSearchParams();
+
+    params.set(
+      "pair",
+      pair.value
+    );
+
+    params.set(
+      "interval",
+      interval.value
+    );
+
+    params.set(
+      "outputsize",
+      outputsize.value
+    );
+
+    if (startDate.value) {
+
+      params.set(
+        "startDate",
+        startDate.value
+      );
+
+    }
+
+    if (endDate.value) {
+
+      params.set(
+        "endDate",
+        endDate.value
+      );
+
+    }
+
+    const response =
+      await fetch(
+        `/api/fx/candles?${params.toString()}`
+      );
+
+    const data =
+      await response.json();
+
+    if (!response.ok || !data.ok) {
+
+      throw new Error(
+        data.error ||
+        "Unable to load market data."
+      );
+
+    }
+
+    if (
+      !Array.isArray(data.candles) ||
+      !data.candles.length
+    ) {
+
+      throw new Error(
+        "No valid candles received."
+      );
+
+    }
+
+    loadCandles(
+      data.candles
+    );
+
+    const cacheText =
+      data.cached
+        ? " • cached"
+        : "";
+
+    setAutomaticStatus(
+      `${data.pair} • ${data.interval} • ${data.count.toLocaleString()} candles${cacheText}`,
+      "success"
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    setAutomaticStatus(
+      error.message ||
+      "Automatic data request failed.",
+      "error"
+    );
+
+  } finally {
+
+    fetchAutomatic.disabled = false;
+
+  }
 
 }
 
 
-/* ============================================================
-   CSV PARSER
-   بدون eval
-============================================================ */
+fetchAutomatic.addEventListener(
+  "click",
+  loadAutomaticData
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| CSV parser
+|--------------------------------------------------------------------------
+*/
 
 function parseCSV(text) {
 
-    const rows = [];
-
-    let row = [];
-
-    let cell = "";
-
-    let quoted = false;
-
-
-    for (
-        let i = 0;
-        i < text.length;
-        i++
-    ) {
-
-        const char =
-            text[i];
-
-        const next =
-            text[i + 1];
-
-
-        if (char === '"') {
-
-            if (
-                quoted &&
-                next === '"'
-            ) {
-
-                cell += '"';
-
-                i++;
-
-            } else {
-
-                quoted =
-                    !quoted;
-
-            }
-
-            continue;
-
-        }
-
-
-        if (
-            char === "," &&
-            !quoted
-        ) {
-
-            row.push(cell);
-
-            cell = "";
-
-            continue;
-
-        }
-
-
-        if (
-            (
-                char === "\n" ||
-                char === "\r"
-            ) &&
-            !quoted
-        ) {
-
-            if (
-                char === "\r" &&
-                next === "\n"
-            ) {
-
-                i++;
-
-            }
-
-            row.push(cell);
-
-            cell = "";
-
-            if (
-                row.some(
-                    value =>
-                        String(value)
-                            .trim() !== ""
-                )
-            ) {
-
-                rows.push(row);
-
-            }
-
-            row = [];
-
-            continue;
-
-        }
-
-
-        cell += char;
-
-    }
-
-
-    if (
-        cell !== "" ||
-        row.length > 0
-    ) {
-
-        row.push(cell);
-
-        if (
-            row.some(
-                value =>
-                    String(value)
-                        .trim() !== ""
-            )
-        ) {
-
-            rows.push(row);
-
-        }
-
-    }
-
-
-    if (
-        rows.length < 2
-    ) {
-
-        throw new Error(
-            "فایل CSV خالی یا نامعتبر است."
-        );
-
-    }
-
-
-    const headers =
-        rows[0].map(
-            normalizeHeader
-        );
-
-
-    const aliases = {
-
-        time: [
-            "time",
-            "timestamp",
-            "date",
-            "datetime",
-            "date_time"
-        ],
-
-        open: [
-            "open",
-            "o"
-        ],
-
-        high: [
-            "high",
-            "h"
-        ],
-
-        low: [
-            "low",
-            "l"
-        ],
-
-        close: [
-            "close",
-            "c"
-        ],
-
-        volume: [
-            "volume",
-            "vol",
-            "v"
-        ]
-
-    };
-
-
-    const indexes = {};
-
-
-    for (
-        const key of Object.keys(aliases)
-    ) {
-
-        indexes[key] =
-            headers.findIndex(
-                header =>
-                    aliases[key]
-                        .includes(header)
-            );
-
-    }
-
-
-    for (
-        const required of [
-            "time",
-            "open",
-            "high",
-            "low",
-            "close"
-        ]
-    ) {
-
-        if (
-            indexes[required] === -1
-        ) {
-
-            throw new Error(
-                `ستون ${required} در CSV پیدا نشد.`
-            );
-
-        }
-
-    }
-
-
-    const candles = [];
-
-
-    const limit =
-        Math.min(
-            rows.length - 1,
-            CONFIG.MAX_ROWS
-        );
-
-
-    for (
-        let i = 1;
-        i <= limit;
-        i++
-    ) {
-
-        const source =
-            rows[i];
-
-
-        const rawTime =
-            String(
-                source[indexes.time] ?? ""
-            ).trim();
-
-
-        let timestamp;
-
-
-        if (
-            /^\d{10,13}$/
-                .test(rawTime)
-        ) {
-
-            const raw =
-                Number(rawTime);
-
-            timestamp =
-                rawTime.length === 13
-                    ? Math.floor(raw / 1000)
-                    : raw;
-
-        } else {
-
-            timestamp =
-                Math.floor(
-                    Date.parse(rawTime)
-                    / 1000
-                );
-
-        }
-
-
-        const open =
-            number(
-                source[indexes.open]
-            );
-
-        const high =
-            number(
-                source[indexes.high]
-            );
-
-        const low =
-            number(
-                source[indexes.low]
-            );
-
-        const close =
-            number(
-                source[indexes.close]
-            );
-
-
-        if (
-            !Number.isFinite(timestamp) ||
-            !Number.isFinite(open) ||
-            !Number.isFinite(high) ||
-            !Number.isFinite(low) ||
-            !Number.isFinite(close)
-        ) {
-
-            continue;
-
-        }
-
-
-        if (
-            high < low ||
-            open < low ||
-            open > high ||
-            close < low ||
-            close > high
-        ) {
-
-            continue;
-
-        }
-
-
-        candles.push({
-
-            time:
-                timestamp,
-
-            open,
-
-            high,
-
-            low,
-
-            close,
-
-            volume:
-                indexes.volume >= 0
-                    ? number(
-                        source[indexes.volume]
-                    )
-                    : undefined
-
-        });
-
-    }
-
-
-    candles.sort(
-        (a,b) =>
-            a.time - b.time
+  const lines =
+    text
+      .replace(/\r\n/g, "\n")
+      .replace(/\r/g, "\n")
+      .split("\n")
+      .map(
+        line => line.trim()
+      )
+      .filter(Boolean);
+
+  if (lines.length < 2) {
+
+    throw new Error(
+      "CSV file does not contain enough rows."
     );
 
+  }
 
-    const unique = [];
+  const headers =
+    lines[0]
+      .split(",")
+      .map(
+        x => x.trim().toLowerCase()
+      );
 
+  function findHeader(names) {
 
-    for (
-        const candle of candles
-    ) {
+    for (const name of names) {
 
-        if (
-            unique.length === 0 ||
-            unique[
-                unique.length - 1
-            ].time !== candle.time
-        ) {
+      const index =
+        headers.indexOf(name);
 
-            unique.push(candle);
-
-        }
+      if (index !== -1) {
+        return index;
+      }
 
     }
 
+    return -1;
+  }
+
+  const timeIndex =
+    findHeader([
+      "time",
+      "timestamp",
+      "datetime",
+      "date"
+    ]);
+
+  const openIndex =
+    findHeader(["open"]);
+
+  const highIndex =
+    findHeader(["high"]);
+
+  const lowIndex =
+    findHeader(["low"]);
+
+  const closeIndex =
+    findHeader(["close"]);
+
+  if (
+    timeIndex === -1 ||
+    openIndex === -1 ||
+    highIndex === -1 ||
+    lowIndex === -1 ||
+    closeIndex === -1
+  ) {
+
+    throw new Error(
+      "CSV must contain time, open, high, low and close columns."
+    );
+
+  }
+
+  const result = [];
+
+  for (
+    let i = 1;
+    i < lines.length;
+    i++
+  ) {
+
+    const parts =
+      lines[i].split(",");
+
+    const timestamp =
+      new Date(
+        parts[timeIndex]
+      ).getTime();
+
+    const open =
+      Number(parts[openIndex]);
+
+    const high =
+      Number(parts[highIndex]);
+
+    const low =
+      Number(parts[lowIndex]);
+
+    const close =
+      Number(parts[closeIndex]);
 
     if (
-        unique.length === 0
+      !Number.isFinite(timestamp) ||
+      !Number.isFinite(open) ||
+      !Number.isFinite(high) ||
+      !Number.isFinite(low) ||
+      !Number.isFinite(close)
     ) {
-
-        throw new Error(
-            "هیچ داده معتبر OHLC در فایل پیدا نشد."
-        );
-
+      continue;
     }
 
+    if (
+      high < low ||
+      open > high ||
+      open < low ||
+      close > high ||
+      close < low
+    ) {
+      continue;
+    }
 
-    return unique;
+    result.push({
+      time: Math.floor(
+        timestamp / 1000
+      ),
+      open,
+      high,
+      low,
+      close
+    });
+
+  }
+
+  result.sort(
+    (a, b) =>
+      a.time - b.time
+  );
+
+  const unique = [];
+
+  let lastTime = null;
+
+  for (const candle of result) {
+
+    if (
+      candle.time === lastTime
+    ) {
+      continue;
+    }
+
+    unique.push(candle);
+
+    lastTime = candle.time;
+
+  }
+
+  return unique;
 
 }
 
 
-/* ============================================================
-   ENABLE / DISABLE CONTROLS
-============================================================ */
+/*
+|--------------------------------------------------------------------------
+| CSV loading
+|--------------------------------------------------------------------------
+*/
 
-function setControls(
-    enabled
-) {
+async function loadCSVFile(file) {
 
-    [
+  if (!file) {
+    return;
+  }
 
-        "resetBtn",
-        "prevBtn",
-        "playBtn",
-        "nextBtn",
-        "speed",
-        "buyBtn",
-        "sellBtn",
-        "closeBtn"
+  if (
+    file.size >
+    25 * 1024 * 1024
+  ) {
 
-    ].forEach(
-        id => {
-
-            $(id).disabled =
-                !enabled;
-
-        }
+    setManualStatus(
+      "CSV file is larger than 25 MB.",
+      "error"
     );
+
+    return;
+
+  }
+
+  try {
+
+    const text =
+      await file.text();
+
+    const candles =
+      parseCSV(text);
+
+    if (!candles.length) {
+
+      throw new Error(
+        "No valid OHLC candles found."
+      );
+
+    }
+
+    if (
+      candles.length > 200000
+    ) {
+
+      throw new Error(
+        "Maximum supported rows: 200,000."
+      );
+
+    }
+
+    loadCandles(candles);
+
+    setManualStatus(
+      `${candles.length.toLocaleString()} candles loaded successfully.`,
+      "success"
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    setManualStatus(
+      error.message ||
+      "CSV import failed.",
+      "error"
+    );
+
+  }
 
 }
 
 
-/* ============================================================
-   RESET BACKTEST
-============================================================ */
+csvFile.addEventListener(
+  "change",
+  event => {
 
-function resetBacktest() {
+    const file =
+      event.target.files?.[0];
+
+    loadCSVFile(file);
+
+  }
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| Drag & drop
+|--------------------------------------------------------------------------
+*/
+
+dropZone.addEventListener(
+  "dragover",
+  event => {
+
+    event.preventDefault();
+
+    dropZone.classList.add(
+      "dragover"
+    );
+
+  }
+);
+
+dropZone.addEventListener(
+  "dragleave",
+  () => {
+
+    dropZone.classList.remove(
+      "dragover"
+    );
+
+  }
+);
+
+dropZone.addEventListener(
+  "drop",
+  event => {
+
+    event.preventDefault();
+
+    dropZone.classList.remove(
+      "dragover"
+    );
+
+    const file =
+      event.dataTransfer.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    loadCSVFile(file);
+
+  }
+);
+
+
+/*
+|--------------------------------------------------------------------------
+| Load candles
+|--------------------------------------------------------------------------
+*/
+
+function loadCandles(candles) {
+
+  stopReplay();
+
+  state.candles =
+    candles.map(c => ({
+      time: c.time,
+      open: c.open,
+      high: c.high,
+      low: c.low,
+      close: c.close
+    }));
+
+  state.visibleCandles = [];
+
+  state.currentIndex = -1;
+
+  state.position = null;
+
+  state.trades = [];
+
+  state.realizedPnl = 0;
+
+  state.equity = 0;
+
+  state.peakEquity = 0;
+
+  state.maxDrawdown = 0;
+
+  candleSeries.setData([]);
+
+  chart.timeScale().fitContent();
+
+  chartEmpty.style.display =
+    "none";
+
+  updateStats();
+
+  updateReplayUI();
+
+  /*
+   * Start replay at first candle.
+   */
+  if (state.candles.length) {
+
+    state.currentIndex = 0;
+
+    state.visibleCandles = [
+      state.candles[0]
+    ];
+
+    candleSeries.setData(
+      state.visibleCandles
+    );
+
+    updateReplayUI();
+
+  }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| Replay
+|--------------------------------------------------------------------------
+*/
+
+function renderCurrentReplay() {
+
+  if (
+    state.currentIndex < 0
+  ) {
+    return;
+  }
+
+  state.visibleCandles =
+    state.candles.slice(
+      0,
+      state.currentIndex + 1
+    );
+
+  candleSeries.setData(
+    state.visibleCandles
+  );
+
+  updateReplayUI();
+
+}
+
+
+function next() {
+
+  if (!state.candles.length) {
+    return;
+  }
+
+  if (
+    state.currentIndex >=
+    state.candles.length - 1
+  ) {
 
     stopReplay();
 
+    return;
 
-    state.visibleCandles = [];
+  }
 
-    state.currentIndex = -1;
+  state.currentIndex++;
 
-    state.position = null;
-
-    state.trades = [];
-
-    state.realizedPnL = 0;
-
-    state.equity =
-        CONFIG.DEFAULT_CAPITAL;
-
-    state.peakEquity =
-        CONFIG.DEFAULT_CAPITAL;
-
-    state.maxDrawdown = 0;
-
-
-    candleSeries.setData([]);
-
-
-    updateUI();
-
-
-    if (
-        state.candles.length
-    ) {
-
-        stepForward();
-
-    }
+  renderCurrentReplay();
 
 }
 
 
-/* ============================================================
-   NEXT CANDLE
-============================================================ */
+function previous() {
 
-function stepForward() {
+  if (!state.candles.length) {
+    return;
+  }
 
-    if (
-        state.currentIndex + 1 >=
-        state.candles.length
-    ) {
+  if (
+    state.currentIndex <= 0
+  ) {
+    return;
+  }
 
-        stopReplay();
+  state.currentIndex--;
 
-        setMessage(
-            "داده‌ها به پایان رسید.",
-            "success"
-        );
-
-        return;
-
-    }
-
-
-    state.currentIndex++;
-
-
-    const candle =
-        state.candles[
-            state.currentIndex
-        ];
-
-
-    state.visibleCandles.push(
-        candle
-    );
-
-
-    candleSeries.setData(
-        state.visibleCandles
-    );
-
-
-    updateUI();
+  renderCurrentReplay();
 
 }
 
 
-/* ============================================================
-   PREVIOUS CANDLE
-============================================================ */
+function startReplay() {
 
-function stepBackward() {
+  if (
+    state.isPlaying ||
+    !state.candles.length
+  ) {
+    return;
+  }
 
-    stopReplay();
+  state.isPlaying = true;
 
+  playReplay.textContent =
+    "⏸ Pause";
+
+  const tick = () => {
+
+    if (!state.isPlaying) {
+      return;
+    }
 
     if (
-        state.currentIndex <= 0
+      state.currentIndex >=
+      state.candles.length - 1
     ) {
 
-        return;
+      stopReplay();
+
+      return;
 
     }
 
+    next();
 
-    /*
-      اگر معامله فعال باشد، در این نسخه
-      عقب رفتن معامله را دستکاری نمی‌کند.
-      این تصمیم عمداً محافظه‌کارانه است.
-      در نسخه بعدی Undo/Replay Ledger خواهیم داشت.
-    */
+    state.playTimer =
+      setTimeout(
+        tick,
+        Number(speed.value)
+      );
 
-    state.currentIndex--;
+  };
 
-    state.visibleCandles =
-        state.candles.slice(
-            0,
-            state.currentIndex + 1
-        );
-
-
-    candleSeries.setData(
-        state.visibleCandles
-    );
-
-
-    updateUI();
+  tick();
 
 }
 
-
-/* ============================================================
-   PLAY / PAUSE
-============================================================ */
-
-function toggleReplay() {
-
-    if (
-        state.timer
-    ) {
-
-        stopReplay();
-
-        return;
-
-    }
-
-
-    if (
-        !state.candles.length
-    ) {
-
-        return;
-
-    }
-
-
-    $("playBtn")
-        .textContent =
-        "⏸ توقف";
-
-
-    state.timer =
-        setInterval(
-            stepForward,
-            Number(
-                $("speed").value
-            )
-        );
-
-}
-
-
-/* ============================================================
-   STOP
-============================================================ */
 
 function stopReplay() {
 
-    if (
-        state.timer
-    ) {
+  state.isPlaying = false;
 
-        clearInterval(
-            state.timer
-        );
+  playReplay.textContent =
+    "▶ Play";
 
-    }
+  if (state.playTimer) {
 
+    clearTimeout(
+      state.playTimer
+    );
 
-    state.timer = null;
+    state.playTimer = null;
 
-
-    $("playBtn")
-        .textContent =
-        "▶ پخش";
+  }
 
 }
 
 
-/* ============================================================
-   OPEN POSITION
-============================================================ */
-
-function openPosition(
-    side
-) {
-
-    if (
-        state.currentIndex < 0
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        state.position
-    ) {
-
-        setMessage(
-            "ابتدا معامله فعلی را ببندید.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const candle =
-        state.candles[
-            state.currentIndex
-        ];
-
-
-    state.position = {
-
-        side,
-
-        entry:
-            candle.close,
-
-        entryTime:
-            candle.time
-
-    };
-
-
-    setMessage(
-        `${side} در قیمت ${candle.close} باز شد.`,
-        "success"
-    );
-
-
-    updateUI();
-
-}
-
-
-/* ============================================================
-   CLOSE POSITION
-============================================================ */
-
-function closePosition() {
-
-    if (
-        !state.position ||
-        state.currentIndex < 0
-    ) {
-
-        return;
-
-    }
-
-
-    const candle =
-        state.candles[
-            state.currentIndex
-        ];
-
-
-    const exit =
-        candle.close;
-
-
-    const direction =
-        state.position.side === "BUY"
-            ? 1
-            : -1;
-
-
-    const pnl =
-        (
-            exit -
-            state.position.entry
-        ) * direction;
-
-
-    const trade = {
-
-        side:
-            state.position.side,
-
-        entry:
-            state.position.entry,
-
-        exit,
-
-        pnl,
-
-        entryTime:
-            state.position.entryTime,
-
-        exitTime:
-            candle.time
-
-    };
-
-
-    state.trades.push(
-        trade
-    );
-
-
-    state.realizedPnL +=
-        pnl;
-
-
-    state.equity =
-        CONFIG.DEFAULT_CAPITAL +
-        state.realizedPnL;
-
-
-    if (
-        state.equity >
-        state.peakEquity
-    ) {
-
-        state.peakEquity =
-            state.equity;
-
-    }
-
-
-    const drawdown =
-        state.peakEquity -
-        state.equity;
-
-
-    if (
-        drawdown >
-        state.maxDrawdown
-    ) {
-
-        state.maxDrawdown =
-            drawdown;
-
-    }
-
-
-    state.position = null;
-
-
-    setMessage(
-        `معامله بسته شد. P&L: ${pnl.toFixed(2)}`,
-        pnl >= 0
-            ? "success"
-            : "error"
-    );
-
-
-    updateUI();
-
-}
-
-
-/* ============================================================
-   UPDATE UI
-============================================================ */
-
-function updateUI() {
-
-    const hasData =
-        state.candles.length > 0;
-
-
-    $("candleCounter")
-        .textContent =
-        hasData
-            ? `${Math.max(state.currentIndex + 1, 0)} / ${state.candles.length}`
-            : "0 / 0";
-
-
-    const current =
-        state.currentIndex >= 0
-            ? state.candles[
-                state.currentIndex
-            ]
-            : null;
-
-
-    $("currentPrice")
-        .textContent =
-        current
-            ? current.close
-            : "—";
-
-
-    $("entryPrice")
-        .textContent =
-        state.position
-            ? state.position.entry
-            : "—";
-
-
-    $("pnl")
-        .textContent =
-        state.realizedPnL.toFixed(2);
-
-
-    $("tradeCount")
-        .textContent =
-        String(
-            state.trades.length
-        );
-
-
-    const wins =
-        state.trades.filter(
-            trade =>
-                trade.pnl > 0
-        ).length;
-
-
-    const winRate =
-        state.trades.length
-            ? (
-                wins /
-                state.trades.length *
-                100
-            )
-            : 0;
-
-
-    $("winRate")
-        .textContent =
-        `${winRate.toFixed(1)}%`;
-
-
-    $("drawdown")
-        .textContent =
-        state.maxDrawdown.toFixed(2);
-
-
-    const badge =
-        $("positionBadge");
-
-
-    badge.className =
-        "position-badge";
-
-
-    if (
-        !state.position
-    ) {
-
-        badge.classList.add(
-            "position-none"
-        );
-
-        badge.textContent =
-            "NO POSITION";
-
-    } else if (
-        state.position.side ===
-        "BUY"
-    ) {
-
-        badge.classList.add(
-            "position-buy"
-        );
-
-        badge.textContent =
-            "LONG";
+previousCandle.addEventListener(
+  "click",
+  previous
+);
+
+nextCandle.addEventListener(
+  "click",
+  next
+);
+
+playReplay.addEventListener(
+  "click",
+  () => {
+
+    if (state.isPlaying) {
+
+      stopReplay();
 
     } else {
 
-        badge.classList.add(
-            "position-sell"
-        );
-
-        badge.textContent =
-            "SHORT";
+      startReplay();
 
     }
 
+  }
+);
 
-    if (
-        state.fileName
-    ) {
 
-        $("symbol")
-            .textContent =
-            state.fileName
-                .replace(
-                    /\.csv$/i,
-                    ""
-                )
-                .slice(
-                    0,
-                    40
-                );
+/*
+|--------------------------------------------------------------------------
+| Trading
+|--------------------------------------------------------------------------
+*/
 
-    }
+function getCurrentCandle() {
+
+  if (
+    state.currentIndex < 0
+  ) {
+    return null;
+  }
+
+  return (
+    state.candles[
+      state.currentIndex
+    ] || null
+  );
 
 }
 
 
-/* ============================================================
-   CSV FILE
-============================================================ */
+function openPosition(side) {
 
-$("csvInput")
-    .addEventListener(
-        "change",
-        async event => {
+  const candle =
+    getCurrentCandle();
 
-            const file =
-                event.target.files?.[0];
+  if (!candle) {
+    return;
+  }
 
+  if (state.position) {
+    return;
+  }
 
-            if (!file) {
+  state.position = {
+    side,
+    entry:
+      candle.close,
+    time:
+      candle.time
+  };
 
-                return;
+  updateStats();
 
-            }
-
-
-            if (
-                file.size >
-                CONFIG.MAX_FILE_SIZE
-            ) {
-
-                setMessage(
-                    "حجم فایل بیشتر از 25MB است.",
-                    "error"
-                );
-
-                event.target.value =
-                    "";
-
-                return;
-
-            }
+}
 
 
-            if (
-                !file.name
-                    .toLowerCase()
-                    .endsWith(".csv")
-            ) {
+function closeCurrentPosition() {
 
-                setMessage(
-                    "فقط فایل CSV مجاز است.",
-                    "error"
-                );
+  const candle =
+    getCurrentCandle();
 
-                event.target.value =
-                    "";
+  if (
+    !candle ||
+    !state.position
+  ) {
+    return;
+  }
 
-                return;
+  const position =
+    state.position;
 
-            }
+  const direction =
+    position.side === "LONG"
+      ? 1
+      : -1;
 
+  const pnl =
+    (
+      candle.close -
+      position.entry
+    ) * direction;
 
-            try {
+  state.realizedPnl += pnl;
 
-                setMessage(
-                    "در حال پردازش فایل..."
-                );
+  state.trades.push({
+    side:
+      position.side,
+    entry:
+      position.entry,
+    exit:
+      candle.close,
+    pnl
+  });
 
+  state.position = null;
 
-                const text =
-                    await file.text();
+  updateStats();
 
-
-                const candles =
-                    parseCSV(
-                        text
-                    );
-
-
-                state.candles =
-                    candles;
-
-                state.fileName =
-                    file.name;
-
-
-                $("timeframe")
-                    .textContent =
-                    "CSV";
+}
 
 
-                resetBacktest();
+buy.addEventListener(
+  "click",
+  () => openPosition("LONG")
+);
+
+sell.addEventListener(
+  "click",
+  () => openPosition("SHORT")
+);
+
+closePosition.addEventListener(
+  "click",
+  closeCurrentPosition
+);
 
 
-                setControls(
-                    true
-                );
+/*
+|--------------------------------------------------------------------------
+| Stats
+|--------------------------------------------------------------------------
+*/
+
+function updateStats() {
+
+  const candles =
+    state.candles.length;
+
+  document.getElementById(
+    "statCandles"
+  ).textContent =
+    candles.toLocaleString();
+
+  document.getElementById(
+    "statPosition"
+  ).textContent =
+    state.position
+      ? state.position.side
+      : "FLAT";
+
+  document.getElementById(
+    "statTrades"
+  ).textContent =
+    state.trades.length;
+
+  document.getElementById(
+    "statPnl"
+  ).textContent =
+    state.realizedPnl.toFixed(5);
+
+  const wins =
+    state.trades.filter(
+      trade =>
+        trade.pnl > 0
+    ).length;
+
+  const winRate =
+    state.trades.length
+      ? (
+          wins /
+          state.trades.length *
+          100
+        )
+      : 0;
+
+  document.getElementById(
+    "statWinRate"
+  ).textContent =
+    `${winRate.toFixed(1)}%`;
+
+  document.getElementById(
+    "statDrawdown"
+  ).textContent =
+    state.maxDrawdown.toFixed(5);
+
+}
 
 
-                setMessage(
-                    `${candles.length.toLocaleString("fa-IR")} کندل با موفقیت بارگذاری شد.`,
-                    "success"
-                );
+/*
+|--------------------------------------------------------------------------
+| Replay UI
+|--------------------------------------------------------------------------
+*/
 
+function updateReplayUI() {
 
-                resizeChart();
+  if (!state.candles.length) {
 
+    document.getElementById(
+      "replayInfo"
+    ).textContent =
+      "No data";
 
-            } catch (
-                error
-            ) {
+    document.getElementById(
+      "replayProgressFill"
+    ).style.width =
+      "0%";
 
-                setControls(
-                    false
-                );
+    return;
 
+  }
 
-                setMessage(
-                    error instanceof Error
-                        ? error.message
-                        : "خطا در پردازش فایل.",
-                    "error"
-                );
-
-            }
-
-        }
+  const current =
+    Math.max(
+      0,
+      state.currentIndex
     );
 
+  const total =
+    state.candles.length;
 
-/* ============================================================
-   DRAG & DROP
-============================================================ */
+  const progress =
+    total > 1
+      ? (
+          current /
+          (total - 1) *
+          100
+        )
+      : 100;
 
-const fileDrop =
-    $("fileDrop");
+  const candle =
+    state.candles[current];
+
+  const date =
+    new Date(
+      candle.time * 1000
+    );
+
+  document.getElementById(
+    "replayInfo"
+  ).textContent =
+    `${current + 1} / ${total.toLocaleString()} • ${date.toLocaleString()}`;
+
+  document.getElementById(
+    "replayProgressFill"
+  ).style.width =
+    `${progress}%`;
+
+}
 
 
-fileDrop.addEventListener(
-    "dragover",
-    event => {
+/*
+|--------------------------------------------------------------------------
+| Keyboard shortcuts
+|--------------------------------------------------------------------------
+*/
 
-        event.preventDefault();
+document.addEventListener(
+  "keydown",
+  event => {
 
-        fileDrop.classList.add(
-            "dragging"
-        );
+    if (
+      event.target.tagName ===
+      "INPUT"
+    ) {
+      return;
+    }
+
+    if (
+      event.code === "ArrowRight"
+    ) {
+
+      next();
 
     }
-);
 
+    if (
+      event.code === "ArrowLeft"
+    ) {
 
-fileDrop.addEventListener(
-    "dragleave",
-    () => {
-
-        fileDrop.classList.remove(
-            "dragging"
-        );
+      previous();
 
     }
-);
 
+    if (
+      event.code === "Space"
+    ) {
 
-fileDrop.addEventListener(
-    "drop",
-    event => {
+      event.preventDefault();
 
-        event.preventDefault();
-
-        fileDrop.classList.remove(
-            "dragging"
-        );
-
-
-        const file =
-            event.dataTransfer
-                .files?.[0];
-
-
-        if (!file) {
-
-            return;
-
-        }
-
-
-        /*
-          input.files مستقیماً در همه مرورگرها
-          قابل تنظیم نیست؛ بنابراین فایل را
-          از طریق DataTransfer به input می‌دهیم.
-        */
-
-        try {
-
-            const transfer =
-                new DataTransfer();
-
-            transfer.items.add(
-                file
-            );
-
-            $("csvInput").files =
-                transfer.files;
-
-
-            $("csvInput")
-                .dispatchEvent(
-                    new Event(
-                        "change"
-                    )
-                );
-
-        } catch {
-
-            setMessage(
-                "لطفاً فایل را از طریق انتخاب فایل وارد کنید.",
-                "error"
-            );
-
-        }
+      if (state.isPlaying) {
+        stopReplay();
+      } else {
+        startReplay();
+      }
 
     }
+
+  }
 );
 
 
-/* ============================================================
-   BUTTONS
-============================================================ */
+/*
+|--------------------------------------------------------------------------
+| Initial state
+|--------------------------------------------------------------------------
+*/
 
-$("resetBtn")
-    .addEventListener(
-        "click",
-        resetBacktest
-    );
-
-
-$("prevBtn")
-    .addEventListener(
-        "click",
-        stepBackward
-    );
-
-
-$("nextBtn")
-    .addEventListener(
-        "click",
-        () => {
-
-            stopReplay();
-
-            stepForward();
-
-        }
-    );
-
-
-$("playBtn")
-    .addEventListener(
-        "click",
-        toggleReplay
-    );
-
-
-$("buyBtn")
-    .addEventListener(
-        "click",
-        () =>
-            openPosition(
-                "BUY"
-            )
-    );
-
-
-$("sellBtn")
-    .addEventListener(
-        "click",
-        () =>
-            openPosition(
-                "SELL"
-            )
-    );
-
-
-$("closeBtn")
-    .addEventListener(
-        "click",
-        closePosition
-    );
-
-
-$("speed")
-    .addEventListener(
-        "change",
-        () => {
-
-            if (
-                state.timer
-            ) {
-
-                stopReplay();
-
-                toggleReplay();
-
-            }
-
-        }
-    );
-
-
-/* ============================================================
-   INITIAL STATE
-============================================================ */
-
-setControls(
-    false
-);
-
-updateUI();
-
-resizeChart();
+updateStats();
+updateReplayUI();
 
 </script>
 

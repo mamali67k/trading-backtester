@@ -1,202 +1,2409 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>TradingView Test UI</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- سبک‌ها -->
+<title>Trading Backtester</title>
+
+<!--
+  Lightweight Charts
+  نسخه ثابت برای جلوگیری از تغییرات ناگهانی CDN
+-->
+<script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
+
 <style>
+:root {
+    --bg: #020617;
+    --panel: #0b1220;
+    --panel-2: #111827;
+    --border: rgba(148,163,184,.16);
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --shadow: 0 15px 50px rgba(0,0,0,.35);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 50% -20%, rgba(56,189,248,.08), transparent 35%),
+        var(--bg);
+    color: var(--text);
+    font-family:
+        Inter,
+        "Segoe UI",
+        Tahoma,
+        Arial,
+        sans-serif;
+}
+
+/* =========================================================
+   APP
+========================================================= */
+
+.app {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.topbar {
+    position: relative;
+    height: 58px;
+    min-height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(2,6,23,.78);
+    backdrop-filter: blur(18px);
+    z-index: 20;
+}
+
+.topbar::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(56,189,248,.65),
+        transparent
+    );
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(56,189,248,.5);
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    background: rgba(56,189,248,.07);
+    font-weight: 800;
+}
+
+.brand-name {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .2px;
+}
+
+.brand-version {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+}
+
+.top-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 12px rgba(34,197,94,.7);
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+}
+
+/* =========================================================
+   LEFT PANEL
+========================================================= */
+
+.sidebar {
+    width: 285px;
+    min-width: 285px;
+    border-left: 1px solid var(--border);
+    background: rgba(11,18,32,.82);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.sidebar-section {
+    padding: 15px;
+    border-bottom: 1px solid var(--border);
+}
+
+.section-title {
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .8px;
+    margin-bottom: 10px;
+}
+
+/* =========================================================
+   FILE UPLOAD
+========================================================= */
+
+.file-drop {
+    border: 1px dashed rgba(148,163,184,.28);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: .2s;
+    background: rgba(255,255,255,.015);
+}
+
+.file-drop:hover,
+.file-drop.dragging {
+    border-color: var(--accent);
+    background: rgba(56,189,248,.05);
+}
+
+.file-drop-title {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.file-drop-subtitle {
+    color: var(--muted);
+    font-size: 10px;
+    margin-top: 5px;
+}
+
+#csvInput {
+    display: none;
+}
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+.control-row {
+    display: flex;
+    gap: 7px;
+    margin-bottom: 8px;
+}
+
+.control-row:last-child {
+    margin-bottom: 0;
+}
+
+button,
+select,
+input {
+    font: inherit;
+}
+
+button,
+select {
+    height: 35px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--panel-2);
+    color: var(--text);
+}
+
+button {
+    cursor: pointer;
+    padding: 0 11px;
+    transition: .15s;
+}
+
+button:hover:not(:disabled) {
+    border-color: rgba(56,189,248,.45);
+    background: rgba(56,189,248,.08);
+}
+
+button:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: .38;
+}
+
+select {
+    padding: 0 8px;
+    outline: none;
+}
+
+.primary {
+    background: rgba(56,189,248,.12);
+    border-color: rgba(56,189,248,.3);
+}
+
+.buy {
+    flex: 1;
+    color: #86efac;
+}
+
+.sell {
+    flex: 1;
+    color: #fca5a5;
+}
+
+.danger {
+    color: #fca5a5;
+}
+
+/* =========================================================
+   INFO
+========================================================= */
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+}
+
+.info-card {
+    min-height: 58px;
+    padding: 9px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    background: rgba(255,255,255,.015);
+}
+
+.info-label {
+    color: var(--muted);
+    font-size: 9px;
+}
+
+.info-value {
+    margin-top: 5px;
+    font-size: 13px;
+    font-weight: 700;
+    direction: ltr;
+    text-align: right;
+}
+
+/* =========================================================
+   POSITION
+========================================================= */
+
+.position-box {
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    padding: 10px;
+    background: rgba(255,255,255,.015);
+}
+
+.position-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+}
+
+.position-badge {
+    padding: 3px 7px;
+    border-radius: 5px;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.position-none {
+    color: var(--muted);
+}
+
+.position-buy {
+    color: #86efac;
+    background: rgba(34,197,94,.1);
+}
+
+.position-sell {
+    color: #fca5a5;
+    background: rgba(239,68,68,.1);
+}
+
+/* =========================================================
+   CHART AREA
+========================================================= */
+
+.chart-area {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-toolbar {
+    height: 43px;
+    min-height: 43px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    background: rgba(11,18,32,.6);
+}
+
+.symbol {
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.timeframe {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.toolbar-spacer {
+    flex: 1;
+}
+
+.candle-counter {
+    font-size: 10px;
+    color: var(--muted);
+    direction: ltr;
+}
+
+.chart-container {
+    flex: 1;
+    min-height: 0;
+    position: relative;
+}
+
+#chart {
+    position: absolute;
+    inset: 0;
+}
+
+/* =========================================================
+   BOTTOM STATUS
+========================================================= */
+
+.bottom-bar {
+    height: 30px;
+    min-height: 30px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    color: var(--muted);
+    font-size: 9px;
+    background: rgba(2,6,23,.9);
+}
+
+#message {
+    direction: rtl;
+}
+
+.ltr {
+    direction: ltr;
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 900px) {
+
     body {
-        margin: 0;
-        background: #020617;
-        font-family: sans-serif;
-        color: white;
-        direction: rtl;
+        overflow: auto;
     }
 
-    /* نوار شفاف */
-    .topbar {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 50px;
-        transition: 0.3s;
+    .app {
+        height: auto;
+        min-height: 100vh;
     }
 
-    .topbar.hover {
-        backdrop-filter: blur(20px);
-        background: rgba(255, 255, 255, 0.05);
+    .main {
+        flex-direction: column;
     }
 
-    .gradient-line {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: linear-gradient(to right, white, #38bdf8, #d946ef);
-        opacity: 0;
-        transition: 0.3s;
+    .sidebar {
+        width: 100%;
+        min-width: 0;
+        max-height: none;
+        order: 2;
     }
 
-    .topbar.hover .gradient-line {
-        opacity: 1;
+    .chart-area {
+        height: 65vh;
+        min-height: 450px;
+        order: 1;
     }
 
-    /* دکمهٔ جستجو */
-    .search-btn {
-        display: none;
-        background: rgba(255, 255, 255, 0.1);
-        padding: 6px 12px;
-        border-radius: 20px;
-        cursor: pointer;
-        margin: 10px;
-        font-size: 14px;
-        transition: 0.2s;
-    }
-
-    .search-btn:hover {
-        background: rgba(255, 255, 255, 0.2);
-    }
-
-    .topbar.hover .search-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    /* چارت */
-    #chart {
-        position: absolute;
-        top: 50px;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: #050816;
-    }
-
-    /* پاپ‌آپ */
-    .popup-bg {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.4);
+    .top-status {
         display: none;
     }
-
-    .popup {
-        width: 350px;
-        background: #020617;
-        border: 1px solid #1f2937;
-        border-radius: 12px;
-        margin: 100px auto;
-        padding: 10px;
-        animation: slideDown 0.25s ease-out;
-    }
-
-    @keyframes slideDown {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .symbol-item {
-        padding: 8px;
-        cursor: pointer;
-        font-size: 14px;
-        border-radius: 6px;
-    }
-
-    .symbol-item:hover {
-        background: rgba(255, 255, 255, 0.1);
-    }
+}
 </style>
 </head>
 
 <body>
 
-<!-- نوار بالا -->
-<div class="topbar" id="topbar">
-    <div class="gradient-line"></div>
-    <div class="search-btn" id="openPopup">🔍 نمادها</div>
-</div>
+<div class="app">
 
-<!-- چارت -->
-<div id="chart"></div>
+    <!-- =====================================================
+         TOP BAR
+    ====================================================== -->
 
-<!-- پاپ‌آپ -->
-<div class="popup-bg" id="popupBg">
-    <div class="popup">
-        <input id="searchInput" type="text" placeholder="جستجوی نماد..." 
-               style="width:100%; padding:8px; border-radius:6px; background:#030712; color:white; border:1px solid #1f2937;">
+    <header class="topbar">
 
-        <div id="symbolList" style="max-height:250px; overflow-y:auto; margin-top:10px;"></div>
+        <div class="brand">
+
+            <div class="logo">
+                TB
+            </div>
+
+            <div>
+                <div class="brand-name">
+                    Trading Backtester
+                </div>
+
+                <div class="brand-version">
+                    Local Engine · v0.1
+                </div>
+            </div>
+
+        </div>
+
+        <div class="top-status">
+
+            <span class="status-dot"></span>
+
+            <span>
+                Engine Ready
+            </span>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <div class="main">
+
+        <!-- =================================================
+             SIDEBAR
+        ================================================== -->
+
+        <aside class="sidebar">
+
+            <!-- DATA -->
+
+            <section class="sidebar-section">
+
+                <div class="section-title">
+                    MARKET DATA
+                </div>
+
+                <label
+                    class="file-drop"
+                    id="fileDrop"
+                    for="csvInput"
+                >
+
+                    <div class="file-drop-title">
+                        انتخاب فایل CSV
+                    </div>
+
+                    <div class="file-drop-subtitle">
+                        OHLC · حداکثر 25MB
+                    </div>
+
+                </label>
+
+                <input
+                    id="csvInput"
+                    type="file"
+                    accept=".csv,text/csv"
+                >
+
+            </section>
+
+
+            <!-- REPLAY -->
+
+            <section class="sidebar-section">
+
+                <div class="section-title">
+                    REPLAY
+                </div>
+
+                <div class="control-row">
+
+                    <button
+                        id="resetBtn"
+                        disabled
+                    >
+                        ↻
+                    </button>
+
+                    <button
+                        id="prevBtn"
+                        disabled
+                    >
+                        ◀
+                    </button>
+
+                    <button
+                        id="playBtn"
+                        class="primary"
+                        disabled
+                        style="flex:1"
+                    >
+                        ▶ پخش
+                    </button>
+
+                    <button
+                        id="nextBtn"
+                        disabled
+                    >
+                        ▶
+                    </button>
+
+                </div>
+
+                <div class="control-row">
+
+                    <select
+                        id="speed"
+                        style="width:100%"
+                        disabled
+                    >
+
+                        <option value="1200">
+                            سرعت 1x
+                        </option>
+
+                        <option value="600">
+                            سرعت 2x
+                        </option>
+
+                        <option value="300">
+                            سرعت 4x
+                        </option>
+
+                        <option value="120">
+                            سرعت 10x
+                        </option>
+
+                        <option value="50">
+                            سرعت 20x
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </section>
+
+
+            <!-- TRADING -->
+
+            <section class="sidebar-section">
+
+                <div class="section-title">
+                    TRADING
+                </div>
+
+                <div class="control-row">
+
+                    <button
+                        id="buyBtn"
+                        class="buy"
+                        disabled
+                    >
+                        BUY
+                    </button>
+
+                    <button
+                        id="sellBtn"
+                        class="sell"
+                        disabled
+                    >
+                        SELL
+                    </button>
+
+                </div>
+
+                <div class="control-row">
+
+                    <button
+                        id="closeBtn"
+                        class="danger"
+                        style="width:100%"
+                        disabled
+                    >
+                        CLOSE POSITION
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- POSITION -->
+
+            <section class="sidebar-section">
+
+                <div class="section-title">
+                    POSITION
+                </div>
+
+                <div class="position-box">
+
+                    <div class="position-status">
+
+                        <span>
+                            وضعیت
+                        </span>
+
+                        <span
+                            id="positionBadge"
+                            class="position-badge position-none"
+                        >
+                            NO POSITION
+                        </span>
+
+                    </div>
+
+                    <div class="info-grid" style="margin-top:8px">
+
+                        <div class="info-card">
+
+                            <div class="info-label">
+                                Entry
+                            </div>
+
+                            <div
+                                id="entryPrice"
+                                class="info-value"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+                        <div class="info-card">
+
+                            <div class="info-label">
+                                Current
+                            </div>
+
+                            <div
+                                id="currentPrice"
+                                class="info-value"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- STATISTICS -->
+
+            <section class="sidebar-section">
+
+                <div class="section-title">
+                    PERFORMANCE
+                </div>
+
+                <div class="info-grid">
+
+                    <div class="info-card">
+
+                        <div class="info-label">
+                            P&L
+                        </div>
+
+                        <div
+                            id="pnl"
+                            class="info-value"
+                        >
+                            0.00
+                        </div>
+
+                    </div>
+
+                    <div class="info-card">
+
+                        <div class="info-label">
+                            TRADES
+                        </div>
+
+                        <div
+                            id="tradeCount"
+                            class="info-value"
+                        >
+                            0
+                        </div>
+
+                    </div>
+
+                    <div class="info-card">
+
+                        <div class="info-label">
+                            WIN RATE
+                        </div>
+
+                        <div
+                            id="winRate"
+                            class="info-value"
+                        >
+                            0%
+                        </div>
+
+                    </div>
+
+                    <div class="info-card">
+
+                        <div class="info-label">
+                            MAX DD
+                        </div>
+
+                        <div
+                            id="drawdown"
+                            class="info-value"
+                        >
+                            0.00
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </aside>
+
+
+        <!-- =================================================
+             CHART
+        ================================================== -->
+
+        <section class="chart-area">
+
+            <div class="chart-toolbar">
+
+                <span
+                    id="symbol"
+                    class="symbol"
+                >
+                    NO DATA
+                </span>
+
+                <span
+                    id="timeframe"
+                    class="timeframe"
+                >
+                    —
+                </span>
+
+                <div class="toolbar-spacer"></div>
+
+                <span
+                    id="candleCounter"
+                    class="candle-counter"
+                >
+                    0 / 0
+                </span>
+
+            </div>
+
+
+            <div class="chart-container">
+
+                <div id="chart"></div>
+
+            </div>
+
+        </section>
+
     </div>
+
+
+    <!-- =====================================================
+         BOTTOM
+    ====================================================== -->
+
+    <footer class="bottom-bar">
+
+        <span id="message">
+            برای شروع، یک فایل CSV انتخاب کنید.
+        </span>
+
+        <span class="ltr">
+            BACKTESTER
+        </span>
+
+    </footer>
+
 </div>
 
-<!-- TradingView Lightweight -->
-<script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
 
 <script>
-    const topbar = document.getElementById("topbar");
-    const popupBg = document.getElementById("popupBg");
-    const openPopup = document.getElementById("openPopup");
-    const symbolList = document.getElementById("symbolList");
-    const searchInput = document.getElementById("searchInput");
+"use strict";
 
-    const symbols = [
-        { code: "EURUSD", base: "🇪🇺", quote: "🇺🇸", desc: "Euro vs US Dollar", cat: "Major" },
-        { code: "GBPJPY", base: "🇬🇧", quote: "🇯🇵", desc: "British Pound vs Japanese Yen", cat: "Minor" },
-        { code: "USDCHF", base: "🇺🇸", quote: "🇨🇭", desc: "US Dollar vs Swiss Franc", cat: "Major" },
-        { code: "AUDCAD", base: "🇦🇺", quote: "🇨🇦", desc: "Australian Dollar vs Canadian Dollar", cat: "Cross" },
-    ];
+/* ============================================================
+   CONFIG
+============================================================ */
 
-    /* Hover نوار */
-    topbar.addEventListener("mouseenter", () => topbar.classList.add("hover"));
-    topbar.addEventListener("mouseleave", () => topbar.classList.remove("hover"));
+const CONFIG = {
 
-    /* پاپ‌آپ */
-    openPopup.onclick = () => popupBg.style.display = "block";
-    popupBg.onclick = (e) => { if (e.target === popupBg) popupBg.style.display = "none"; };
+    MAX_FILE_SIZE:
+        25 * 1024 * 1024,
 
-    /* لیست نمادها */
-    function renderSymbols(filter = "") {
-        symbolList.innerHTML = "";
-        symbols
-            .filter(s => s.code.toLowerCase().includes(filter.toLowerCase()))
-            .forEach(s => {
-                const item = document.createElement("div");
-                item.className = "symbol-item";
-                item.innerText = `${s.base} ${s.code} ${s.quote} — ${s.desc} (${s.cat})`;
-                item.onclick = () => {
-                    popupBg.style.display = "none";
-                    loadChart();
-                };
-                symbolList.appendChild(item);
-            });
+    MAX_ROWS:
+        200000,
+
+    DEFAULT_CAPITAL:
+        10000
+
+};
+
+
+/* ============================================================
+   DOM
+============================================================ */
+
+const $ = id =>
+    document.getElementById(id);
+
+
+/* ============================================================
+   APPLICATION STATE
+============================================================ */
+
+const state = {
+
+    candles: [],
+
+    visibleCandles: [],
+
+    currentIndex: -1,
+
+    timer: null,
+
+    position: null,
+
+    trades: [],
+
+    realizedPnL: 0,
+
+    equity: CONFIG.DEFAULT_CAPITAL,
+
+    peakEquity: CONFIG.DEFAULT_CAPITAL,
+
+    maxDrawdown: 0,
+
+    fileName: null
+
+};
+
+
+/* ============================================================
+   CHART
+============================================================ */
+
+const chartElement =
+    $("chart");
+
+const chart =
+    LightweightCharts.createChart(
+        chartElement,
+        {
+
+            layout: {
+
+                background: {
+                    color: "#0b1220"
+                },
+
+                textColor: "#94a3b8"
+
+            },
+
+            grid: {
+
+                vertLines: {
+                    color: "rgba(148,163,184,.06)"
+                },
+
+                horzLines: {
+                    color: "rgba(148,163,184,.06)"
+                }
+
+            },
+
+            crosshair: {
+
+                mode:
+                    LightweightCharts.CrosshairMode.Normal
+
+            },
+
+            rightPriceScale: {
+
+                borderColor:
+                    "rgba(148,163,184,.15)"
+
+            },
+
+            timeScale: {
+
+                borderColor:
+                    "rgba(148,163,184,.15)",
+
+                timeVisible: true,
+
+                secondsVisible: false
+
+            },
+
+            handleScroll: true,
+
+            handleScale: true
+
+        }
+    );
+
+
+const candleSeries =
+    chart.addCandlestickSeries({
+
+        upColor: "#22c55e",
+
+        downColor: "#ef4444",
+
+        borderUpColor: "#22c55e",
+
+        borderDownColor: "#ef4444",
+
+        wickUpColor: "#22c55e",
+
+        wickDownColor: "#ef4444"
+
+    });
+
+
+/* ============================================================
+   RESPONSIVE CHART
+============================================================ */
+
+function resizeChart() {
+
+    chart.applyOptions({
+
+        width:
+            chartElement.clientWidth,
+
+        height:
+            chartElement.clientHeight
+
+    });
+
+}
+
+window.addEventListener(
+    "resize",
+    resizeChart
+);
+
+setTimeout(
+    resizeChart,
+    100
+);
+
+
+/* ============================================================
+   MESSAGE
+============================================================ */
+
+function setMessage(
+    text,
+    type = "normal"
+) {
+
+    const element =
+        $("message");
+
+    element.textContent =
+        text;
+
+    if (type === "error") {
+
+        element.style.color =
+            "#fca5a5";
+
+    } else if (type === "success") {
+
+        element.style.color =
+            "#86efac";
+
+    } else {
+
+        element.style.color =
+            "";
+
     }
 
-    searchInput.oninput = () => renderSymbols(searchInput.value);
-    renderSymbols();
+}
 
-    /* چارت */
-    function loadChart() {
-        const chart = LightweightCharts.createChart(document.getElementById("chart"), {
-            layout: { background: { color: "#050816" }, textColor: "white" },
-            width: window.innerWidth,
-            height: window.innerHeight - 50,
+
+/* ============================================================
+   NUMBER
+============================================================ */
+
+function number(value) {
+
+    const n =
+        Number(
+            String(value)
+                .trim()
+                .replace(/,/g, "")
+        );
+
+    return Number.isFinite(n)
+        ? n
+        : NaN;
+
+}
+
+
+/* ============================================================
+   HEADER NORMALIZATION
+============================================================ */
+
+function normalizeHeader(value) {
+
+    return String(value)
+        .trim()
+        .toLowerCase()
+        .replace(
+            /[\s\-]+/g,
+            "_"
+        );
+
+}
+
+
+/* ============================================================
+   CSV PARSER
+   بدون eval
+============================================================ */
+
+function parseCSV(text) {
+
+    const rows = [];
+
+    let row = [];
+
+    let cell = "";
+
+    let quoted = false;
+
+
+    for (
+        let i = 0;
+        i < text.length;
+        i++
+    ) {
+
+        const char =
+            text[i];
+
+        const next =
+            text[i + 1];
+
+
+        if (char === '"') {
+
+            if (
+                quoted &&
+                next === '"'
+            ) {
+
+                cell += '"';
+
+                i++;
+
+            } else {
+
+                quoted =
+                    !quoted;
+
+            }
+
+            continue;
+
+        }
+
+
+        if (
+            char === "," &&
+            !quoted
+        ) {
+
+            row.push(cell);
+
+            cell = "";
+
+            continue;
+
+        }
+
+
+        if (
+            (
+                char === "\n" ||
+                char === "\r"
+            ) &&
+            !quoted
+        ) {
+
+            if (
+                char === "\r" &&
+                next === "\n"
+            ) {
+
+                i++;
+
+            }
+
+            row.push(cell);
+
+            cell = "";
+
+            if (
+                row.some(
+                    value =>
+                        String(value)
+                            .trim() !== ""
+                )
+            ) {
+
+                rows.push(row);
+
+            }
+
+            row = [];
+
+            continue;
+
+        }
+
+
+        cell += char;
+
+    }
+
+
+    if (
+        cell !== "" ||
+        row.length > 0
+    ) {
+
+        row.push(cell);
+
+        if (
+            row.some(
+                value =>
+                    String(value)
+                        .trim() !== ""
+            )
+        ) {
+
+            rows.push(row);
+
+        }
+
+    }
+
+
+    if (
+        rows.length < 2
+    ) {
+
+        throw new Error(
+            "فایل CSV خالی یا نامعتبر است."
+        );
+
+    }
+
+
+    const headers =
+        rows[0].map(
+            normalizeHeader
+        );
+
+
+    const aliases = {
+
+        time: [
+            "time",
+            "timestamp",
+            "date",
+            "datetime",
+            "date_time"
+        ],
+
+        open: [
+            "open",
+            "o"
+        ],
+
+        high: [
+            "high",
+            "h"
+        ],
+
+        low: [
+            "low",
+            "l"
+        ],
+
+        close: [
+            "close",
+            "c"
+        ],
+
+        volume: [
+            "volume",
+            "vol",
+            "v"
+        ]
+
+    };
+
+
+    const indexes = {};
+
+
+    for (
+        const key of Object.keys(aliases)
+    ) {
+
+        indexes[key] =
+            headers.findIndex(
+                header =>
+                    aliases[key]
+                        .includes(header)
+            );
+
+    }
+
+
+    for (
+        const required of [
+            "time",
+            "open",
+            "high",
+            "low",
+            "close"
+        ]
+    ) {
+
+        if (
+            indexes[required] === -1
+        ) {
+
+            throw new Error(
+                `ستون ${required} در CSV پیدا نشد.`
+            );
+
+        }
+
+    }
+
+
+    const candles = [];
+
+
+    const limit =
+        Math.min(
+            rows.length - 1,
+            CONFIG.MAX_ROWS
+        );
+
+
+    for (
+        let i = 1;
+        i <= limit;
+        i++
+    ) {
+
+        const source =
+            rows[i];
+
+
+        const rawTime =
+            String(
+                source[indexes.time] ?? ""
+            ).trim();
+
+
+        let timestamp;
+
+
+        if (
+            /^\d{10,13}$/
+                .test(rawTime)
+        ) {
+
+            const raw =
+                Number(rawTime);
+
+            timestamp =
+                rawTime.length === 13
+                    ? Math.floor(raw / 1000)
+                    : raw;
+
+        } else {
+
+            timestamp =
+                Math.floor(
+                    Date.parse(rawTime)
+                    / 1000
+                );
+
+        }
+
+
+        const open =
+            number(
+                source[indexes.open]
+            );
+
+        const high =
+            number(
+                source[indexes.high]
+            );
+
+        const low =
+            number(
+                source[indexes.low]
+            );
+
+        const close =
+            number(
+                source[indexes.close]
+            );
+
+
+        if (
+            !Number.isFinite(timestamp) ||
+            !Number.isFinite(open) ||
+            !Number.isFinite(high) ||
+            !Number.isFinite(low) ||
+            !Number.isFinite(close)
+        ) {
+
+            continue;
+
+        }
+
+
+        if (
+            high < low ||
+            open < low ||
+            open > high ||
+            close < low ||
+            close > high
+        ) {
+
+            continue;
+
+        }
+
+
+        candles.push({
+
+            time:
+                timestamp,
+
+            open,
+
+            high,
+
+            low,
+
+            close,
+
+            volume:
+                indexes.volume >= 0
+                    ? number(
+                        source[indexes.volume]
+                    )
+                    : undefined
+
         });
 
-        const series = chart.addCandlestickSeries();
-        series.setData([
-            { time: 1, open: 1.1, high: 1.2, low: 1.0, close: 1.15 },
-            { time: 2, open: 1.15, high: 1.25, low: 1.1, close: 1.2 },
-            { time: 3, open: 1.2, high: 1.3, low: 1.15, close: 1.28 },
-            { time: 4, open: 1.28, high: 1.32, low: 1.2, close: 1.22 },
-        ]);
     }
 
-    loadChart();
+
+    candles.sort(
+        (a,b) =>
+            a.time - b.time
+    );
+
+
+    const unique = [];
+
+
+    for (
+        const candle of candles
+    ) {
+
+        if (
+            unique.length === 0 ||
+            unique[
+                unique.length - 1
+            ].time !== candle.time
+        ) {
+
+            unique.push(candle);
+
+        }
+
+    }
+
+
+    if (
+        unique.length === 0
+    ) {
+
+        throw new Error(
+            "هیچ داده معتبر OHLC در فایل پیدا نشد."
+        );
+
+    }
+
+
+    return unique;
+
+}
+
+
+/* ============================================================
+   ENABLE / DISABLE CONTROLS
+============================================================ */
+
+function setControls(
+    enabled
+) {
+
+    [
+
+        "resetBtn",
+        "prevBtn",
+        "playBtn",
+        "nextBtn",
+        "speed",
+        "buyBtn",
+        "sellBtn",
+        "closeBtn"
+
+    ].forEach(
+        id => {
+
+            $(id).disabled =
+                !enabled;
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   RESET BACKTEST
+============================================================ */
+
+function resetBacktest() {
+
+    stopReplay();
+
+
+    state.visibleCandles = [];
+
+    state.currentIndex = -1;
+
+    state.position = null;
+
+    state.trades = [];
+
+    state.realizedPnL = 0;
+
+    state.equity =
+        CONFIG.DEFAULT_CAPITAL;
+
+    state.peakEquity =
+        CONFIG.DEFAULT_CAPITAL;
+
+    state.maxDrawdown = 0;
+
+
+    candleSeries.setData([]);
+
+
+    updateUI();
+
+
+    if (
+        state.candles.length
+    ) {
+
+        stepForward();
+
+    }
+
+}
+
+
+/* ============================================================
+   NEXT CANDLE
+============================================================ */
+
+function stepForward() {
+
+    if (
+        state.currentIndex + 1 >=
+        state.candles.length
+    ) {
+
+        stopReplay();
+
+        setMessage(
+            "داده‌ها به پایان رسید.",
+            "success"
+        );
+
+        return;
+
+    }
+
+
+    state.currentIndex++;
+
+
+    const candle =
+        state.candles[
+            state.currentIndex
+        ];
+
+
+    state.visibleCandles.push(
+        candle
+    );
+
+
+    candleSeries.setData(
+        state.visibleCandles
+    );
+
+
+    updateUI();
+
+}
+
+
+/* ============================================================
+   PREVIOUS CANDLE
+============================================================ */
+
+function stepBackward() {
+
+    stopReplay();
+
+
+    if (
+        state.currentIndex <= 0
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+      اگر معامله فعال باشد، در این نسخه
+      عقب رفتن معامله را دستکاری نمی‌کند.
+      این تصمیم عمداً محافظه‌کارانه است.
+      در نسخه بعدی Undo/Replay Ledger خواهیم داشت.
+    */
+
+    state.currentIndex--;
+
+    state.visibleCandles =
+        state.candles.slice(
+            0,
+            state.currentIndex + 1
+        );
+
+
+    candleSeries.setData(
+        state.visibleCandles
+    );
+
+
+    updateUI();
+
+}
+
+
+/* ============================================================
+   PLAY / PAUSE
+============================================================ */
+
+function toggleReplay() {
+
+    if (
+        state.timer
+    ) {
+
+        stopReplay();
+
+        return;
+
+    }
+
+
+    if (
+        !state.candles.length
+    ) {
+
+        return;
+
+    }
+
+
+    $("playBtn")
+        .textContent =
+        "⏸ توقف";
+
+
+    state.timer =
+        setInterval(
+            stepForward,
+            Number(
+                $("speed").value
+            )
+        );
+
+}
+
+
+/* ============================================================
+   STOP
+============================================================ */
+
+function stopReplay() {
+
+    if (
+        state.timer
+    ) {
+
+        clearInterval(
+            state.timer
+        );
+
+    }
+
+
+    state.timer = null;
+
+
+    $("playBtn")
+        .textContent =
+        "▶ پخش";
+
+}
+
+
+/* ============================================================
+   OPEN POSITION
+============================================================ */
+
+function openPosition(
+    side
+) {
+
+    if (
+        state.currentIndex < 0
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        state.position
+    ) {
+
+        setMessage(
+            "ابتدا معامله فعلی را ببندید.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const candle =
+        state.candles[
+            state.currentIndex
+        ];
+
+
+    state.position = {
+
+        side,
+
+        entry:
+            candle.close,
+
+        entryTime:
+            candle.time
+
+    };
+
+
+    setMessage(
+        `${side} در قیمت ${candle.close} باز شد.`,
+        "success"
+    );
+
+
+    updateUI();
+
+}
+
+
+/* ============================================================
+   CLOSE POSITION
+============================================================ */
+
+function closePosition() {
+
+    if (
+        !state.position ||
+        state.currentIndex < 0
+    ) {
+
+        return;
+
+    }
+
+
+    const candle =
+        state.candles[
+            state.currentIndex
+        ];
+
+
+    const exit =
+        candle.close;
+
+
+    const direction =
+        state.position.side === "BUY"
+            ? 1
+            : -1;
+
+
+    const pnl =
+        (
+            exit -
+            state.position.entry
+        ) * direction;
+
+
+    const trade = {
+
+        side:
+            state.position.side,
+
+        entry:
+            state.position.entry,
+
+        exit,
+
+        pnl,
+
+        entryTime:
+            state.position.entryTime,
+
+        exitTime:
+            candle.time
+
+    };
+
+
+    state.trades.push(
+        trade
+    );
+
+
+    state.realizedPnL +=
+        pnl;
+
+
+    state.equity =
+        CONFIG.DEFAULT_CAPITAL +
+        state.realizedPnL;
+
+
+    if (
+        state.equity >
+        state.peakEquity
+    ) {
+
+        state.peakEquity =
+            state.equity;
+
+    }
+
+
+    const drawdown =
+        state.peakEquity -
+        state.equity;
+
+
+    if (
+        drawdown >
+        state.maxDrawdown
+    ) {
+
+        state.maxDrawdown =
+            drawdown;
+
+    }
+
+
+    state.position = null;
+
+
+    setMessage(
+        `معامله بسته شد. P&L: ${pnl.toFixed(2)}`,
+        pnl >= 0
+            ? "success"
+            : "error"
+    );
+
+
+    updateUI();
+
+}
+
+
+/* ============================================================
+   UPDATE UI
+============================================================ */
+
+function updateUI() {
+
+    const hasData =
+        state.candles.length > 0;
+
+
+    $("candleCounter")
+        .textContent =
+        hasData
+            ? `${Math.max(state.currentIndex + 1, 0)} / ${state.candles.length}`
+            : "0 / 0";
+
+
+    const current =
+        state.currentIndex >= 0
+            ? state.candles[
+                state.currentIndex
+            ]
+            : null;
+
+
+    $("currentPrice")
+        .textContent =
+        current
+            ? current.close
+            : "—";
+
+
+    $("entryPrice")
+        .textContent =
+        state.position
+            ? state.position.entry
+            : "—";
+
+
+    $("pnl")
+        .textContent =
+        state.realizedPnL.toFixed(2);
+
+
+    $("tradeCount")
+        .textContent =
+        String(
+            state.trades.length
+        );
+
+
+    const wins =
+        state.trades.filter(
+            trade =>
+                trade.pnl > 0
+        ).length;
+
+
+    const winRate =
+        state.trades.length
+            ? (
+                wins /
+                state.trades.length *
+                100
+            )
+            : 0;
+
+
+    $("winRate")
+        .textContent =
+        `${winRate.toFixed(1)}%`;
+
+
+    $("drawdown")
+        .textContent =
+        state.maxDrawdown.toFixed(2);
+
+
+    const badge =
+        $("positionBadge");
+
+
+    badge.className =
+        "position-badge";
+
+
+    if (
+        !state.position
+    ) {
+
+        badge.classList.add(
+            "position-none"
+        );
+
+        badge.textContent =
+            "NO POSITION";
+
+    } else if (
+        state.position.side ===
+        "BUY"
+    ) {
+
+        badge.classList.add(
+            "position-buy"
+        );
+
+        badge.textContent =
+            "LONG";
+
+    } else {
+
+        badge.classList.add(
+            "position-sell"
+        );
+
+        badge.textContent =
+            "SHORT";
+
+    }
+
+
+    if (
+        state.fileName
+    ) {
+
+        $("symbol")
+            .textContent =
+            state.fileName
+                .replace(
+                    /\.csv$/i,
+                    ""
+                )
+                .slice(
+                    0,
+                    40
+                );
+
+    }
+
+}
+
+
+/* ============================================================
+   CSV FILE
+============================================================ */
+
+$("csvInput")
+    .addEventListener(
+        "change",
+        async event => {
+
+            const file =
+                event.target.files?.[0];
+
+
+            if (!file) {
+
+                return;
+
+            }
+
+
+            if (
+                file.size >
+                CONFIG.MAX_FILE_SIZE
+            ) {
+
+                setMessage(
+                    "حجم فایل بیشتر از 25MB است.",
+                    "error"
+                );
+
+                event.target.value =
+                    "";
+
+                return;
+
+            }
+
+
+            if (
+                !file.name
+                    .toLowerCase()
+                    .endsWith(".csv")
+            ) {
+
+                setMessage(
+                    "فقط فایل CSV مجاز است.",
+                    "error"
+                );
+
+                event.target.value =
+                    "";
+
+                return;
+
+            }
+
+
+            try {
+
+                setMessage(
+                    "در حال پردازش فایل..."
+                );
+
+
+                const text =
+                    await file.text();
+
+
+                const candles =
+                    parseCSV(
+                        text
+                    );
+
+
+                state.candles =
+                    candles;
+
+                state.fileName =
+                    file.name;
+
+
+                $("timeframe")
+                    .textContent =
+                    "CSV";
+
+
+                resetBacktest();
+
+
+                setControls(
+                    true
+                );
+
+
+                setMessage(
+                    `${candles.length.toLocaleString("fa-IR")} کندل با موفقیت بارگذاری شد.`,
+                    "success"
+                );
+
+
+                resizeChart();
+
+
+            } catch (
+                error
+            ) {
+
+                setControls(
+                    false
+                );
+
+
+                setMessage(
+                    error instanceof Error
+                        ? error.message
+                        : "خطا در پردازش فایل.",
+                    "error"
+                );
+
+            }
+
+        }
+    );
+
+
+/* ============================================================
+   DRAG & DROP
+============================================================ */
+
+const fileDrop =
+    $("fileDrop");
+
+
+fileDrop.addEventListener(
+    "dragover",
+    event => {
+
+        event.preventDefault();
+
+        fileDrop.classList.add(
+            "dragging"
+        );
+
+    }
+);
+
+
+fileDrop.addEventListener(
+    "dragleave",
+    () => {
+
+        fileDrop.classList.remove(
+            "dragging"
+        );
+
+    }
+);
+
+
+fileDrop.addEventListener(
+    "drop",
+    event => {
+
+        event.preventDefault();
+
+        fileDrop.classList.remove(
+            "dragging"
+        );
+
+
+        const file =
+            event.dataTransfer
+                .files?.[0];
+
+
+        if (!file) {
+
+            return;
+
+        }
+
+
+        /*
+          input.files مستقیماً در همه مرورگرها
+          قابل تنظیم نیست؛ بنابراین فایل را
+          از طریق DataTransfer به input می‌دهیم.
+        */
+
+        try {
+
+            const transfer =
+                new DataTransfer();
+
+            transfer.items.add(
+                file
+            );
+
+            $("csvInput").files =
+                transfer.files;
+
+
+            $("csvInput")
+                .dispatchEvent(
+                    new Event(
+                        "change"
+                    )
+                );
+
+        } catch {
+
+            setMessage(
+                "لطفاً فایل را از طریق انتخاب فایل وارد کنید.",
+                "error"
+            );
+
+        }
+
+    }
+);
+
+
+/* ============================================================
+   BUTTONS
+============================================================ */
+
+$("resetBtn")
+    .addEventListener(
+        "click",
+        resetBacktest
+    );
+
+
+$("prevBtn")
+    .addEventListener(
+        "click",
+        stepBackward
+    );
+
+
+$("nextBtn")
+    .addEventListener(
+        "click",
+        () => {
+
+            stopReplay();
+
+            stepForward();
+
+        }
+    );
+
+
+$("playBtn")
+    .addEventListener(
+        "click",
+        toggleReplay
+    );
+
+
+$("buyBtn")
+    .addEventListener(
+        "click",
+        () =>
+            openPosition(
+                "BUY"
+            )
+    );
+
+
+$("sellBtn")
+    .addEventListener(
+        "click",
+        () =>
+            openPosition(
+                "SELL"
+            )
+    );
+
+
+$("closeBtn")
+    .addEventListener(
+        "click",
+        closePosition
+    );
+
+
+$("speed")
+    .addEventListener(
+        "change",
+        () => {
+
+            if (
+                state.timer
+            ) {
+
+                stopReplay();
+
+                toggleReplay();
+
+            }
+
+        }
+    );
+
+
+/* ============================================================
+   INITIAL STATE
+============================================================ */
+
+setControls(
+    false
+);
+
+updateUI();
+
+resizeChart();
+
 </script>
 
 </body>

@@ -21,6 +21,7 @@
   --bg:#080c11;
   --panel:#10161f;
   --panel2:#151d27;
+  --panel3:#1b2430;
   --border:#293443;
   --text:#e8edf4;
   --muted:#8793a3;
@@ -31,11 +32,17 @@
   --red:#dc2626;
   --yellow:#f59e0b;
 
+  --drawing-bg:#0d131b;
+
 }
 
+
 * {
+
   box-sizing:border-box;
+
 }
+
 
 html,
 body {
@@ -45,9 +52,11 @@ body {
   width:100%;
   height:100%;
 
-  background:var(--bg);
+  background:
+    var(--bg);
 
-  color:var(--text);
+  color:
+    var(--text);
 
   font-family:
     Inter,
@@ -56,11 +65,13 @@ body {
 
 }
 
+
 body {
 
   overflow:hidden;
 
 }
+
 
 button,
 select,
@@ -70,19 +81,13 @@ input {
 
 }
 
+
 button {
 
   cursor:pointer;
 
 }
 
-button:disabled {
-
-  cursor:not-allowed;
-
-  opacity:.55;
-
-}
 
 .app {
 
@@ -99,7 +104,7 @@ button:disabled {
 
 /* =========================================================
    HEADER
-========================================================= */
+   ========================================================= */
 
 .header {
 
@@ -112,12 +117,14 @@ button:disabled {
   padding:
     0 16px;
 
-  background:#0c1118;
+  background:
+    #0c1118;
 
   border-bottom:
     1px solid var(--border);
 
 }
+
 
 .logo {
 
@@ -128,6 +135,7 @@ button:disabled {
   gap:10px;
 
 }
+
 
 .logo-box {
 
@@ -147,6 +155,7 @@ button:disabled {
 
 }
 
+
 .logo-title {
 
   font-size:14px;
@@ -155,13 +164,16 @@ button:disabled {
 
 }
 
+
 .logo-sub {
 
-  color:var(--muted);
+  color:
+    var(--muted);
 
   font-size:10px;
 
 }
+
 
 .status {
 
@@ -171,11 +183,13 @@ button:disabled {
 
   gap:7px;
 
-  color:var(--muted);
+  color:
+    var(--muted);
 
   font-size:11px;
 
 }
+
 
 .status-dot {
 
@@ -192,7 +206,7 @@ button:disabled {
 
 /* =========================================================
    MAIN
-========================================================= */
+   ========================================================= */
 
 .main {
 
@@ -208,7 +222,7 @@ button:disabled {
 
 /* =========================================================
    SIDEBAR
-========================================================= */
+   ========================================================= */
 
 .sidebar {
 
@@ -224,15 +238,18 @@ button:disabled {
 
 }
 
+
 .section {
 
   margin-bottom:16px;
 
 }
 
+
 .title {
 
-  color:var(--muted);
+  color:
+    var(--muted);
 
   font-size:10px;
 
@@ -249,7 +266,7 @@ button:disabled {
 
 /* =========================================================
    DATA
-========================================================= */
+   ========================================================= */
 
 .data-tabs {
 
@@ -264,6 +281,7 @@ button:disabled {
 
 }
 
+
 .tab {
 
   padding:8px;
@@ -274,11 +292,13 @@ button:disabled {
   background:
     var(--panel2);
 
-  color:var(--muted);
+  color:
+    var(--muted);
 
   border-radius:6px;
 
 }
+
 
 .tab.active {
 
@@ -291,6 +311,7 @@ button:disabled {
     rgba(41,98,255,.12);
 
 }
+
 
 .data-box {
 
@@ -306,23 +327,27 @@ button:disabled {
 
 }
 
+
 .field {
 
   margin-bottom:9px;
 
 }
 
+
 label {
 
   display:block;
 
-  color:var(--muted);
+  color:
+    var(--muted);
 
   font-size:10px;
 
   margin-bottom:4px;
 
 }
+
 
 select,
 input[type=date],
@@ -337,11 +362,14 @@ input[type=file] {
 
   border-radius:6px;
 
-  background:#080d13;
+  background:
+    #080d13;
 
-  color:var(--text);
+  color:
+    var(--text);
 
 }
+
 
 .primary {
 
@@ -362,11 +390,15 @@ input[type=file] {
 
 }
 
-.primary.loading {
 
-  opacity:.7;
+.primary:disabled {
+
+  opacity:.55;
+
+  cursor:not-allowed;
 
 }
+
 
 .status-box {
 
@@ -379,7 +411,8 @@ input[type=file] {
 
   border-radius:6px;
 
-  color:var(--muted);
+  color:
+    var(--muted);
 
   font-size:10px;
 
@@ -387,11 +420,13 @@ input[type=file] {
 
 }
 
+
 .status-box.ok {
 
   color:#8de0a4;
 
 }
+
 
 .status-box.error {
 
@@ -401,8 +436,8 @@ input[type=file] {
 
 
 /* =========================================================
-   TOOLS
-========================================================= */
+   TIMEFRAME
+   ========================================================= */
 
 .tools {
 
@@ -414,6 +449,7 @@ input[type=file] {
   gap:5px;
 
 }
+
 
 .tool {
 
@@ -427,20 +463,13 @@ input[type=file] {
   background:
     var(--panel2);
 
-  color:var(--muted);
+  color:
+    var(--muted);
 
   font-size:10px;
 
 }
 
-.tool:hover {
-
-  color:white;
-
-  border-color:
-    #526174;
-
-}
 
 .tool.active {
 
@@ -454,16 +483,10 @@ input[type=file] {
 
 }
 
-.tool-danger {
-
-  color:#ff9c9c;
-
-}
-
 
 /* =========================================================
    STATS
-========================================================= */
+   ========================================================= */
 
 .stats {
 
@@ -475,6 +498,7 @@ input[type=file] {
   gap:5px;
 
 }
+
 
 .stat {
 
@@ -490,13 +514,16 @@ input[type=file] {
 
 }
 
+
 .stat-label {
 
-  color:var(--muted);
+  color:
+    var(--muted);
 
   font-size:9px;
 
 }
+
 
 .stat-value {
 
@@ -511,7 +538,7 @@ input[type=file] {
 
 /* =========================================================
    WORKSPACE
-========================================================= */
+   ========================================================= */
 
 .workspace {
 
@@ -528,8 +555,8 @@ input[type=file] {
 
 
 /* =========================================================
-   TOOLBAR
-========================================================= */
+   TOP TOOLBAR
+   ========================================================= */
 
 .toolbar {
 
@@ -539,19 +566,26 @@ input[type=file] {
 
   gap:5px;
 
-  padding:5px 8px;
+  padding:
+    5px 8px;
 
   border-bottom:
     1px solid var(--border);
 
-  background:#0c1118;
+  background:
+    #0c1118;
 
 }
 
+
 .toolbar button {
 
+  min-width:32px;
+
+  height:30px;
+
   padding:
-    6px 9px;
+    5px 9px;
 
   border:
     1px solid var(--border);
@@ -561,24 +595,28 @@ input[type=file] {
   background:
     var(--panel2);
 
-  color:var(--text);
+  color:
+    var(--text);
 
   font-size:10px;
 
 }
 
+
 .toolbar button:hover {
 
-  border-color:
-    #526174;
+  background:
+    var(--panel3);
 
 }
+
 
 .toolbar-spacer {
 
   flex:1;
 
 }
+
 
 .tf-buttons {
 
@@ -588,11 +626,13 @@ input[type=file] {
 
 }
 
+
 .tf {
 
   min-width:37px;
 
 }
+
 
 .tf.active {
 
@@ -607,9 +647,30 @@ input[type=file] {
 }
 
 
+#buy {
+
+  color:#7ee2a8;
+
+}
+
+
+#sell {
+
+  color:#ff8e8e;
+
+}
+
+
+#close {
+
+  color:#f4c76b;
+
+}
+
+
 /* =========================================================
    CHART
-========================================================= */
+   ========================================================= */
 
 .chart-area {
 
@@ -619,10 +680,13 @@ input[type=file] {
 
   min-height:0;
 
+  overflow:hidden;
+
   background:
     #080c11;
 
 }
+
 
 #chart {
 
@@ -631,6 +695,278 @@ input[type=file] {
   inset:0;
 
 }
+
+
+.chart-message {
+
+  position:absolute;
+
+  inset:0;
+
+  display:grid;
+
+  place-items:center;
+
+  color:
+    var(--muted);
+
+  font-size:12px;
+
+  pointer-events:none;
+
+  z-index:5;
+
+}
+
+
+/* =========================================================
+   DRAWING TOOLBAR
+   ========================================================= */
+
+.drawing-toolbar {
+
+  position:absolute;
+
+  top:10px;
+
+  left:10px;
+
+  z-index:30;
+
+  width:44px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  gap:4px;
+
+  padding:5px;
+
+  background:
+    rgba(13,19,27,.96);
+
+  border:
+    1px solid var(--border);
+
+  border-radius:7px;
+
+  box-shadow:
+    0 8px 25px rgba(0,0,0,.35);
+
+  transition:
+    width .18s ease;
+
+}
+
+
+.drawing-toolbar.open {
+
+  width:44px;
+
+}
+
+
+.drawing-toolbar.collapsed {
+
+  width:36px;
+
+  padding:
+    4px;
+
+}
+
+
+.drawing-tool {
+
+  position:relative;
+
+  width:34px;
+  height:34px;
+
+  display:grid;
+
+  place-items:center;
+
+  padding:0;
+
+  border:
+    1px solid transparent;
+
+  border-radius:5px;
+
+  background:
+    transparent;
+
+  color:
+    #aeb8c6;
+
+}
+
+
+.drawing-tool:hover {
+
+  color:white;
+
+  background:
+    rgba(255,255,255,.06);
+
+  border-color:
+    #344151;
+
+}
+
+
+.drawing-tool.active {
+
+  color:white;
+
+  background:
+    rgba(41,98,255,.2);
+
+  border-color:
+    var(--accent);
+
+}
+
+
+.drawing-tool svg {
+
+  width:18px;
+  height:18px;
+
+  stroke:currentColor;
+
+  fill:none;
+
+  stroke-width:1.7;
+
+  stroke-linecap:round;
+
+  stroke-linejoin:round;
+
+}
+
+
+.drawing-tool.fill-icon svg {
+
+  fill:currentColor;
+
+  stroke:none;
+
+}
+
+
+.drawing-divider {
+
+  width:24px;
+
+  height:1px;
+
+  margin:2px 0;
+
+  background:
+    #2a3542;
+
+}
+
+
+.drawing-collapse {
+
+  color:
+    #9aa7b7;
+
+}
+
+
+.drawing-collapse svg {
+
+  transition:
+    transform .18s ease;
+
+}
+
+
+.drawing-toolbar.collapsed
+.drawing-collapse svg {
+
+  transform:
+    rotate(180deg);
+
+}
+
+
+/* TOOLTIP */
+
+.drawing-tool::after {
+
+  content:
+    attr(data-tooltip);
+
+  position:absolute;
+
+  left:42px;
+
+  top:50%;
+
+  transform:
+    translateY(-50%);
+
+  white-space:nowrap;
+
+  padding:
+    5px 8px;
+
+  border-radius:5px;
+
+  background:
+    #111923;
+
+  border:
+    1px solid #344151;
+
+  color:
+    #e8edf4;
+
+  font-size:10px;
+
+  pointer-events:none;
+
+  opacity:0;
+
+  visibility:hidden;
+
+  transition:
+    opacity .12s ease;
+
+  box-shadow:
+    0 5px 15px rgba(0,0,0,.3);
+
+}
+
+
+.drawing-tool:hover::after {
+
+  opacity:1;
+
+  visibility:visible;
+
+}
+
+
+.drawing-toolbar.collapsed
+.drawing-tool::after {
+
+  left:39px;
+
+}
+
+
+/* =========================================================
+   DRAWING CANVAS
+   ========================================================= */
 
 #drawingCanvas {
 
@@ -643,67 +979,16 @@ input[type=file] {
 
   pointer-events:none;
 
-  z-index:10;
-
-}
-
-.chart-message {
-
-  position:absolute;
-
-  inset:0;
-
-  display:grid;
-
-  place-items:center;
-
-  color:var(--muted);
-
-  font-size:12px;
-
-  pointer-events:none;
-
   z-index:20;
 
-}
-
-.chart-loading {
-
-  position:absolute;
-
-  top:12px;
-
-  left:50%;
-
-  transform:
-    translateX(-50%);
-
-  z-index:30;
-
-  padding:
-    6px 10px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:6px;
-
-  background:
-    rgba(8,12,17,.92);
-
-  color:
-    #aeb9c8;
-
-  font-size:10px;
-
-  display:none;
+  touch-action:none;
 
 }
 
 
 /* =========================================================
    BOTTOM
-========================================================= */
+   ========================================================= */
 
 .bottom {
 
@@ -713,22 +998,27 @@ input[type=file] {
 
   gap:10px;
 
-  padding:8px 12px;
+  padding:
+    8px 12px;
 
-  background:#0c1118;
+  background:
+    #0c1118;
 
   border-top:
     1px solid var(--border);
 
 }
 
+
 .bottom-info {
 
-  color:var(--muted);
+  color:
+    var(--muted);
 
   font-size:10px;
 
 }
+
 
 .progress {
 
@@ -736,9 +1026,15 @@ input[type=file] {
 
   height:3px;
 
-  background:#27303b;
+  background:
+    #27303b;
+
+  border-radius:2px;
+
+  overflow:hidden;
 
 }
+
 
 .progress-fill {
 
@@ -753,8 +1049,8 @@ input[type=file] {
 
 
 /* =========================================================
-   MOBILE
-========================================================= */
+   RESPONSIVE
+   ========================================================= */
 
 @media(max-width:850px) {
 
@@ -764,11 +1060,14 @@ input[type=file] {
 
   }
 
+
   .main {
 
-    grid-template-columns:1fr;
+    grid-template-columns:
+      1fr;
 
   }
+
 
   .sidebar {
 
@@ -779,6 +1078,7 @@ input[type=file] {
 
   }
 
+
   .workspace {
 
     height:70vh;
@@ -786,6 +1086,7 @@ input[type=file] {
   }
 
 }
+
 
 </style>
 
@@ -843,8 +1144,8 @@ input[type=file] {
 
 
 <!-- =====================================================
-     MARKET DATA
-===================================================== -->
+     DATA
+     ===================================================== -->
 
 <section class="section">
 
@@ -967,8 +1268,9 @@ Load Market Data
   id="dataStatus"
   class="status-box"
 >
-Select a pair and load the initial timeframe.
+Select market data and load it.
 </div>
+
 
 </div>
 
@@ -985,6 +1287,7 @@ Select a pair and load the initial timeframe.
   accept=".csv,text/csv"
 >
 
+
 <div
   id="manualStatus"
   class="status-box"
@@ -999,7 +1302,7 @@ CSV remains local.
 
 <!-- =====================================================
      TIMEFRAME
-===================================================== -->
+     ===================================================== -->
 
 <section class="section">
 
@@ -1065,110 +1368,8 @@ Timeframe
 
 
 <!-- =====================================================
-     DRAWING
-===================================================== -->
-
-<section class="section">
-
-<div class="title">
-Drawing Tools
-</div>
-
-
-<div class="tools">
-
-<button
-  class="tool draw-btn active"
-  data-tool="cursor"
->
-Cursor
-</button>
-
-<button
-  class="tool draw-btn"
-  data-tool="horizontal"
->
-Horizontal
-</button>
-
-<button
-  class="tool draw-btn"
-  data-tool="vertical"
->
-Vertical
-</button>
-
-<button
-  class="tool draw-btn"
-  data-tool="trend"
->
-Trend Line
-</button>
-
-<button
-  class="tool draw-btn"
-  data-tool="ray"
->
-Ray
-</button>
-
-<button
-  class="tool draw-btn"
-  data-tool="rectangle"
->
-Rectangle
-</button>
-
-<button
-  class="tool draw-btn"
-  data-tool="fib"
->
-Fib Retracement
-</button>
-
-<button
-  class="tool draw-btn"
-  data-tool="measure"
->
-Measure
-</button>
-
-<button
-  class="tool draw-btn"
-  data-tool="arrow"
->
-Arrow
-</button>
-
-<button
-  class="tool draw-btn"
-  data-tool="text"
->
-Text
-</button>
-
-<button
-  id="undoDrawing"
-  class="tool"
->
-Undo
-</button>
-
-<button
-  id="clearDrawings"
-  class="tool tool-danger"
->
-Clear All
-</button>
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     BACKTEST
-===================================================== -->
+     STATS
+     ===================================================== -->
 
 <section class="section">
 
@@ -1254,21 +1455,32 @@ P&L
 
 
 <!-- =====================================================
-     TOOLBAR
-===================================================== -->
+     TOP BAR
+     ===================================================== -->
 
 <div class="toolbar">
 
 
-<button id="prev">
+<button
+  id="prev"
+  title="Previous candle"
+>
 ◀
 </button>
 
-<button id="next">
+
+<button
+  id="next"
+  title="Next candle"
+>
 ▶
 </button>
 
-<button id="play">
+
+<button
+  id="play"
+  title="Play replay"
+>
 ▶ Play
 </button>
 
@@ -1330,42 +1542,455 @@ P&L
 </div>
 
 
-<button id="buy">
+<button
+  id="buy"
+>
 BUY
 </button>
 
-<button id="sell">
+
+<button
+  id="sell"
+>
 SELL
 </button>
 
-<button id="close">
+
+<button
+  id="close"
+>
 CLOSE
 </button>
+
 
 </div>
 
 
 <!-- =====================================================
      CHART AREA
-===================================================== -->
+     ===================================================== -->
 
 <div
   id="chartArea"
   class="chart-area"
 >
 
+
 <div id="chart"></div>
+
+
+<!-- =====================================================
+     DRAWING TOOLBAR
+     ===================================================== -->
+
+<div
+  id="drawingToolbar"
+  class="drawing-toolbar open"
+>
+
+
+<!-- Cursor -->
+
+<button
+  class="drawing-tool active"
+  data-tool="cursor"
+  data-tooltip="Cursor"
+  aria-label="Cursor"
+>
+
+<svg viewBox="0 0 24 24">
+
+<path
+  d="M5 3l6.8 16 2.2-6 5.8-2.2L5 3z"
+></path>
+
+</svg>
+
+</button>
+
+
+<div class="drawing-divider"></div>
+
+
+<!-- Horizontal -->
+
+<button
+  class="drawing-tool"
+  data-tool="horizontal"
+  data-tooltip="Horizontal Line"
+  aria-label="Horizontal Line"
+>
+
+<svg viewBox="0 0 24 24">
+
+<line
+  x1="3"
+  y1="12"
+  x2="21"
+  y2="12"
+></line>
+
+</svg>
+
+</button>
+
+
+<!-- Vertical -->
+
+<button
+  class="drawing-tool"
+  data-tool="vertical"
+  data-tooltip="Vertical Line"
+  aria-label="Vertical Line"
+>
+
+<svg viewBox="0 0 24 24">
+
+<line
+  x1="12"
+  y1="3"
+  x2="12"
+  y2="21"
+></line>
+
+</svg>
+
+</button>
+
+
+<!-- Trend -->
+
+<button
+  class="drawing-tool"
+  data-tool="trend"
+  data-tooltip="Trend Line"
+  aria-label="Trend Line"
+>
+
+<svg viewBox="0 0 24 24">
+
+<line
+  x1="4"
+  y1="18"
+  x2="20"
+  y2="6"
+></line>
+
+<circle
+  cx="4"
+  cy="18"
+  r="1.5"
+></circle>
+
+<circle
+  cx="20"
+  cy="6"
+  r="1.5"
+></circle>
+
+</svg>
+
+</button>
+
+
+<!-- Ray -->
+
+<button
+  class="drawing-tool"
+  data-tool="ray"
+  data-tooltip="Ray"
+  aria-label="Ray"
+>
+
+<svg viewBox="0 0 24 24">
+
+<line
+  x1="4"
+  y1="18"
+  x2="20"
+  y2="6"
+></line>
+
+<polyline
+  points="15,6 20,6 20,11"
+></polyline>
+
+</svg>
+
+</button>
+
+
+<!-- Rectangle -->
+
+<button
+  class="drawing-tool"
+  data-tool="rectangle"
+  data-tooltip="Rectangle"
+  aria-label="Rectangle"
+>
+
+<svg viewBox="0 0 24 24">
+
+<rect
+  x="4"
+  y="5"
+  width="16"
+  height="14"
+></rect>
+
+</svg>
+
+</button>
+
+
+<!-- Fibonacci -->
+
+<button
+  class="drawing-tool"
+  data-tool="fib"
+  data-tooltip="Fib Retracement"
+  aria-label="Fib Retracement"
+>
+
+<svg viewBox="0 0 24 24">
+
+<line
+  x1="4"
+  y1="5"
+  x2="20"
+  y2="5"
+></line>
+
+<line
+  x1="4"
+  y1="9"
+  x2="20"
+  y2="9"
+></line>
+
+<line
+  x1="4"
+  y1="13"
+  x2="20"
+  y2="13"
+></line>
+
+<line
+  x1="4"
+  y1="17"
+  x2="20"
+  y2="17"
+></line>
+
+<line
+  x1="4"
+  y1="21"
+  x2="20"
+  y2="21"
+></line>
+
+</svg>
+
+</button>
+
+
+<!-- Measure -->
+
+<button
+  class="drawing-tool"
+  data-tool="measure"
+  data-tooltip="Measure"
+  aria-label="Measure"
+>
+
+<svg viewBox="0 0 24 24">
+
+<line
+  x1="5"
+  y1="19"
+  x2="19"
+  y2="5"
+></line>
+
+<line
+  x1="5"
+  y1="16"
+  x2="5"
+  y2="22"
+></line>
+
+<line
+  x1="2"
+  y1="19"
+  x2="8"
+  y2="19"
+></line>
+
+<line
+  x1="16"
+  y1="5"
+  x2="22"
+  y2="5"
+></line>
+
+<line
+  x1="19"
+  y1="2"
+  x2="19"
+  y2="8"
+></line>
+
+</svg>
+
+</button>
+
+
+<!-- Arrow -->
+
+<button
+  class="drawing-tool"
+  data-tool="arrow"
+  data-tooltip="Arrow"
+  aria-label="Arrow"
+>
+
+<svg viewBox="0 0 24 24">
+
+<line
+  x1="4"
+  y1="20"
+  x2="19"
+  y2="5"
+></line>
+
+<polyline
+  points="11,5 19,5 19,13"
+></polyline>
+
+</svg>
+
+</button>
+
+
+<!-- Text -->
+
+<button
+  class="drawing-tool"
+  data-tool="text"
+  data-tooltip="Text"
+  aria-label="Text"
+>
+
+<svg viewBox="0 0 24 24">
+
+<path
+  d="M5 5h14M12 5v14M8 19h8"
+></path>
+
+</svg>
+
+</button>
+
+
+<div class="drawing-divider"></div>
+
+
+<!-- Undo -->
+
+<button
+  id="undoDrawing"
+  class="drawing-tool"
+  data-tooltip="Undo"
+  aria-label="Undo"
+>
+
+<svg viewBox="0 0 24 24">
+
+<path
+  d="M9 7l-5 5 5 5"
+></path>
+
+<path
+  d="M4 12h9a6 6 0 0 1 6 6"
+></path>
+
+</svg>
+
+</button>
+
+
+<!-- Clear -->
+
+<button
+  id="clearDrawings"
+  class="drawing-tool"
+  data-tooltip="Clear All Drawings"
+  aria-label="Clear All Drawings"
+>
+
+<svg viewBox="0 0 24 24">
+
+<path
+  d="M5 7h14"
+></path>
+
+<path
+  d="M9 7V4h6v3"
+></path>
+
+<path
+  d="M7 7l1 13h8l1-13"
+></path>
+
+<line
+  x1="10"
+  y1="10"
+  x2="10"
+  y2="17"
+></line>
+
+<line
+  x1="14"
+  y1="10"
+  x2="14"
+  y2="17"
+></line>
+
+</svg>
+
+</button>
+
+
+<div class="drawing-divider"></div>
+
+
+<!-- Collapse -->
+
+<button
+  id="drawingCollapse"
+  class="drawing-tool drawing-collapse"
+  data-tooltip="Collapse / Expand"
+  aria-label="Collapse / Expand"
+>
+
+<svg viewBox="0 0 24 24">
+
+<polyline
+  points="15,5 8,12 15,19"
+></polyline>
+
+</svg>
+
+</button>
+
+
+</div>
+
 
 <canvas
   id="drawingCanvas"
 ></canvas>
 
-<div
-  id="chartLoading"
-  class="chart-loading"
->
-Loading timeframe...
-</div>
 
 <div
   id="chartMessage"
@@ -1374,14 +1999,16 @@ Loading timeframe...
 Load market data to begin.
 </div>
 
+
 </div>
 
 
 <!-- =====================================================
      BOTTOM
-===================================================== -->
+     ===================================================== -->
 
 <div class="bottom">
+
 
 <div
   id="replayInfo"
@@ -1389,6 +2016,7 @@ Load market data to begin.
 >
 No data
 </div>
+
 
 <div class="progress">
 
@@ -1399,14 +2027,14 @@ No data
 
 </div>
 
+
 </div>
 
 
 </section>
 
-</main>
 
-</div>
+</main>
 
 
 <script>
@@ -1416,136 +2044,82 @@ No data
 
 /* =========================================================
    STATE
-========================================================= */
+   ========================================================= */
 
 const state = {
 
-  pair:
-    "EUR/USD",
+  candles: [],
 
-  timeframe:
-    1,
+  timeframe: 1,
 
-  candles:
-    [],
+  currentIndex: -1,
 
-  currentIndex:
-    -1,
+  position: null,
 
-  position:
-    null,
+  trades: [],
 
-  trades:
-    [],
+  pnl: 0,
 
-  pnl:
-    0,
+  playing: false,
 
-  playing:
-    false,
+  timer: null,
 
-  timer:
-    null,
+  drawingTool: "cursor",
 
-  drawingTool:
-    "cursor",
+  drawings: [],
 
-  drawings:
-    [],
+  drawingStart: null,
 
-  drawingStart:
-    null,
+  drawingPreview: null,
 
-  drawingPreview:
-    null,
-
-  requestId:
-    0,
-
-  loading:
-    false
-
-};
-
-
-/* =========================================================
-   TIMEFRAME MAP
-========================================================= */
-
-const TIMEFRAME_MAP = {
-
-  1:
-    "1min",
-
-  5:
-    "5min",
-
-  15:
-    "15min",
-
-  30:
-    "30min",
-
-  60:
-    "1h",
-
-  240:
-    "4h",
-
-  1440:
-    "1day"
+  requestId: 0
 
 };
 
 
 /* =========================================================
    DOM
-========================================================= */
+   ========================================================= */
 
 const chartArea =
   document.getElementById(
     "chartArea"
   );
 
+
 const chartElement =
   document.getElementById(
     "chart"
   );
+
 
 const canvas =
   document.getElementById(
     "drawingCanvas"
   );
 
+
 const ctx =
   canvas.getContext(
     "2d"
   );
+
 
 const message =
   document.getElementById(
     "chartMessage"
   );
 
-const chartLoading =
-  document.getElementById(
-    "chartLoading"
-  );
 
-const loadDataButton =
+const drawingToolbar =
   document.getElementById(
-    "loadData"
-  );
-
-const dataStatus =
-  document.getElementById(
-    "dataStatus"
+    "drawingToolbar"
   );
 
 
 /* =========================================================
    CHART
-========================================================= */
+   ========================================================= */
 
 const chart =
   LightweightCharts.createChart(
@@ -1558,8 +2132,7 @@ const chart =
           color:"#080c11"
         },
 
-        textColor:
-          "#8995a5"
+        textColor:"#8995a5"
 
       },
 
@@ -1587,7 +2160,15 @@ const chart =
       rightPriceScale: {
 
         borderColor:
-          "#293443"
+          "#293443",
+
+        scaleMargins: {
+
+          top:.08,
+
+          bottom:.08
+
+        }
 
       },
 
@@ -1596,40 +2177,37 @@ const chart =
         borderColor:
           "#293443",
 
-        timeVisible:
-          true,
+        timeVisible:true,
 
-        secondsVisible:
-          false
+        secondsVisible:false,
+
+        rightOffset:8,
+
+        barSpacing:8,
+
+        minBarSpacing:2
 
       },
 
       handleScroll: {
 
-        mouseWheel:
-          true,
+        mouseWheel:true,
 
-        pressedMouseMove:
-          true,
+        pressedMouseMove:true,
 
-        horzTouchDrag:
-          true,
+        horzTouchDrag:true,
 
-        vertTouchDrag:
-          true
+        vertTouchDrag:true
 
       },
 
       handleScale: {
 
-        axisPressedMouseMove:
-          true,
+        axisPressedMouseMove:true,
 
-        mouseWheel:
-          true,
+        mouseWheel:true,
 
-        pinch:
-          true
+        pinch:true
 
       }
 
@@ -1640,36 +2218,47 @@ const chart =
 const series =
   chart.addCandlestickSeries({
 
-    upColor:
-      "#16a34a",
+    upColor:"#16a34a",
 
-    downColor:
-      "#dc2626",
+    downColor:"#dc2626",
 
-    borderUpColor:
-      "#16a34a",
+    borderUpColor:"#16a34a",
 
-    borderDownColor:
-      "#dc2626",
+    borderDownColor:"#dc2626",
 
-    wickUpColor:
-      "#16a34a",
+    wickUpColor:"#16a34a",
 
-    wickDownColor:
-      "#dc2626"
+    wickDownColor:"#dc2626"
 
   });
 
 
 /* =========================================================
    RESIZE
-========================================================= */
+   ========================================================= */
 
 function resize() {
 
+  const width =
+    chartElement.clientWidth;
+
+  const height =
+    chartElement.clientHeight;
+
+
+  if (
+    width <= 0 ||
+    height <= 0
+  ) {
+
+    return;
+
+  }
+
+
   chart.resize(
-    chartElement.clientWidth,
-    chartElement.clientHeight
+    width,
+    height
   );
 
 
@@ -1679,13 +2268,17 @@ function resize() {
 
 
   canvas.width =
-    chartArea.clientWidth *
-    ratio;
+    Math.floor(
+      chartArea.clientWidth *
+      ratio
+    );
 
 
   canvas.height =
-    chartArea.clientHeight *
-    ratio;
+    Math.floor(
+      chartArea.clientHeight *
+      ratio
+    );
 
 
   canvas.style.width =
@@ -1720,36 +2313,154 @@ window.addEventListener(
 
 
 /* =========================================================
-   CHART DATA
-========================================================= */
+   CHART RANGE CHANGED
+   ========================================================= */
 
-function resetBacktestState() {
+chart.timeScale()
+  .subscribeVisibleTimeRangeChange(
+    () => {
+
+      redrawDrawings();
+
+    }
+  );
+
+
+/* =========================================================
+   TIMEFRAME MAP
+   ========================================================= */
+
+const TIMEFRAME_MAP = {
+
+  1:
+    "1min",
+
+  5:
+    "5min",
+
+  15:
+    "15min",
+
+  30:
+    "30min",
+
+  60:
+    "1h",
+
+  240:
+    "4h",
+
+  1440:
+    "1day"
+
+};
+
+
+/* =========================================================
+   TIMEFRAME CHANGE
+   ========================================================= */
+
+async function changeTimeframe(
+  minutes
+) {
+
+  const value =
+    Number(minutes);
+
+
+  if (
+    !TIMEFRAME_MAP[value]
+  ) {
+
+    return;
+
+  }
+
+
+  state.timeframe =
+    value;
+
 
   stopReplay();
 
-  state.currentIndex =
-    state.candles.length
-      ? 0
-      : -1;
 
-  state.position =
-    null;
+  updateTimeframeUI();
 
-  state.trades =
-    [];
 
-  state.pnl =
-    0;
+  const hasData =
+    state.candles.length > 0;
+
+
+  if (!hasData) {
+
+    return;
+
+  }
+
+
+  await loadAutomatic(
+    value,
+    true
+  );
 
 }
 
 
 /* =========================================================
-   RENDER
-========================================================= */
+   TIMEFRAME UI
+   ========================================================= */
+
+function updateTimeframeUI() {
+
+  document
+    .querySelectorAll(
+      ".tf-btn,.tf"
+    )
+    .forEach(
+      button => {
+
+        button.classList.toggle(
+          "active",
+          Number(
+            button.dataset.tf
+          ) ===
+          state.timeframe
+        );
+
+      }
+    );
+
+}
+
+
+document
+  .querySelectorAll(
+    ".tf-btn,.tf"
+  )
+  .forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          changeTimeframe(
+            button.dataset.tf
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   RENDER CHART
+   ========================================================= */
 
 function renderChart(
-  fit = true
+  fit=true
 ) {
 
   if (
@@ -1801,198 +2512,71 @@ function renderChart(
 
 
 /* =========================================================
-   UPDATE UI
-========================================================= */
+   LOAD AUTOMATIC DATA
+   ========================================================= */
 
-function updateTimeframeUI() {
+async function loadAutomatic(
+  timeframeOverride=null,
+  preserveExisting=false
+) {
 
-  document
-    .querySelectorAll(
-      ".tf-btn,.tf"
-    )
-    .forEach(
-      button => {
-
-        button.classList.toggle(
-          "active",
-          Number(
-            button.dataset.tf
-          ) ===
-          state.timeframe
-        );
-
-      }
-    );
-
-}
-
-
-function updateStats() {
-
-  document.getElementById(
-    "candles"
-  ).textContent =
-    state.candles.length
-      .toLocaleString();
-
-
-  document.getElementById(
-    "position"
-  ).textContent =
-    state.position
-      ? state.position.side
-      : "FLAT";
-
-
-  document.getElementById(
-    "trades"
-  ).textContent =
-    state.trades.length;
-
-
-  document.getElementById(
-    "pnl"
-  ).textContent =
-    state.pnl.toFixed(5);
-
-}
-
-
-function updateReplay() {
-
-  if (
-    !state.candles.length
-  ) {
-
+  const status =
     document.getElementById(
-      "replayInfo"
-    ).textContent =
-      "No data";
-
-    document.getElementById(
-      "progressFill"
-    ).style.width =
-      "0%";
-
-    return;
-
-  }
-
-
-  const candle =
-    state.candles[
-      state.currentIndex
-    ];
-
-
-  if (!candle) {
-    return;
-  }
-
-
-  const date =
-    new Date(
-      candle.time * 1000
+      "dataStatus"
     );
 
 
-  document.getElementById(
-    "replayInfo"
-  ).textContent =
-    `${state.currentIndex + 1} / ${state.candles.length.toLocaleString()} • ${date.toLocaleString()} • ${state.pair} • ${formatTimeframe(state.timeframe)}`;
+  const loadButton =
+    document.getElementById(
+      "loadData"
+    );
 
 
-  const percent =
-    state.candles.length > 1
-      ? (
-          state.currentIndex /
-          (state.candles.length - 1)
-        ) * 100
-      : 100;
-
-
-  document.getElementById(
-    "progressFill"
-  ).style.width =
-    `${percent}%`;
-
-}
-
-
-function formatTimeframe(
-  minutes
-) {
-
-  if (
-    minutes === 60
-  ) {
-    return "1H";
-  }
-
-  if (
-    minutes === 240
-  ) {
-    return "4H";
-  }
-
-  if (
-    minutes === 1440
-  ) {
-    return "1D";
-  }
-
-  return `${minutes}m`;
-
-}
-
-
-/* =========================================================
-   SERVER DATA REQUEST
-========================================================= */
-
-async function fetchTimeframeData(
-  timeframe,
-  options = {}
-) {
-
-  const {
-
-    pair =
-      document.getElementById(
-        "pair"
-      ).value,
-
-    outputsize =
-      document.getElementById(
-        "outputsize"
-      ).value,
-
-    startDate =
-      document.getElementById(
-        "startDate"
-      ).value,
-
-    endDate =
-      document.getElementById(
-        "endDate"
-      ).value
-
-  } = options;
+  const timeframe =
+    timeframeOverride !== null
+      ? Number(timeframeOverride)
+      : state.timeframe;
 
 
   const interval =
-    TIMEFRAME_MAP[
-      Number(timeframe)
-    ];
+    TIMEFRAME_MAP[timeframe];
 
 
   if (!interval) {
 
-    throw new Error(
-      "Unsupported timeframe."
-    );
+    status.textContent =
+      "Unsupported timeframe.";
+
+    status.className =
+      "status-box error";
+
+    return;
 
   }
+
+
+  const pair =
+    document.getElementById(
+      "pair"
+    ).value;
+
+
+  const outputsize =
+    document.getElementById(
+      "outputsize"
+    ).value;
+
+
+  const start =
+    document.getElementById(
+      "startDate"
+    ).value;
+
+
+  const end =
+    document.getElementById(
+      "endDate"
+    ).value;
 
 
   const params =
@@ -2017,133 +2601,22 @@ async function fetchTimeframeData(
   );
 
 
-  if (startDate) {
+  if (start) {
 
     params.set(
       "startDate",
-      startDate
+      start
     );
 
   }
 
 
-  if (endDate) {
+  if (end) {
 
     params.set(
       "endDate",
-      endDate
+      end
     );
-
-  }
-
-
-  const apiUrl =
-    `/api/fx/base-candles?${params.toString()}`;
-
-
-  console.log(
-    "REQUESTING:",
-    apiUrl
-  );
-
-
-  const response =
-    await fetch(
-      apiUrl,
-      {
-
-        method:
-          "GET",
-
-        headers: {
-
-          "Accept":
-            "application/json"
-
-        }
-
-      }
-    );
-
-
-  let data;
-
-
-  try {
-
-    data =
-      await response.json();
-
-  } catch {
-
-    throw new Error(
-      `Server returned HTTP ${response.status}.`
-    );
-
-  }
-
-
-  if (
-    !response.ok ||
-    !data.ok
-  ) {
-
-    throw new Error(
-      data.error ||
-      "Data request failed."
-    );
-
-  }
-
-
-  if (
-    !Array.isArray(
-      data.candles
-    )
-  ) {
-
-    throw new Error(
-      "Server returned invalid candle data."
-    );
-
-  }
-
-
-  return {
-
-    pair:
-      data.pair ||
-      pair,
-
-    interval:
-      data.interval ||
-      interval,
-
-    count:
-      data.count ||
-      data.candles.length,
-
-    candles:
-      data.candles
-
-  };
-
-}
-
-
-/* =========================================================
-   LOAD AUTOMATIC DATA
-========================================================= */
-
-async function loadAutomatic(
-  timeframe = state.timeframe
-) {
-
-  if (
-    state.loading
-  ) {
-
-    return;
 
   }
 
@@ -2152,63 +2625,41 @@ async function loadAutomatic(
     ++state.requestId;
 
 
-  state.loading =
-    true;
+  status.textContent =
+    `Loading ${pair} • ${interval}...`;
 
 
-  const previousTimeframe =
-    state.timeframe;
-
-
-  state.timeframe =
-    Number(timeframe);
-
-
-  state.pair =
-    document.getElementById(
-      "pair"
-    ).value;
-
-
-  updateTimeframeUI();
-
-
-  chartLoading.style.display =
-    "block";
-
-
-  chartLoading.textContent =
-    `Loading ${formatTimeframe(state.timeframe)} data...`;
-
-
-  dataStatus.textContent =
-    `Downloading ${formatTimeframe(state.timeframe)} data...`;
-
-
-  dataStatus.className =
+  status.className =
     "status-box";
 
 
-  loadDataButton.disabled =
+  loadButton.disabled =
     true;
-
-
-  loadDataButton.classList.add(
-    "loading"
-  );
 
 
   try {
 
-    const data =
-      await fetchTimeframeData(
-        state.timeframe
+    const response =
+      await fetch(
+        `/api/fx/base-candles?${params.toString()}`,
+        {
+
+          method:"GET",
+
+          headers: {
+
+            Accept:
+              "application/json"
+
+          }
+
+        }
       );
 
 
-    /*
-     * Ignore stale responses.
-     */
+    const data =
+      await response.json();
+
 
     if (
       requestId !==
@@ -2220,56 +2671,103 @@ async function loadAutomatic(
     }
 
 
-    state.pair =
-      data.pair;
+    if (
+      !response.ok ||
+      !data.ok
+    ) {
+
+      throw new Error(
+        data.error ||
+        "Data request failed."
+      );
+
+    }
+
+
+    if (
+      !Array.isArray(
+        data.candles
+      ) ||
+      !data.candles.length
+    ) {
+
+      throw new Error(
+        "No candle data received."
+      );
+
+    }
+
+
+    state.timeframe =
+      timeframe;
 
 
     state.candles =
       data.candles;
 
 
-    resetBacktestState();
+    state.currentIndex =
+      state.candles.length - 1;
+
+
+    state.position =
+      null;
+
+
+    state.trades =
+      [];
+
+
+    state.pnl =
+      0;
 
 
     renderChart(true);
+
 
     updateStats();
 
     updateReplay();
 
-
-    dataStatus.textContent =
-      `${data.pair} • ${formatTimeframe(state.timeframe)} • ${data.count.toLocaleString()} candles loaded from server.`;
+    updateTimeframeUI();
 
 
-    dataStatus.className =
+    const cacheText =
+      data.cached
+        ? " • cache"
+        : " • fresh";
+
+
+    status.textContent =
+      `${data.pair} • ${data.count.toLocaleString()} candles • ${interval}${cacheText}`;
+
+
+    status.className =
       "status-box ok";
 
 
-  } catch(error) {
+  } catch (error) {
 
     console.error(
-      "TIMEFRAME DATA ERROR:",
       error
     );
 
 
-    /*
-     * If the request failed, keep the old
-     * timeframe/data instead of destroying it.
-     */
+    if (
+      requestId !==
+      state.requestId
+    ) {
 
-    state.timeframe =
-      previousTimeframe;
+      return;
 
-
-    updateTimeframeUI();
+    }
 
 
-    dataStatus.textContent =
+    status.textContent =
       error.message;
 
-    dataStatus.className =
+
+    status.className =
       "status-box error";
 
 
@@ -2280,18 +2778,8 @@ async function loadAutomatic(
       state.requestId
     ) {
 
-      state.loading =
+      loadButton.disabled =
         false;
-
-      chartLoading.style.display =
-        "none";
-
-      loadDataButton.disabled =
-        false;
-
-      loadDataButton.classList.remove(
-        "loading"
-      );
 
     }
 
@@ -2300,97 +2788,15 @@ async function loadAutomatic(
 }
 
 
-/* =========================================================
-   INITIAL LOAD BUTTON
-========================================================= */
-
-loadDataButton.addEventListener(
-  "click",
-  () => {
-
-    loadAutomatic(
-      state.timeframe
-    );
-
-  }
-);
-
-
-/* =========================================================
-   TIMEFRAME CHANGE
-========================================================= */
-
-async function changeTimeframe(
-  minutes
-) {
-
-  minutes =
-    Number(minutes);
-
-
-  if (
-    !TIMEFRAME_MAP[minutes]
-  ) {
-
-    return;
-
-  }
-
-
-  /*
-   * IMPORTANT:
-   *
-   * This is intentionally NOT local
-   * aggregation.
-   *
-   * Every timeframe asks the server
-   * for the actual timeframe data.
-   */
-
-  if (
-    state.loading
-  ) {
-
-    return;
-
-  }
-
-
-  if (
-    !document.getElementById(
-      "pair"
-    ).value
-  ) {
-
-    return;
-
-  }
-
-
-  await loadAutomatic(
-    minutes
-  );
-
-}
-
-
 document
-  .querySelectorAll(
-    ".tf-btn,.tf"
+  .getElementById(
+    "loadData"
   )
-  .forEach(
-    button => {
+  .addEventListener(
+    "click",
+    () => {
 
-      button.addEventListener(
-        "click",
-        () => {
-
-          changeTimeframe(
-            button.dataset.tf
-          );
-
-        }
-      );
+      loadAutomatic();
 
     }
   );
@@ -2398,7 +2804,7 @@ document
 
 /* =========================================================
    MANUAL CSV
-========================================================= */
+   ========================================================= */
 
 function parseCSV(
   text
@@ -2406,10 +2812,7 @@ function parseCSV(
 
   const lines =
     text
-      .replace(
-        /\r/g,
-        ""
-      )
+      .replace(/\r/g, "")
       .split("\n")
       .map(
         x =>
@@ -2434,8 +2837,7 @@ function parseCSV(
       .split(",")
       .map(
         x =>
-          x
-            .trim()
+          x.trim()
             .toLowerCase()
       );
 
@@ -2444,13 +2846,15 @@ function parseCSV(
     names => {
 
       for (
-        const name of names
+        const name of
+        names
       ) {
 
         const index =
           headers.indexOf(
             name
           );
+
 
         if (
           index !== -1
@@ -2461,6 +2865,7 @@ function parseCSV(
         }
 
       }
+
 
       return -1;
 
@@ -2515,8 +2920,7 @@ function parseCSV(
   }
 
 
-  const result =
-    [];
+  const result = [];
 
 
   for (
@@ -2525,56 +2929,59 @@ function parseCSV(
     i++
   ) {
 
-    const p =
-      lines[i].split(",");
+    const parts =
+      lines[i]
+        .split(",");
 
 
     const timestamp =
       new Date(
-        p[ti]
+        parts[ti]
       ).getTime();
 
 
     const open =
       Number(
-        p[oi]
+        parts[oi]
       );
 
 
     const high =
       Number(
-        p[hi]
+        parts[hi]
       );
 
 
     const low =
       Number(
-        p[li]
+        parts[li]
       );
 
 
     const close =
       Number(
-        p[ci]
+        parts[ci]
       );
 
 
     if (
-      !Number.isFinite(
-        timestamp
-      ) ||
-      !Number.isFinite(
-        open
-      ) ||
-      !Number.isFinite(
-        high
-      ) ||
-      !Number.isFinite(
-        low
-      ) ||
-      !Number.isFinite(
-        close
-      )
+      !Number.isFinite(timestamp) ||
+      !Number.isFinite(open) ||
+      !Number.isFinite(high) ||
+      !Number.isFinite(low) ||
+      !Number.isFinite(close)
+    ) {
+
+      continue;
+
+    }
+
+
+    if (
+      open <= 0 ||
+      high <= 0 ||
+      low <= 0 ||
+      close <= 0
     ) {
 
       continue;
@@ -2608,13 +3015,48 @@ function parseCSV(
   );
 
 
-  return result;
+  const unique = [];
+
+
+  let previous =
+    null;
+
+
+  for (
+    const candle of
+    result
+  ) {
+
+    if (
+      candle.time ===
+      previous
+    ) {
+
+      continue;
+
+    }
+
+
+    unique.push(
+      candle
+    );
+
+
+    previous =
+      candle.time;
+
+  }
+
+
+  return unique;
 
 }
 
 
 document
-  .getElementById("csv")
+  .getElementById(
+    "csv"
+  )
   .addEventListener(
     "change",
     async event => {
@@ -2623,9 +3065,7 @@ document
         event.target.files?.[0];
 
 
-      if (
-        !file
-      ) {
+      if (!file) {
 
         return;
 
@@ -2638,17 +3078,41 @@ document
           await file.text();
 
 
-        state.candles =
+        const candles =
           parseCSV(
             text
           );
 
 
-        state.pair =
-          "CSV";
+        if (
+          !candles.length
+        ) {
+
+          throw new Error(
+            "No valid candles found in CSV."
+          );
+
+        }
 
 
-        resetBacktestState();
+        state.candles =
+          candles;
+
+
+        state.currentIndex =
+          candles.length - 1;
+
+
+        state.position =
+          null;
+
+
+        state.trades =
+          [];
+
+
+        state.pnl =
+          0;
 
 
         renderChart(true);
@@ -2665,7 +3129,8 @@ document
 
 
         status.textContent =
-          `${state.candles.length.toLocaleString()} candles loaded locally from CSV.`;
+          `${candles.length.toLocaleString()} candles loaded from CSV.`;
+
 
         status.className =
           "status-box ok";
@@ -2673,14 +3138,17 @@ document
 
       } catch(error) {
 
-        document.getElementById(
-          "manualStatus"
-        ).textContent =
+        const status =
+          document.getElementById(
+            "manualStatus"
+          );
+
+
+        status.textContent =
           error.message;
 
-        document.getElementById(
-          "manualStatus"
-        ).className =
+
+        status.className =
           "status-box error";
 
       }
@@ -2691,9 +3159,18 @@ document
 
 /* =========================================================
    REPLAY
-========================================================= */
+   ========================================================= */
 
 function renderReplay() {
+
+  if (
+    !state.candles.length
+  ) {
+
+    return;
+
+  }
+
 
   const visible =
     state.candles.slice(
@@ -2737,7 +3214,8 @@ function next() {
 function previous() {
 
   if (
-    state.currentIndex > 0
+    state.currentIndex >
+    0
   ) {
 
     state.currentIndex--;
@@ -2836,7 +3314,9 @@ function stopReplay() {
 
 
 document
-  .getElementById("next")
+  .getElementById(
+    "next"
+  )
   .addEventListener(
     "click",
     next
@@ -2844,7 +3324,9 @@ document
 
 
 document
-  .getElementById("prev")
+  .getElementById(
+    "prev"
+  )
   .addEventListener(
     "click",
     previous
@@ -2852,7 +3334,9 @@ document
 
 
 document
-  .getElementById("play")
+  .getElementById(
+    "play"
+  )
   .addEventListener(
     "click",
     () => {
@@ -2875,7 +3359,7 @@ document
 
 /* =========================================================
    TRADING
-========================================================= */
+   ========================================================= */
 
 function currentCandle() {
 
@@ -2943,8 +3427,7 @@ function closePosition() {
 
 
   const direction =
-    position.side ===
-    "LONG"
+    position.side === "LONG"
       ? 1
       : -1;
 
@@ -2987,7 +3470,9 @@ function closePosition() {
 
 
 document
-  .getElementById("buy")
+  .getElementById(
+    "buy"
+  )
   .addEventListener(
     "click",
     () =>
@@ -2998,7 +3483,9 @@ document
 
 
 document
-  .getElementById("sell")
+  .getElementById(
+    "sell"
+  )
   .addEventListener(
     "click",
     () =>
@@ -3009,7 +3496,9 @@ document
 
 
 document
-  .getElementById("close")
+  .getElementById(
+    "close"
+  )
   .addEventListener(
     "click",
     closePosition
@@ -3017,8 +3506,114 @@ document
 
 
 /* =========================================================
-   DRAWING TOOL
-========================================================= */
+   STATS
+   ========================================================= */
+
+function updateStats() {
+
+  document.getElementById(
+    "candles"
+  ).textContent =
+    state.candles.length
+      .toLocaleString();
+
+
+  document.getElementById(
+    "position"
+  ).textContent =
+    state.position
+      ? state.position.side
+      : "FLAT";
+
+
+  document.getElementById(
+    "trades"
+  ).textContent =
+    state.trades.length;
+
+
+  document.getElementById(
+    "pnl"
+  ).textContent =
+    state.pnl.toFixed(5);
+
+}
+
+
+/* =========================================================
+   REPLAY INFO
+   ========================================================= */
+
+function updateReplay() {
+
+  if (
+    !state.candles.length ||
+    state.currentIndex < 0
+  ) {
+
+    document.getElementById(
+      "replayInfo"
+    ).textContent =
+      "No data";
+
+
+    document.getElementById(
+      "progressFill"
+    ).style.width =
+      "0%";
+
+
+    return;
+
+  }
+
+
+  const candle =
+    state.candles[
+      state.currentIndex
+    ];
+
+
+  if (!candle) {
+
+    return;
+
+  }
+
+
+  const date =
+    new Date(
+      candle.time * 1000
+    );
+
+
+  document.getElementById(
+    "replayInfo"
+  ).textContent =
+    `${state.currentIndex + 1} / ${state.candles.length.toLocaleString()} • ${date.toLocaleString()}`;
+
+
+  const percent =
+    state.candles.length > 1
+      ? (
+          state.currentIndex /
+          (state.candles.length - 1)
+        ) *
+        100
+      : 100;
+
+
+  document.getElementById(
+    "progressFill"
+  ).style.width =
+    `${percent}%`;
+
+}
+
+
+/* =========================================================
+   DRAWING TOOL SELECTION
+   ========================================================= */
 
 function setDrawingTool(
   tool
@@ -3030,7 +3625,7 @@ function setDrawingTool(
 
   document
     .querySelectorAll(
-      ".draw-btn"
+      ".drawing-tool[data-tool]"
     )
     .forEach(
       button => {
@@ -3045,24 +3640,53 @@ function setDrawingTool(
     );
 
 
-  canvas.style.pointerEvents =
+  if (
     tool === "cursor"
-      ? "none"
-      : "auto";
+  ) {
+
+    canvas.style.pointerEvents =
+      "none";
+
+    canvas.style.cursor =
+      "default";
+
+  } else {
+
+    canvas.style.pointerEvents =
+      "auto";
+
+    canvas.style.cursor =
+      "crosshair";
+
+  }
+
+
+  state.drawingStart =
+    null;
+
+
+  state.drawingPreview =
+    null;
+
+
+  redrawDrawings();
 
 }
 
 
 document
   .querySelectorAll(
-    ".draw-btn"
+    ".drawing-tool[data-tool]"
   )
   .forEach(
     button => {
 
       button.addEventListener(
         "click",
-        () => {
+        event => {
+
+          event.stopPropagation();
+
 
           setDrawingTool(
             button.dataset.tool
@@ -3076,17 +3700,93 @@ document
 
 
 /* =========================================================
-   PRICE / TIME CONVERSION
-========================================================= */
+   COLLAPSE DRAWING TOOLBAR
+   ========================================================= */
+
+document
+  .getElementById(
+    "drawingCollapse"
+  )
+  .addEventListener(
+    "click",
+    event => {
+
+      event.stopPropagation();
+
+
+      drawingToolbar.classList.toggle(
+        "collapsed"
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   COORDINATE CONVERSION
+   ========================================================= */
 
 function coordinateToTime(
   x
 ) {
 
-  return chart.timeScale()
-    .coordinateToTime(
-      x
-    );
+  const value =
+    chart.timeScale()
+      .coordinateToTime(
+        x
+      );
+
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return null;
+
+  }
+
+
+  if (
+    typeof value === "object"
+  ) {
+
+    if (
+      "timestamp" in value
+    ) {
+
+      return Number(
+        value.timestamp
+      );
+
+    }
+
+    if (
+      "year" in value
+    ) {
+
+      return Math.floor(
+        Date.UTC(
+          value.year,
+          value.month - 1,
+          value.day
+        ) / 1000
+      );
+
+    }
+
+  }
+
+
+  const number =
+    Number(value);
+
+
+  return Number.isFinite(
+    number
+  )
+    ? number
+    : null;
 
 }
 
@@ -3095,9 +3795,17 @@ function coordinateToPrice(
   y
 ) {
 
-  return series.coordinateToPrice(
-    y
-  );
+  const value =
+    series.coordinateToPrice(
+      y
+    );
+
+
+  return Number.isFinite(
+    value
+  )
+    ? value
+    : null;
 
 }
 
@@ -3106,10 +3814,16 @@ function timeToX(
   time
 ) {
 
-  return chart.timeScale()
-    .timeToCoordinate(
-      time
-    );
+  const value =
+    chart.timeScale()
+      .timeToCoordinate(
+        time
+      );
+
+
+  return value === null
+    ? null
+    : value;
 
 }
 
@@ -3118,16 +3832,507 @@ function priceToY(
   price
 ) {
 
-  return series.priceToCoordinate(
-    price
-  );
+  const value =
+    series.priceToCoordinate(
+      price
+    );
+
+
+  return value === null
+    ? null
+    : value;
 
 }
 
 
 /* =========================================================
-   DRAWING RENDER
-========================================================= */
+   POINTER POSITION
+   ========================================================= */
+
+function getPointerPosition(
+  event
+) {
+
+  const rect =
+    canvas.getBoundingClientRect();
+
+
+  const x =
+    event.clientX -
+    rect.left;
+
+
+  const y =
+    event.clientY -
+    rect.top;
+
+
+  const time =
+    coordinateToTime(
+      x
+    );
+
+
+  const price =
+    coordinateToPrice(
+      y
+    );
+
+
+  if (
+    time === null ||
+    price === null
+  ) {
+
+    return null;
+
+  }
+
+
+  return {
+
+    x,
+
+    y,
+
+    time,
+
+    price
+
+  };
+
+}
+
+
+/* =========================================================
+   POINTER DOWN
+   ========================================================= */
+
+canvas.addEventListener(
+  "pointerdown",
+  event => {
+
+    if (
+      state.drawingTool ===
+      "cursor"
+    ) {
+
+      return;
+
+    }
+
+
+    const point =
+      getPointerPosition(
+        event
+      );
+
+
+    if (!point) {
+
+      return;
+
+    }
+
+
+    event.preventDefault();
+
+
+    canvas.setPointerCapture(
+      event.pointerId
+    );
+
+
+    state.drawingStart =
+      point;
+
+
+    state.drawingPreview = {
+
+      type:
+        state.drawingTool,
+
+      t1:
+        point.time,
+
+      p1:
+        point.price,
+
+      t2:
+        point.time,
+
+      p2:
+        point.price
+
+    };
+
+
+    if (
+      state.drawingTool ===
+      "horizontal"
+    ) {
+
+      finishDrawing(
+        event
+      );
+
+    }
+
+
+    if (
+      state.drawingTool ===
+      "vertical"
+    ) {
+
+      finishDrawing(
+        event
+      );
+
+    }
+
+
+    if (
+      state.drawingTool ===
+      "text"
+    ) {
+
+      finishDrawing(
+        event
+      );
+
+    }
+
+
+    redrawDrawings();
+
+  }
+);
+
+
+/* =========================================================
+   POINTER MOVE
+   ========================================================= */
+
+canvas.addEventListener(
+  "pointermove",
+  event => {
+
+    if (
+      !state.drawingStart
+    ) {
+
+      return;
+
+    }
+
+
+    const point =
+      getPointerPosition(
+        event
+      );
+
+
+    if (!point) {
+
+      return;
+
+    }
+
+
+    state.drawingPreview = {
+
+      type:
+        state.drawingTool,
+
+      t1:
+        state.drawingStart.time,
+
+      p1:
+        state.drawingStart.price,
+
+      t2:
+        point.time,
+
+      p2:
+        point.price
+
+    };
+
+
+    redrawDrawings();
+
+  }
+);
+
+
+/* =========================================================
+   POINTER UP
+   ========================================================= */
+
+canvas.addEventListener(
+  "pointerup",
+  event => {
+
+    if (
+      !state.drawingStart
+    ) {
+
+      return;
+
+    }
+
+
+    if (
+      state.drawingTool ===
+      "horizontal" ||
+      state.drawingTool ===
+      "vertical" ||
+      state.drawingTool ===
+      "text"
+    ) {
+
+      return;
+
+    }
+
+
+    finishDrawing(
+      event
+    );
+
+  }
+);
+
+
+/* =========================================================
+   POINTER CANCEL
+   ========================================================= */
+
+canvas.addEventListener(
+  "pointercancel",
+  () => {
+
+    state.drawingStart =
+      null;
+
+    state.drawingPreview =
+      null;
+
+    redrawDrawings();
+
+  }
+);
+
+
+/* =========================================================
+   FINISH DRAWING
+   ========================================================= */
+
+function finishDrawing(
+  event
+) {
+
+  if (
+    !state.drawingStart
+  ) {
+
+    return;
+
+  }
+
+
+  const point =
+    getPointerPosition(
+      event
+    );
+
+
+  if (!point) {
+
+    state.drawingStart =
+      null;
+
+    state.drawingPreview =
+      null;
+
+    redrawDrawings();
+
+    return;
+
+  }
+
+
+  const drawing = {
+
+    type:
+      state.drawingTool,
+
+    t1:
+      state.drawingStart.time,
+
+    p1:
+      state.drawingStart.price,
+
+    t2:
+      point.time,
+
+    p2:
+      point.price
+
+  };
+
+
+  /* =====================================================
+     HORIZONTAL
+     ===================================================== */
+
+  if (
+    state.drawingTool ===
+    "horizontal"
+  ) {
+
+    drawing.t2 =
+      drawing.t1;
+
+    drawing.p2 =
+      drawing.p1;
+
+  }
+
+
+  /* =====================================================
+     VERTICAL
+     ===================================================== */
+
+  if (
+    state.drawingTool ===
+    "vertical"
+  ) {
+
+    drawing.t2 =
+      drawing.t1;
+
+    drawing.p2 =
+      drawing.p1;
+
+  }
+
+
+  /* =====================================================
+     TEXT
+     ===================================================== */
+
+  if (
+    state.drawingTool ===
+    "text"
+  ) {
+
+    const text =
+      window.prompt(
+        "Enter text:"
+      );
+
+
+    if (
+      !text ||
+      !text.trim()
+    ) {
+
+      state.drawingStart =
+        null;
+
+      state.drawingPreview =
+        null;
+
+      redrawDrawings();
+
+      return;
+
+    }
+
+
+    drawing.text =
+      text.trim();
+
+
+    drawing.t2 =
+      drawing.t1;
+
+
+    drawing.p2 =
+      drawing.p1;
+
+  }
+
+
+  /* =====================================================
+     MINIMUM DISTANCE
+     ===================================================== */
+
+  if (
+    state.drawingTool !==
+    "horizontal" &&
+    state.drawingTool !==
+    "vertical" &&
+    state.drawingTool !==
+    "text"
+  ) {
+
+    const distance =
+      Math.sqrt(
+        Math.pow(
+          point.x -
+          state.drawingStart.x,
+          2
+        ) +
+        Math.pow(
+          point.y -
+          state.drawingStart.y,
+          2
+        )
+      );
+
+
+    if (
+      distance < 4
+    ) {
+
+      state.drawingStart =
+        null;
+
+      state.drawingPreview =
+        null;
+
+      redrawDrawings();
+
+      return;
+
+    }
+
+  }
+
+
+  state.drawings.push(
+    drawing
+  );
+
+
+  state.drawingStart =
+    null;
+
+
+  state.drawingPreview =
+    null;
+
+
+  redrawDrawings();
+
+}
+
+
+/* =========================================================
+   DRAWINGS REDRAW
+   ========================================================= */
 
 function redrawDrawings() {
 
@@ -3137,6 +4342,16 @@ function redrawDrawings() {
 
   const height =
     chartArea.clientHeight;
+
+
+  if (
+    width <= 0 ||
+    height <= 0
+  ) {
+
+    return;
+
+  }
 
 
   ctx.clearRect(
@@ -3153,7 +4368,8 @@ function redrawDrawings() {
   ) {
 
     drawObject(
-      drawing
+      drawing,
+      false
     );
 
   }
@@ -3175,11 +4391,11 @@ function redrawDrawings() {
 
 /* =========================================================
    DRAW OBJECT
-========================================================= */
+   ========================================================= */
 
 function drawObject(
   d,
-  preview = false
+  preview=false
 ) {
 
   const x1 =
@@ -3220,18 +4436,29 @@ function drawObject(
 
 
   ctx.lineWidth =
-    1.5;
+    preview
+      ? 1.4
+      : 1.7;
 
 
   ctx.strokeStyle =
     preview
-      ? "#8aa4ff"
+      ? "#7d9cff"
       : "#d7dee8";
 
 
   ctx.fillStyle =
-    "rgba(41,98,255,.12)";
+    "rgba(41,98,255,.10)";
 
+
+  ctx.setLineDash(
+    []
+  );
+
+
+  /* =====================================================
+     HORIZONTAL
+     ===================================================== */
 
   if (
     d.type ===
@@ -3255,6 +4482,10 @@ function drawObject(
   }
 
 
+  /* =====================================================
+     VERTICAL
+     ===================================================== */
+
   else if (
     d.type ===
     "vertical"
@@ -3277,10 +4508,26 @@ function drawObject(
   }
 
 
+  /* =====================================================
+     TREND
+     ===================================================== */
+
   else if (
     d.type ===
     "trend"
   ) {
+
+    if (
+      x2 === null ||
+      y2 === null
+    ) {
+
+      ctx.restore();
+
+      return;
+
+    }
+
 
     ctx.beginPath();
 
@@ -3296,13 +4543,43 @@ function drawObject(
 
     ctx.stroke();
 
+
+    drawPointHandle(
+      x1,
+      y1,
+      preview
+    );
+
+
+    drawPointHandle(
+      x2,
+      y2,
+      preview
+    );
+
   }
 
+
+  /* =====================================================
+     RAY
+     ===================================================== */
 
   else if (
     d.type ===
     "ray"
   ) {
+
+    if (
+      x2 === null ||
+      y2 === null
+    ) {
+
+      ctx.restore();
+
+      return;
+
+    }
+
 
     const dx =
       x2 - x1;
@@ -3312,25 +4589,45 @@ function drawObject(
       y2 - y1;
 
 
-    let endX =
-      chartArea.clientWidth;
-
-
-    let endY;
-
-
     if (
-      Math.abs(dx) <
-      0.00001
+      Math.abs(dx) < .0001
     ) {
 
-      endX =
-        x1;
+      ctx.beginPath();
 
-      endY =
-        chartArea.clientHeight;
+      ctx.moveTo(
+        x1,
+        y1
+      );
+
+      ctx.lineTo(
+        x1,
+        chartArea.clientHeight
+      );
+
+      ctx.stroke();
 
     } else {
+
+      let endX;
+
+      let endY;
+
+
+      if (
+        dx > 0
+      ) {
+
+        endX =
+          chartArea.clientWidth;
+
+      } else {
+
+        endX =
+          0;
+
+      }
+
 
       endY =
         y1 +
@@ -3338,33 +4635,51 @@ function drawObject(
           endX -
           x1
         ) *
-        dy /
-        dx;
+        (
+          dy /
+          dx
+        );
+
+
+      ctx.beginPath();
+
+      ctx.moveTo(
+        x1,
+        y1
+      );
+
+      ctx.lineTo(
+        endX,
+        endY
+      );
+
+      ctx.stroke();
 
     }
 
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-      x1,
-      y1
-    );
-
-    ctx.lineTo(
-      endX,
-      endY
-    );
-
-    ctx.stroke();
-
   }
 
+
+  /* =====================================================
+     RECTANGLE
+     ===================================================== */
 
   else if (
     d.type ===
     "rectangle"
   ) {
+
+    if (
+      x2 === null ||
+      y2 === null
+    ) {
+
+      ctx.restore();
+
+      return;
+
+    }
+
 
     const left =
       Math.min(
@@ -3392,6 +4707,12 @@ function drawObject(
       );
 
 
+    ctx.fillStyle =
+      preview
+        ? "rgba(41,98,255,.07)"
+        : "rgba(41,98,255,.10)";
+
+
     ctx.fillRect(
       left,
       top,
@@ -3410,10 +4731,26 @@ function drawObject(
   }
 
 
+  /* =====================================================
+     FIBONACCI
+     ===================================================== */
+
   else if (
     d.type ===
     "fib"
   ) {
+
+    if (
+      x2 === null ||
+      y2 === null
+    ) {
+
+      ctx.restore();
+
+      return;
+
+    }
+
 
     const levels = [
 
@@ -3432,6 +4769,20 @@ function drawObject(
       1
 
     ];
+
+
+    const left =
+      Math.min(
+        x1,
+        x2
+      );
+
+
+    const right =
+      Math.max(
+        x1,
+        x2
+      );
 
 
     for (
@@ -3466,18 +4817,12 @@ function drawObject(
       ctx.beginPath();
 
       ctx.moveTo(
-        Math.min(
-          x1,
-          x2
-        ),
+        left,
         y
       );
 
       ctx.lineTo(
-        Math.max(
-          x1,
-          x2
-        ),
+        right,
         y
       );
 
@@ -3485,7 +4830,7 @@ function drawObject(
 
 
       ctx.fillStyle =
-        "#9aa8ba";
+        "#aeb8c6";
 
 
       ctx.font =
@@ -3496,11 +4841,8 @@ function drawObject(
         `${(
           level * 100
         ).toFixed(1)}%`,
-        Math.min(
-          x1,
-          x2
-        ) + 4,
-        y - 3
+        left + 4,
+        y - 4
       );
 
     }
@@ -3508,10 +4850,26 @@ function drawObject(
   }
 
 
+  /* =====================================================
+     MEASURE
+     ===================================================== */
+
   else if (
     d.type ===
     "measure"
   ) {
+
+    if (
+      x2 === null ||
+      y2 === null
+    ) {
+
+      ctx.restore();
+
+      return;
+
+    }
+
 
     ctx.beginPath();
 
@@ -3553,27 +4911,62 @@ function drawObject(
       3600;
 
 
+    const bars =
+      estimateBars(
+        d.t1,
+        d.t2
+      );
+
+
     ctx.fillStyle =
-      "#d7dee8";
+      "#e0e6ef";
 
 
     ctx.font =
       "11px Arial";
 
 
+    const text =
+      `${change >= 0 ? "+" : ""}${change.toFixed(2)}% • ${hours.toFixed(2)}h • ${bars} bars`;
+
+
+    const labelX =
+      x2 + 7;
+
+
+    const labelY =
+      y2 - 7;
+
+
     ctx.fillText(
-      `${change.toFixed(2)}% • ${hours.toFixed(2)}h`,
-      x2 + 5,
-      y2 - 5
+      text,
+      labelX,
+      labelY
     );
 
   }
 
 
+  /* =====================================================
+     ARROW
+     ===================================================== */
+
   else if (
     d.type ===
     "arrow"
   ) {
+
+    if (
+      x2 === null ||
+      y2 === null
+    ) {
+
+      ctx.restore();
+
+      return;
+
+    }
+
 
     drawArrow(
       x1,
@@ -3585,6 +4978,10 @@ function drawObject(
   }
 
 
+  /* =====================================================
+     TEXT
+     ===================================================== */
+
   else if (
     d.type ===
     "text"
@@ -3595,7 +4992,7 @@ function drawObject(
 
 
     ctx.font =
-      "12px Arial";
+      "13px Arial";
 
 
     ctx.fillText(
@@ -3614,8 +5011,45 @@ function drawObject(
 
 
 /* =========================================================
-   ARROW
-========================================================= */
+   POINT HANDLE
+   ========================================================= */
+
+function drawPointHandle(
+  x,
+  y,
+  preview
+) {
+
+  ctx.save();
+
+
+  ctx.fillStyle =
+    preview
+      ? "#7d9cff"
+      : "#d7dee8";
+
+
+  ctx.beginPath();
+
+  ctx.arc(
+    x,
+    y,
+    2.5,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.fill();
+
+
+  ctx.restore();
+
+}
+
+
+/* =========================================================
+   ARROW DRAWING
+   ========================================================= */
 
 function drawArrow(
   x1,
@@ -3665,6 +5099,7 @@ function drawArrow(
         angle -
         Math.PI / 6
       ),
+
     y2 -
       size *
       Math.sin(
@@ -3681,6 +5116,7 @@ function drawArrow(
         angle +
         Math.PI / 6
       ),
+
     y2 -
       size *
       Math.sin(
@@ -3694,7 +5130,7 @@ function drawArrow(
 
 
   ctx.fillStyle =
-    "#d7dee8";
+    ctx.strokeStyle;
 
 
   ctx.fill();
@@ -3703,307 +5139,59 @@ function drawArrow(
 
 
 /* =========================================================
-   MOUSE DRAWING
-========================================================= */
+   ESTIMATE BARS
+   ========================================================= */
 
-canvas.addEventListener(
-  "mousedown",
-  event => {
+function estimateBars(
+  t1,
+  t2
+) {
 
-    if (
-      state.drawingTool ===
-      "cursor"
-    ) {
+  if (
+    !state.candles.length
+  ) {
 
-      return;
-
-    }
-
-
-    const rect =
-      canvas.getBoundingClientRect();
-
-
-    const x =
-      event.clientX -
-      rect.left;
-
-
-    const y =
-      event.clientY -
-      rect.top;
-
-
-    const time =
-      coordinateToTime(
-        x
-      );
-
-
-    const price =
-      coordinateToPrice(
-        y
-      );
-
-
-    if (
-      time === null ||
-      price === null
-    ) {
-
-      return;
-
-    }
-
-
-    state.drawingStart = {
-
-      x,
-
-      y,
-
-      time,
-
-      price
-
-    };
-
-
-    state.drawingPreview = {
-
-      type:
-        state.drawingTool,
-
-      t1:
-        time,
-
-      p1:
-        price,
-
-      t2:
-        time,
-
-      p2:
-        price
-
-    };
-
-
-    redrawDrawings();
+    return 0;
 
   }
-);
 
 
-canvas.addEventListener(
-  "mousemove",
-  event => {
-
-    if (
-      !state.drawingStart
-    ) {
-
-      return;
-
-    }
-
-
-    const rect =
-      canvas.getBoundingClientRect();
-
-
-    const x =
-      event.clientX -
-      rect.left;
-
-
-    const y =
-      event.clientY -
-      rect.top;
-
-
-    const time =
-      coordinateToTime(
-        x
-      );
-
-
-    const price =
-      coordinateToPrice(
-        y
-      );
-
-
-    if (
-      time === null ||
-      price === null
-    ) {
-
-      return;
-
-    }
-
-
-    state.drawingPreview = {
-
-      type:
-        state.drawingTool,
-
-      t1:
-        state.drawingStart.time,
-
-      p1:
-        state.drawingStart.price,
-
-      t2:
-        time,
-
-      p2:
-        price
-
-    };
-
-
-    redrawDrawings();
-
-  }
-);
-
-
-canvas.addEventListener(
-  "mouseup",
-  event => {
-
-    if (
-      !state.drawingStart
-    ) {
-
-      return;
-
-    }
-
-
-    const rect =
-      canvas.getBoundingClientRect();
-
-
-    const x =
-      event.clientX -
-      rect.left;
-
-
-    const y =
-      event.clientY -
-      rect.top;
-
-
-    const time =
-      coordinateToTime(
-        x
-      );
-
-
-    const price =
-      coordinateToPrice(
-        y
-      );
-
-
-    if (
-      time === null ||
-      price === null
-    ) {
-
-      state.drawingStart =
-        null;
-
-      state.drawingPreview =
-        null;
-
-      redrawDrawings();
-
-      return;
-
-    }
-
-
-    const drawing = {
-
-      type:
-        state.drawingTool,
-
-      t1:
-        state.drawingStart.time,
-
-      p1:
-        state.drawingStart.price,
-
-      t2:
-        time,
-
-      p2:
-        price
-
-    };
-
-
-    if (
-      state.drawingTool ===
-      "text"
-    ) {
-
-      const text =
-        prompt(
-          "Enter text:"
-        );
-
-
-      if (
-        text
-      ) {
-
-        drawing.text =
-          text;
-
-      } else {
-
-        state.drawingStart =
-          null;
-
-        state.drawingPreview =
-          null;
-
-        redrawDrawings();
-
-        return;
-
-      }
-
-    }
-
-
-    state.drawings.push(
-      drawing
+  const distance =
+    Math.abs(
+      t2 -
+      t1
     );
 
 
-    state.drawingStart =
-      null;
+  if (
+    distance <= 0
+  ) {
 
-
-    state.drawingPreview =
-      null;
-
-
-    redrawDrawings();
+    return 0;
 
   }
-);
+
+
+  const intervalMinutes =
+    state.timeframe;
+
+
+  const secondsPerBar =
+    intervalMinutes *
+    60;
+
+
+  return Math.round(
+    distance /
+    secondsPerBar
+  );
+
+}
 
 
 /* =========================================================
-   UNDO / CLEAR
-========================================================= */
+   UNDO
+   ========================================================= */
 
 document
   .getElementById(
@@ -4011,9 +5199,27 @@ document
   )
   .addEventListener(
     "click",
-    () => {
+    event => {
 
-      state.drawings.pop();
+      event.stopPropagation();
+
+
+      if (
+        state.drawings.length
+      ) {
+
+        state.drawings.pop();
+
+      }
+
+
+      state.drawingStart =
+        null;
+
+
+      state.drawingPreview =
+        null;
+
 
       redrawDrawings();
 
@@ -4021,15 +5227,32 @@ document
   );
 
 
+/* =========================================================
+   CLEAR DRAWINGS
+   ========================================================= */
+
 document
   .getElementById(
     "clearDrawings"
   )
   .addEventListener(
     "click",
-    () => {
+    event => {
 
-      state.drawings = [];
+      event.stopPropagation();
+
+
+      state.drawings =
+        [];
+
+
+      state.drawingStart =
+        null;
+
+
+      state.drawingPreview =
+        null;
+
 
       redrawDrawings();
 
@@ -4039,7 +5262,7 @@ document
 
 /* =========================================================
    TABS
-========================================================= */
+   ========================================================= */
 
 document
   .getElementById(
@@ -4133,7 +5356,7 @@ document
 
 /* =========================================================
    HEALTH
-========================================================= */
+   ========================================================= */
 
 async function health() {
 
@@ -4155,8 +5378,14 @@ async function health() {
       );
 
 
+    const dot =
+      document.getElementById(
+        "statusDot"
+      );
+
+
     if (
-      response.ok &&
+      data.ok &&
       data.automaticData
     ) {
 
@@ -4164,9 +5393,7 @@ async function health() {
         "Automatic FX data online";
 
 
-      document.getElementById(
-        "statusDot"
-      ).style.background =
+      dot.style.background =
         "#16a34a";
 
     } else {
@@ -4175,9 +5402,7 @@ async function health() {
         "Manual mode";
 
 
-      document.getElementById(
-        "statusDot"
-      ).style.background =
+      dot.style.background =
         "#f59e0b";
 
     }
@@ -4202,25 +5427,20 @@ async function health() {
 
 /* =========================================================
    KEYBOARD
-========================================================= */
+   ========================================================= */
 
 document.addEventListener(
   "keydown",
   event => {
 
-    if (
-      event.target.tagName ===
-      "INPUT"
-    ) {
-
-      return;
-
-    }
+    const tag =
+      event.target?.tagName;
 
 
     if (
-      event.target.tagName ===
-      "SELECT"
+      tag === "INPUT" ||
+      tag === "SELECT" ||
+      tag === "TEXTAREA"
     ) {
 
       return;
@@ -4256,9 +5476,29 @@ document.addEventListener(
       event.preventDefault();
 
 
-      state.playing
-        ? stopReplay()
-        : startReplay();
+      if (
+        state.playing
+      ) {
+
+        stopReplay();
+
+      } else {
+
+        startReplay();
+
+      }
+
+    }
+
+
+    if (
+      event.key ===
+      "Escape"
+    ) {
+
+      setDrawingTool(
+        "cursor"
+      );
 
     }
 
@@ -4268,22 +5508,30 @@ document.addEventListener(
 
 /* =========================================================
    INITIALIZE
-========================================================= */
+   ========================================================= */
 
 setDrawingTool(
   "cursor"
 );
 
 
+updateTimeframeUI();
+
 updateStats();
 
 updateReplay();
 
-updateTimeframeUI();
-
 health();
 
 resize();
+
+
+/* =========================================================
+   AUTO LOAD
+   ========================================================= */
+
+loadAutomatic();
+
 
 </script>
 

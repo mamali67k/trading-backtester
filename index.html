@@ -1619,6 +1619,20 @@ CLOSE
 <div class="drawing-divider"></div>
 
 
+<!-- Settings -->
+
+<button
+  id="drawingSettingsToggle"
+  class="drawing-tool"
+  data-tooltip="Drawing Settings"
+  aria-label="Drawing Settings"
+>
+<svg viewBox="0 0 24 24">
+<circle cx="12" cy="12" r="3"></circle>
+<path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.06.06-1.7 1.7-.06-.06a1.8 1.8 0 0 0-1.98-.36 1.8 1.8 0 0 0-1.1 1.66V22h-2.4v-.02a1.8 1.8 0 0 0-1.1-1.66 1.8 1.8 0 0 0-1.98.36l-.06.06-1.7-1.7.06-.06A1.8 1.8 0 0 0 8.16 17a1.8 1.8 0 0 0-1.66-1.1H6v-2.4h.02a1.8 1.8 0 0 0 1.66-1.1 1.8 1.8 0 0 0-.36-1.98l-.06-.06 1.7-1.7.06.06a1.8 1.8 0 0 0 1.98.36A1.8 1.8 0 0 0 12.1 7.4V6h2.4v1.4a1.8 1.8 0 0 0 1.1 1.66 1.8 1.8 0 0 0 1.98-.36l.06-.06 1.7 1.7-.06.06a1.8 1.8 0 0 0-.36 1.98 1.8 1.8 0 0 0 1.66 1.1H22v2.4h-1.4A1.8 1.8 0 0 0 19.4 15z"></path>
+</svg>
+</button>
+
 <!-- Horizontal -->
 
 <button
@@ -1994,6 +2008,95 @@ CLOSE
 </div>
 
 
+
+<div id="drawingSettings" class="drawing-settings" aria-hidden="true">
+  <div class="settings-head">
+    <div class="settings-title">Drawing Settings</div>
+    <button id="drawingSettingsClose" class="replay-btn" type="button">×</button>
+  </div>
+
+  <div class="settings-grid">
+    <div class="settings-field">
+      <label>Line Color</label>
+      <input id="drawColor" type="color" value="#d7dee8">
+    </div>
+
+    <div class="settings-field">
+      <label>Line Style</label>
+      <select id="drawStyle">
+        <option value="solid">Solid</option>
+        <option value="dashed">Dashed</option>
+        <option value="dotted">Dotted</option>
+      </select>
+    </div>
+
+    <div class="settings-field">
+      <label>Line Width <span id="drawWidthValue" class="settings-value">2</span></label>
+      <input id="drawWidth" type="range" min="1" max="5" step="1" value="2">
+    </div>
+
+    <div class="settings-field">
+      <label>Opacity <span id="drawOpacityValue" class="settings-value">100%</span></label>
+      <input id="drawOpacity" type="range" min="10" max="100" step="5" value="100">
+    </div>
+
+    <div class="settings-field">
+      <label>Fill Opacity <span id="drawFillOpacityValue" class="settings-value">10%</span></label>
+      <input id="drawFillOpacity" type="range" min="0" max="60" step="5" value="10">
+    </div>
+
+    <div class="settings-field">
+      <label>Text Size <span id="drawTextSizeValue" class="settings-value">13</span></label>
+      <input id="drawTextSize" type="range" min="9" max="24" step="1" value="13">
+    </div>
+
+    <div class="settings-field full">
+      <label>Fibonacci Levels</label>
+      <input id="fibLevels" type="text" value="0,0.236,0.382,0.5,0.618,0.786,1">
+    </div>
+
+    <div class="settings-field full">
+      <label class="settings-check">
+        <input id="drawMagnet" type="checkbox">
+        Magnet / Snap to nearest candle OHLC
+      </label>
+    </div>
+
+    <div class="settings-field full">
+      <label class="settings-check">
+        <input id="drawHandles" type="checkbox" checked>
+        Show anchor handles while drawing
+      </label>
+    </div>
+
+    <div class="settings-field full">
+      <label class="settings-check">
+        <input id="measureBars" type="checkbox" checked>
+        Measure: show bars
+      </label>
+    </div>
+
+    <div class="settings-field full">
+      <label class="settings-check">
+        <input id="measureTime" type="checkbox" checked>
+        Measure: show time
+      </label>
+    </div>
+
+    <div class="settings-field full">
+      <label class="settings-check">
+        <input id="measurePercent" type="checkbox" checked>
+        Measure: show percent
+      </label>
+    </div>
+  </div>
+
+  <div class="settings-note">
+    Settings apply to new drawings and also control how existing drawings are rendered.
+    Use ESC to cancel the current drawing. Delete removes the last drawing until selection mode is added in the next drawing-engine phase.
+  </div>
+</div>
+
 <canvas
   id="drawingCanvas"
 ></canvas>
@@ -2014,31 +2117,63 @@ Load market data to begin.
      BOTTOM
      ===================================================== -->
 
+
 <div class="bottom">
 
+  <div class="replay-controls">
 
-<div
-  id="replayInfo"
-  class="bottom-info"
->
-No data
+    <button id="replayStart" class="replay-btn" title="Go to first candle">⏮</button>
+    <button id="prev" class="replay-btn" title="Previous candle">◀</button>
+    <button id="play" class="replay-btn" title="Play / Pause">▶</button>
+    <button id="next" class="replay-btn" title="Next candle">▶</button>
+
+    <div class="replay-slider-wrap">
+      <input
+        id="replaySlider"
+        type="range"
+        min="0"
+        max="0"
+        value="0"
+        step="1"
+        title="Seek anywhere in the loaded dataset"
+      >
+      <span id="replayPercent" class="replay-percent">0%</span>
+    </div>
+
+    <input
+      id="replayIndex"
+      class="replay-index"
+      type="number"
+      min="1"
+      value="1"
+      title="Jump to candle number"
+    >
+
+    <input
+      id="replayJump"
+      class="replay-jump"
+      type="datetime-local"
+      title="Jump to date/time"
+    >
+
+    <select id="replaySpeed" class="replay-speed" title="Replay speed">
+      <option value="2000">0.5×</option>
+      <option value="1000">1×</option>
+      <option value="500" selected>2×</option>
+      <option value="250">4×</option>
+      <option value="100">10×</option>
+      <option value="50">20×</option>
+    </select>
+
+    <button id="replayEnd" class="replay-btn" title="Go to last candle">⏭</button>
+
+    <span id="replayInfo" class="replay-hint">No data</span>
+
+  </div>
+
 </div>
-
-
-<div class="progress">
-
-<div
-  id="progressFill"
-  class="progress-fill"
-></div>
-
-</div>
-
-
-</div>
-
-
 </section>
+
 
 
 </main>
@@ -2079,7 +2214,24 @@ const state = {
 
   drawingPreview: null,
 
-  requestId: 0
+  requestId: 0,
+
+  replayDelay: 500,
+
+  drawingSettings: {
+    color: "#d7dee8",
+    width: 2,
+    opacity: 100,
+    fillOpacity: 10,
+    style: "solid",
+    textSize: 13,
+    fibLevels: [0, .236, .382, .5, .618, .786, 1],
+    magnet: false,
+    showHandles: true,
+    measureBars: true,
+    measureTime: true,
+    measurePercent: true
+  }
 
 };
 
@@ -2121,6 +2273,11 @@ const message =
 const drawingToolbar =
   document.getElementById(
     "drawingToolbar"
+  );
+
+const drawingSettings =
+  document.getElementById(
+    "drawingSettings"
   );
 
 
@@ -3168,201 +3325,273 @@ document
    REPLAY
    ========================================================= */
 
-function renderReplay() {
+function clampReplayIndex(index) {
+  if (!state.candles.length) return -1;
+  return Math.max(0, Math.min(
+    state.candles.length - 1,
+    Math.round(Number(index) || 0)
+  ));
+}
 
-  if (
-    !state.candles.length
-  ) {
-
+function renderReplay(keepPosition = true) {
+  if (!state.candles.length) {
+    updateReplay();
     return;
-
   }
 
+  state.currentIndex = clampReplayIndex(state.currentIndex);
 
-  const visible =
-    state.candles.slice(
-      0,
-      state.currentIndex + 1
-    );
-
-
-  series.setData(
-    visible
+  const visible = state.candles.slice(
+    0,
+    state.currentIndex + 1
   );
 
+  series.setData(visible);
 
+  /*
+   * The replay engine intentionally exposes only candles up to
+   * currentIndex. Future candles are therefore hidden.
+   */
   updateReplay();
-
   redrawDrawings();
 
+  if (!keepPosition) {
+    chart.timeScale().fitContent();
+  }
 }
 
+function seekReplay(index, options = {}) {
+  if (!state.candles.length) return;
 
-function next() {
+  stopReplay();
 
-  if (
-    state.currentIndex <
-    state.candles.length - 1
-  ) {
+  const nextIndex = clampReplayIndex(index);
 
-    state.currentIndex++;
+  state.currentIndex = nextIndex;
 
+  renderReplay(options.keepPosition !== false);
+
+  /*
+   * Keep the current replay candle near the right edge without
+   * destroying the user's zoom level.
+   */
+  try {
+    chart.timeScale().scrollToPosition(0, false);
+  } catch {}
+
+  updateStats();
+}
+
+function next(step = 1) {
+  if (!state.candles.length) return;
+
+  const target = state.currentIndex + Math.max(1, Number(step) || 1);
+
+  if (target >= state.candles.length - 1) {
+    state.currentIndex = state.candles.length - 1;
     renderReplay();
-
-  } else {
-
     stopReplay();
-
+    return;
   }
 
+  state.currentIndex = target;
+  renderReplay();
 }
 
+function previous(step = 1) {
+  if (!state.candles.length) return;
 
-function previous() {
+  state.currentIndex = Math.max(
+    0,
+    state.currentIndex - Math.max(1, Number(step) || 1)
+  );
 
-  if (
-    state.currentIndex >
-    0
-  ) {
-
-    state.currentIndex--;
-
-    renderReplay();
-
-  }
-
+  renderReplay();
 }
-
 
 function startReplay() {
-
   if (
     state.playing ||
     !state.candles.length
   ) {
-
     return;
-
   }
 
+  if (state.currentIndex >= state.candles.length - 1) {
+    state.currentIndex = 0;
+    renderReplay();
+  }
 
-  state.playing =
-    true;
+  state.playing = true;
 
+  const playButton =
+    document.getElementById("play");
 
-  document.getElementById(
-    "play"
-  ).textContent =
-    "⏸ Pause";
+  playButton.textContent = "⏸";
+  playButton.classList.add("active");
 
+  const loop = () => {
+    if (!state.playing) return;
 
-  const loop =
-    () => {
+    if (
+      state.currentIndex >=
+      state.candles.length - 1
+    ) {
+      stopReplay();
+      return;
+    }
 
-      if (
-        !state.playing
-      ) {
+    next(1);
 
-        return;
-
-      }
-
-
-      next();
-
-
-      if (
-        state.playing
-      ) {
-
-        state.timer =
-          setTimeout(
-            loop,
-            500
-          );
-
-      }
-
-    };
-
+    if (state.playing) {
+      state.timer = setTimeout(
+        loop,
+        state.replayDelay
+      );
+    }
+  };
 
   loop();
-
 }
-
 
 function stopReplay() {
+  state.playing = false;
 
-  state.playing =
-    false;
+  const playButton =
+    document.getElementById("play");
 
+  playButton.textContent = "▶";
+  playButton.classList.remove("active");
 
-  document.getElementById(
-    "play"
-  ).textContent =
-    "▶ Play";
-
-
-  if (
-    state.timer
-  ) {
-
-    clearTimeout(
-      state.timer
-    );
-
-
-    state.timer =
-      null;
-
+  if (state.timer) {
+    clearTimeout(state.timer);
+    state.timer = null;
   }
-
 }
 
+function jumpReplayToDate(value) {
+  if (!value || !state.candles.length) return;
+
+  const timestamp =
+    Math.floor(new Date(value).getTime() / 1000);
+
+  if (!Number.isFinite(timestamp)) return;
+
+  let lo = 0;
+  let hi = state.candles.length - 1;
+
+  while (lo < hi) {
+    const mid = Math.floor((lo + hi) / 2);
+
+    if (state.candles[mid].time < timestamp) {
+      lo = mid + 1;
+    } else {
+      hi = mid;
+    }
+  }
+
+  /*
+   * Pick the nearest candle rather than always choosing the next one.
+   */
+  const a = lo;
+  const b = Math.max(0, lo - 1);
+
+  const chosen =
+    Math.abs(state.candles[a].time - timestamp) <
+    Math.abs(state.candles[b].time - timestamp)
+      ? a
+      : b;
+
+  seekReplay(chosen);
+}
 
 document
-  .getElementById(
-    "next"
-  )
+  .getElementById("next")
   .addEventListener(
     "click",
-    next
+    () => next(1)
   );
 
-
 document
-  .getElementById(
-    "prev"
-  )
+  .getElementById("prev")
   .addEventListener(
     "click",
-    previous
+    () => previous(1)
   );
 
-
 document
-  .getElementById(
-    "play"
-  )
+  .getElementById("play")
   .addEventListener(
     "click",
     () => {
-
-      if (
-        state.playing
-      ) {
-
+      if (state.playing) {
         stopReplay();
-
       } else {
-
         startReplay();
-
       }
-
     }
   );
 
+document
+  .getElementById("replayStart")
+  .addEventListener(
+    "click",
+    () => seekReplay(0)
+  );
+
+document
+  .getElementById("replayEnd")
+  .addEventListener(
+    "click",
+    () => {
+      if (state.candles.length) {
+        seekReplay(state.candles.length - 1);
+      }
+    }
+  );
+
+document
+  .getElementById("replaySlider")
+  .addEventListener(
+    "input",
+    event => {
+      seekReplay(Number(event.target.value));
+    }
+  );
+
+document
+  .getElementById("replayIndex")
+  .addEventListener(
+    "change",
+    event => {
+      const requested =
+        Number(event.target.value) - 1;
+
+      seekReplay(requested);
+    }
+  );
+
+document
+  .getElementById("replayJump")
+  .addEventListener(
+    "change",
+    event => {
+      jumpReplayToDate(event.target.value);
+    }
+  );
+
+document
+  .getElementById("replaySpeed")
+  .addEventListener(
+    "change",
+    event => {
+      state.replayDelay =
+        Math.max(
+          25,
+          Number(event.target.value) || 500
+        );
+    }
+  );
 
 /* =========================================================
    TRADING
@@ -3553,70 +3782,280 @@ function updateStats() {
 
 function updateReplay() {
 
+  const info =
+    document.getElementById("replayInfo");
+
+  const slider =
+    document.getElementById("replaySlider");
+
+  const indexInput =
+    document.getElementById("replayIndex");
+
+  const jumpInput =
+    document.getElementById("replayJump");
+
+  const percentLabel =
+    document.getElementById("replayPercent");
+
   if (
     !state.candles.length ||
     state.currentIndex < 0
   ) {
-
-    document.getElementById(
-      "replayInfo"
-    ).textContent =
-      "No data";
-
-
-    document.getElementById(
-      "progressFill"
-    ).style.width =
-      "0%";
-
-
+    info.textContent = "No data";
+    slider.max = "0";
+    slider.value = "0";
+    indexInput.value = "0";
+    percentLabel.textContent = "0%";
+    jumpInput.value = "";
     return;
-
   }
-
 
   const candle =
     state.candles[
-      state.currentIndex
+      clampReplayIndex(state.currentIndex)
     ];
-
-
-  if (!candle) {
-
-    return;
-
-  }
-
-
-  const date =
-    new Date(
-      candle.time * 1000
-    );
-
-
-  document.getElementById(
-    "replayInfo"
-  ).textContent =
-    `${state.currentIndex + 1} / ${state.candles.length.toLocaleString()} • ${date.toLocaleString()}`;
-
 
   const percent =
     state.candles.length > 1
       ? (
           state.currentIndex /
           (state.candles.length - 1)
-        ) *
-        100
+        ) * 100
       : 100;
 
+  const date =
+    new Date(candle.time * 1000);
 
-  document.getElementById(
-    "progressFill"
-  ).style.width =
-    `${percent}%`;
+  info.textContent =
+    `${(state.currentIndex + 1).toLocaleString()} / ${state.candles.length.toLocaleString()} • ${date.toLocaleString()}`;
 
+  slider.max =
+    String(state.candles.length - 1);
+
+  slider.value =
+    String(state.currentIndex);
+
+  indexInput.max =
+    String(state.candles.length);
+
+  indexInput.value =
+    String(state.currentIndex + 1);
+
+  percentLabel.textContent =
+    `${percent.toFixed(1)}%`;
+
+  /*
+   * datetime-local uses local browser time. This is only a navigation
+   * control; the source candle timestamp remains unchanged.
+   */
+  const local =
+    new Date(
+      candle.time * 1000 -
+      date.getTimezoneOffset() * 60000
+    );
+
+  jumpInput.value =
+    local.toISOString().slice(0, 16);
 }
 
+
+
+/* =========================================================
+   DRAWING SETTINGS
+   ========================================================= */
+
+function hexToRgba(hex, alpha) {
+  const clean = String(hex || "#d7dee8").replace("#", "");
+  const value =
+    clean.length === 3
+      ? clean.split("").map(ch => ch + ch).join("")
+      : clean;
+
+  const number = parseInt(value, 16);
+
+  if (!Number.isFinite(number)) {
+    return `rgba(215,222,232,${alpha})`;
+  }
+
+  return `rgba(${(number >> 16) & 255},${(number >> 8) & 255},${number & 255},${alpha})`;
+}
+
+function applyDrawingSettingsToUI() {
+  const s = state.drawingSettings;
+
+  document.getElementById("drawColor").value = s.color;
+  document.getElementById("drawStyle").value = s.style;
+  document.getElementById("drawWidth").value = s.width;
+  document.getElementById("drawOpacity").value = s.opacity;
+  document.getElementById("drawFillOpacity").value = s.fillOpacity;
+  document.getElementById("drawTextSize").value = s.textSize;
+  document.getElementById("fibLevels").value =
+    s.fibLevels.join(",");
+
+  document.getElementById("drawMagnet").checked = s.magnet;
+  document.getElementById("drawHandles").checked = s.showHandles;
+  document.getElementById("measureBars").checked = s.measureBars;
+  document.getElementById("measureTime").checked = s.measureTime;
+  document.getElementById("measurePercent").checked = s.measurePercent;
+
+  updateDrawingSettingLabels();
+}
+
+function updateDrawingSettingLabels() {
+  document.getElementById("drawWidthValue").textContent =
+    state.drawingSettings.width;
+
+  document.getElementById("drawOpacityValue").textContent =
+    `${state.drawingSettings.opacity}%`;
+
+  document.getElementById("drawFillOpacityValue").textContent =
+    `${state.drawingSettings.fillOpacity}%`;
+
+  document.getElementById("drawTextSizeValue").textContent =
+    state.drawingSettings.textSize;
+}
+
+function readDrawingSettings() {
+  const s = state.drawingSettings;
+
+  s.color =
+    document.getElementById("drawColor").value || "#d7dee8";
+
+  s.style =
+    document.getElementById("drawStyle").value || "solid";
+
+  s.width =
+    Math.max(
+      1,
+      Math.min(
+        5,
+        Number(document.getElementById("drawWidth").value) || 2
+      )
+    );
+
+  s.opacity =
+    Math.max(
+      10,
+      Math.min(
+        100,
+        Number(document.getElementById("drawOpacity").value) || 100
+      )
+    );
+
+  s.fillOpacity =
+    Math.max(
+      0,
+      Math.min(
+        60,
+        Number(document.getElementById("drawFillOpacity").value) || 0
+      )
+    );
+
+  s.textSize =
+    Math.max(
+      9,
+      Math.min(
+        24,
+        Number(document.getElementById("drawTextSize").value) || 13
+      )
+    );
+
+  const levels =
+    document
+      .getElementById("fibLevels")
+      .value
+      .split(",")
+      .map(value => Number(value.trim()))
+      .filter(value => Number.isFinite(value));
+
+  if (levels.length >= 2) {
+    s.fibLevels = levels;
+  }
+
+  s.magnet =
+    document.getElementById("drawMagnet").checked;
+
+  s.showHandles =
+    document.getElementById("drawHandles").checked;
+
+  s.measureBars =
+    document.getElementById("measureBars").checked;
+
+  s.measureTime =
+    document.getElementById("measureTime").checked;
+
+  s.measurePercent =
+    document.getElementById("measurePercent").checked;
+
+  updateDrawingSettingLabels();
+  redrawDrawings();
+}
+
+document
+  .getElementById("drawingSettingsToggle")
+  .addEventListener(
+    "click",
+    event => {
+      event.stopPropagation();
+
+      const open =
+        drawingSettings.classList.toggle("open");
+
+      drawingSettings.setAttribute(
+        "aria-hidden",
+        String(!open)
+      );
+
+      if (open) {
+        applyDrawingSettingsToUI();
+      }
+    }
+  );
+
+document
+  .getElementById("drawingSettingsClose")
+  .addEventListener(
+    "click",
+    event => {
+      event.stopPropagation();
+      drawingSettings.classList.remove("open");
+      drawingSettings.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+    }
+  );
+
+[
+  "drawColor",
+  "drawStyle",
+  "drawWidth",
+  "drawOpacity",
+  "drawFillOpacity",
+  "drawTextSize",
+  "fibLevels",
+  "drawMagnet",
+  "drawHandles",
+  "measureBars",
+  "measureTime",
+  "measurePercent"
+].forEach(id => {
+  document
+    .getElementById(id)
+    .addEventListener(
+      "input",
+      readDrawingSettings
+    );
+
+  document
+    .getElementById(id)
+    .addEventListener(
+      "change",
+      readDrawingSettings
+    );
+});
+
+applyDrawingSettingsToUI();
 
 /* =========================================================
    DRAWING INTERACTION ENGINE
@@ -3666,6 +4105,62 @@ function priceToY(price) {
   return value === null ? null : value;
 }
 
+function snapPointerToCandle(point) {
+  if (!state.drawingSettings.magnet || !state.candles.length) {
+    return point;
+  }
+
+  let lo = 0;
+  let hi = state.candles.length - 1;
+
+  while (lo < hi) {
+    const mid = Math.floor((lo + hi) / 2);
+
+    if (state.candles[mid].time < point.time) {
+      lo = mid + 1;
+    } else {
+      hi = mid;
+    }
+  }
+
+  const candidates = [
+    Math.max(0, lo - 1),
+    lo
+  ];
+
+  let best = point;
+  let bestDistance = Infinity;
+
+  for (const index of candidates) {
+    const candle = state.candles[index];
+
+    for (const price of [
+      candle.open,
+      candle.high,
+      candle.low,
+      candle.close
+    ]) {
+      const py = priceToY(price);
+
+      if (py === null) continue;
+
+      const distance = Math.abs(py - point.y);
+
+      if (distance < bestDistance && distance <= 18) {
+        bestDistance = distance;
+        best = {
+          x: timeToX(candle.time) ?? point.x,
+          y: py,
+          time: candle.time,
+          price
+        };
+      }
+    }
+  }
+
+  return best;
+}
+
 function getPointerPosition(event) {
   const rect = canvas.getBoundingClientRect();
   const x = event.clientX - rect.left;
@@ -3675,7 +4170,12 @@ function getPointerPosition(event) {
 
   if (time === null || price === null) return null;
 
-  return { x, y, time, price };
+  return snapPointerToCandle({
+    x,
+    y,
+    time,
+    price
+  });
 }
 
 function resetDrawingInteraction() {
@@ -3692,7 +4192,14 @@ function createDrawingFromPoints(start, end) {
     t1: start.time,
     p1: start.price,
     t2: end.time,
-    p2: end.price
+    p2: end.price,
+    color: state.drawingSettings.color,
+    width: state.drawingSettings.width,
+    opacity: state.drawingSettings.opacity,
+    fillOpacity: state.drawingSettings.fillOpacity,
+    style: state.drawingSettings.style,
+    textSize: state.drawingSettings.textSize,
+    fibLevels: [...state.drawingSettings.fibLevels]
   };
 
   if (type === "horizontal") {
@@ -3955,25 +4462,47 @@ function drawObject(
   ctx.save();
 
 
+  const settings =
+    state.drawingSettings;
+
+  const color =
+    d.color ||
+    settings.color;
+
+  const width =
+    Number(d.width) ||
+    settings.width;
+
+  const opacity =
+    Number(d.opacity ?? settings.opacity) / 100;
+
+  const fillOpacity =
+    Number(d.fillOpacity ?? settings.fillOpacity) / 100;
+
+  const lineStyle =
+    d.style ||
+    settings.style;
+
   ctx.lineWidth =
     preview
-      ? 1.4
-      : 1.7;
-
+      ? Math.max(1, width - .5)
+      : width;
 
   ctx.strokeStyle =
     preview
-      ? "#7d9cff"
-      : "#d7dee8";
-
+      ? "rgba(125,156,255,.9)"
+      : hexToRgba(color, opacity);
 
   ctx.fillStyle =
-    "rgba(41,98,255,.10)";
+    hexToRgba(color, fillOpacity);
 
-
-  ctx.setLineDash(
-    []
-  );
+  if (lineStyle === "dashed") {
+    ctx.setLineDash([8, 5]);
+  } else if (lineStyle === "dotted") {
+    ctx.setLineDash([2, 4]);
+  } else {
+    ctx.setLineDash([]);
+  }
 
 
   /* =====================================================
@@ -4064,18 +4593,19 @@ function drawObject(
     ctx.stroke();
 
 
-    drawPointHandle(
-      x1,
-      y1,
-      preview
-    );
+    if (preview && state.drawingSettings.showHandles) {
+      drawPointHandle(
+        x1,
+        y1,
+        true
+      );
 
-
-    drawPointHandle(
-      x2,
-      y2,
-      preview
-    );
+      drawPointHandle(
+        x2,
+        y2,
+        true
+      );
+    }
 
   }
 
@@ -4272,23 +4802,11 @@ function drawObject(
     }
 
 
-    const levels = [
-
-      0,
-
-      .236,
-
-      .382,
-
-      .5,
-
-      .618,
-
-      .786,
-
-      1
-
-    ];
+    const levels =
+      Array.isArray(d.fibLevels) &&
+      d.fibLevels.length >= 2
+        ? d.fibLevels
+        : state.drawingSettings.fibLevels;
 
 
     const left =
@@ -4446,17 +4964,34 @@ function drawObject(
       "11px Arial";
 
 
-    const text =
-      `${change >= 0 ? "+" : ""}${change.toFixed(2)}% • ${hours.toFixed(2)}h • ${bars} bars`;
+    const parts = [];
 
+    if (state.drawingSettings.measurePercent) {
+      parts.push(
+        `${change >= 0 ? "+" : ""}${change.toFixed(2)}%`
+      );
+    }
+
+    if (state.drawingSettings.measureTime) {
+      parts.push(
+        `${hours.toFixed(2)}h`
+      );
+    }
+
+    if (state.drawingSettings.measureBars) {
+      parts.push(
+        `${bars} bars`
+      );
+    }
+
+    const text =
+      parts.join(" • ");
 
     const labelX =
       x2 + 7;
 
-
     const labelY =
       y2 - 7;
-
 
     ctx.fillText(
       text,
@@ -4512,7 +5047,7 @@ function drawObject(
 
 
     ctx.font =
-      "13px Arial";
+      `${Number(d.textSize || state.drawingSettings.textSize)}px Arial`;
 
 
     ctx.fillText(
@@ -4973,7 +5508,13 @@ document.addEventListener(
       "ArrowRight"
     ) {
 
-      next();
+      next(
+        event.ctrlKey || event.metaKey
+          ? 50
+          : event.shiftKey
+            ? 10
+            : 1
+      );
 
     }
 
@@ -4983,7 +5524,13 @@ document.addEventListener(
       "ArrowLeft"
     ) {
 
-      previous();
+      previous(
+        event.ctrlKey || event.metaKey
+          ? 50
+          : event.shiftKey
+            ? 10
+            : 1
+      );
 
     }
 

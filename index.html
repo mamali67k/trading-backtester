@@ -727,9 +727,9 @@ input[type=file] {
 
   position:absolute;
 
-  top:10px;
+  top:12px;
 
-  left:10px;
+  left:8px;
 
   z-index:30;
 
@@ -775,6 +775,13 @@ input[type=file] {
 
   padding:
     4px;
+
+}
+
+.drawing-toolbar.collapsed .drawing-tool[data-tool],
+.drawing-toolbar.collapsed .drawing-divider {
+
+  display:none;
 
 }
 
@@ -3612,723 +3619,236 @@ function updateReplay() {
 
 
 /* =========================================================
-   DRAWING TOOL SELECTION
+   DRAWING INTERACTION ENGINE
    ========================================================= */
 
-function setDrawingTool(
-  tool
-) {
+const TWO_POINT_TOOLS = new Set([
+  "trend",
+  "ray",
+  "rectangle",
+  "fib",
+  "measure",
+  "arrow"
+]);
 
-  state.drawingTool =
-    tool;
+function coordinateToTime(x) {
+  const value = chart.timeScale().coordinateToTime(x);
 
+  if (value === null || value === undefined) return null;
 
-  document
-    .querySelectorAll(
-      ".drawing-tool[data-tool]"
-    )
-    .forEach(
-      button => {
-
-        button.classList.toggle(
-          "active",
-          button.dataset.tool ===
-          tool
-        );
-
-      }
-    );
-
-
-  if (
-    tool === "cursor"
-  ) {
-
-    canvas.style.pointerEvents =
-      "none";
-
-    canvas.style.cursor =
-      "default";
-
-  } else {
-
-    canvas.style.pointerEvents =
-      "auto";
-
-    canvas.style.cursor =
-      "crosshair";
-
+  if (typeof value === "object") {
+    if ("timestamp" in value) return Number(value.timestamp);
+    if ("year" in value) {
+      return Math.floor(Date.UTC(
+        value.year,
+        value.month - 1,
+        value.day
+      ) / 1000);
+    }
   }
 
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
 
-  state.drawingStart =
-    null;
+function coordinateToPrice(y) {
+  const value = series.coordinateToPrice(y);
+  return Number.isFinite(value) ? value : null;
+}
 
+function timeToX(time) {
+  const value = chart.timeScale().timeToCoordinate(time);
+  return value === null ? null : value;
+}
 
-  state.drawingPreview =
-    null;
+function priceToY(price) {
+  const value = series.priceToCoordinate(price);
+  return value === null ? null : value;
+}
 
+function getPointerPosition(event) {
+  const rect = canvas.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+  const time = coordinateToTime(x);
+  const price = coordinateToPrice(y);
 
+  if (time === null || price === null) return null;
+
+  return { x, y, time, price };
+}
+
+function resetDrawingInteraction() {
+  state.drawingStart = null;
+  state.drawingPreview = null;
   redrawDrawings();
-
 }
 
-
-document
-  .querySelectorAll(
-    ".drawing-tool[data-tool]"
-  )
-  .forEach(
-    button => {
-
-      button.addEventListener(
-        "click",
-        event => {
-
-          event.stopPropagation();
-
-
-          setDrawingTool(
-            button.dataset.tool
-          );
-
-        }
-      );
-
-    }
-  );
-
-
-/* =========================================================
-   COLLAPSE DRAWING TOOLBAR
-   ========================================================= */
-
-document
-  .getElementById(
-    "drawingCollapse"
-  )
-  .addEventListener(
-    "click",
-    event => {
-
-      event.stopPropagation();
-
-
-      drawingToolbar.classList.toggle(
-        "collapsed"
-      );
-
-    }
-  );
-
-
-/* =========================================================
-   COORDINATE CONVERSION
-   ========================================================= */
-
-function coordinateToTime(
-  x
-) {
-
-  const value =
-    chart.timeScale()
-      .coordinateToTime(
-        x
-      );
-
-
-  if (
-    value === null ||
-    value === undefined
-  ) {
-
-    return null;
-
-  }
-
-
-  if (
-    typeof value === "object"
-  ) {
-
-    if (
-      "timestamp" in value
-    ) {
-
-      return Number(
-        value.timestamp
-      );
-
-    }
-
-    if (
-      "year" in value
-    ) {
-
-      return Math.floor(
-        Date.UTC(
-          value.year,
-          value.month - 1,
-          value.day
-        ) / 1000
-      );
-
-    }
-
-  }
-
-
-  const number =
-    Number(value);
-
-
-  return Number.isFinite(
-    number
-  )
-    ? number
-    : null;
-
-}
-
-
-function coordinateToPrice(
-  y
-) {
-
-  const value =
-    series.coordinateToPrice(
-      y
-    );
-
-
-  return Number.isFinite(
-    value
-  )
-    ? value
-    : null;
-
-}
-
-
-function timeToX(
-  time
-) {
-
-  const value =
-    chart.timeScale()
-      .timeToCoordinate(
-        time
-      );
-
-
-  return value === null
-    ? null
-    : value;
-
-}
-
-
-function priceToY(
-  price
-) {
-
-  const value =
-    series.priceToCoordinate(
-      price
-    );
-
-
-  return value === null
-    ? null
-    : value;
-
-}
-
-
-/* =========================================================
-   POINTER POSITION
-   ========================================================= */
-
-function getPointerPosition(
-  event
-) {
-
-  const rect =
-    canvas.getBoundingClientRect();
-
-
-  const x =
-    event.clientX -
-    rect.left;
-
-
-  const y =
-    event.clientY -
-    rect.top;
-
-
-  const time =
-    coordinateToTime(
-      x
-    );
-
-
-  const price =
-    coordinateToPrice(
-      y
-    );
-
-
-  if (
-    time === null ||
-    price === null
-  ) {
-
-    return null;
-
-  }
-
-
-  return {
-
-    x,
-
-    y,
-
-    time,
-
-    price
-
-  };
-
-}
-
-
-/* =========================================================
-   POINTER DOWN
-   ========================================================= */
-
-canvas.addEventListener(
-  "pointerdown",
-  event => {
-
-    if (
-      state.drawingTool ===
-      "cursor"
-    ) {
-
-      return;
-
-    }
-
-
-    const point =
-      getPointerPosition(
-        event
-      );
-
-
-    if (!point) {
-
-      return;
-
-    }
-
-
-    event.preventDefault();
-
-
-    canvas.setPointerCapture(
-      event.pointerId
-    );
-
-
-    state.drawingStart =
-      point;
-
-
-    state.drawingPreview = {
-
-      type:
-        state.drawingTool,
-
-      t1:
-        point.time,
-
-      p1:
-        point.price,
-
-      t2:
-        point.time,
-
-      p2:
-        point.price
-
-    };
-
-
-    if (
-      state.drawingTool ===
-      "horizontal"
-    ) {
-
-      finishDrawing(
-        event
-      );
-
-    }
-
-
-    if (
-      state.drawingTool ===
-      "vertical"
-    ) {
-
-      finishDrawing(
-        event
-      );
-
-    }
-
-
-    if (
-      state.drawingTool ===
-      "text"
-    ) {
-
-      finishDrawing(
-        event
-      );
-
-    }
-
-
-    redrawDrawings();
-
-  }
-);
-
-
-/* =========================================================
-   POINTER MOVE
-   ========================================================= */
-
-canvas.addEventListener(
-  "pointermove",
-  event => {
-
-    if (
-      !state.drawingStart
-    ) {
-
-      return;
-
-    }
-
-
-    const point =
-      getPointerPosition(
-        event
-      );
-
-
-    if (!point) {
-
-      return;
-
-    }
-
-
-    state.drawingPreview = {
-
-      type:
-        state.drawingTool,
-
-      t1:
-        state.drawingStart.time,
-
-      p1:
-        state.drawingStart.price,
-
-      t2:
-        point.time,
-
-      p2:
-        point.price
-
-    };
-
-
-    redrawDrawings();
-
-  }
-);
-
-
-/* =========================================================
-   POINTER UP
-   ========================================================= */
-
-canvas.addEventListener(
-  "pointerup",
-  event => {
-
-    if (
-      !state.drawingStart
-    ) {
-
-      return;
-
-    }
-
-
-    if (
-      state.drawingTool ===
-      "horizontal" ||
-      state.drawingTool ===
-      "vertical" ||
-      state.drawingTool ===
-      "text"
-    ) {
-
-      return;
-
-    }
-
-
-    finishDrawing(
-      event
-    );
-
-  }
-);
-
-
-/* =========================================================
-   POINTER CANCEL
-   ========================================================= */
-
-canvas.addEventListener(
-  "pointercancel",
-  () => {
-
-    state.drawingStart =
-      null;
-
-    state.drawingPreview =
-      null;
-
-    redrawDrawings();
-
-  }
-);
-
-
-/* =========================================================
-   FINISH DRAWING
-   ========================================================= */
-
-function finishDrawing(
-  event
-) {
-
-  if (
-    !state.drawingStart
-  ) {
-
-    return;
-
-  }
-
-
-  const point =
-    getPointerPosition(
-      event
-    );
-
-
-  if (!point) {
-
-    state.drawingStart =
-      null;
-
-    state.drawingPreview =
-      null;
-
-    redrawDrawings();
-
-    return;
-
-  }
-
-
+function createDrawingFromPoints(start, end) {
+  const type = state.drawingTool;
   const drawing = {
-
-    type:
-      state.drawingTool,
-
-    t1:
-      state.drawingStart.time,
-
-    p1:
-      state.drawingStart.price,
-
-    t2:
-      point.time,
-
-    p2:
-      point.price
-
+    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    type,
+    t1: start.time,
+    p1: start.price,
+    t2: end.time,
+    p2: end.price
   };
 
-
-  /* =====================================================
-     HORIZONTAL
-     ===================================================== */
-
-  if (
-    state.drawingTool ===
-    "horizontal"
-  ) {
-
-    drawing.t2 =
-      drawing.t1;
-
-    drawing.p2 =
-      drawing.p1;
-
+  if (type === "horizontal") {
+    drawing.t2 = drawing.t1;
+    drawing.p2 = drawing.p1;
   }
 
-
-  /* =====================================================
-     VERTICAL
-     ===================================================== */
-
-  if (
-    state.drawingTool ===
-    "vertical"
-  ) {
-
-    drawing.t2 =
-      drawing.t1;
-
-    drawing.p2 =
-      drawing.p1;
-
+  if (type === "vertical") {
+    drawing.t2 = drawing.t1;
+    drawing.p2 = drawing.p1;
   }
 
-
-  /* =====================================================
-     TEXT
-     ===================================================== */
-
-  if (
-    state.drawingTool ===
-    "text"
-  ) {
-
-    const text =
-      window.prompt(
-        "Enter text:"
-      );
-
-
-    if (
-      !text ||
-      !text.trim()
-    ) {
-
-      state.drawingStart =
-        null;
-
-      state.drawingPreview =
-        null;
-
-      redrawDrawings();
-
-      return;
-
-    }
-
-
-    drawing.text =
-      text.trim();
-
-
-    drawing.t2 =
-      drawing.t1;
-
-
-    drawing.p2 =
-      drawing.p1;
-
+  if (type === "text") {
+    const text = window.prompt("Enter text:");
+    if (!text || !text.trim()) return null;
+    drawing.text = text.trim();
+    drawing.t2 = drawing.t1;
+    drawing.p2 = drawing.p1;
   }
 
-
-  /* =====================================================
-     MINIMUM DISTANCE
-     ===================================================== */
-
-  if (
-    state.drawingTool !==
-    "horizontal" &&
-    state.drawingTool !==
-    "vertical" &&
-    state.drawingTool !==
-    "text"
-  ) {
-
-    const distance =
-      Math.sqrt(
-        Math.pow(
-          point.x -
-          state.drawingStart.x,
-          2
-        ) +
-        Math.pow(
-          point.y -
-          state.drawingStart.y,
-          2
-        )
-      );
-
-
-    if (
-      distance < 4
-    ) {
-
-      state.drawingStart =
-        null;
-
-      state.drawingPreview =
-        null;
-
-      redrawDrawings();
-
-      return;
-
-    }
-
-  }
-
-
-  state.drawings.push(
-    drawing
-  );
-
-
-  state.drawingStart =
-    null;
-
-
-  state.drawingPreview =
-    null;
-
-
-  redrawDrawings();
-
+  return drawing;
 }
 
+function commitTwoPointDrawing(end) {
+  if (!state.drawingStart) return;
+
+  const start = state.drawingStart;
+  const distance = Math.hypot(
+    end.x - start.x,
+    end.y - start.y
+  );
+
+  if (distance < 5) {
+    resetDrawingInteraction();
+    return;
+  }
+
+  const drawing = createDrawingFromPoints(start, end);
+
+  if (drawing) {
+    state.drawings.push(drawing);
+  }
+
+  resetDrawingInteraction();
+}
+
+function setDrawingTool(tool) {
+  state.drawingTool = tool;
+
+  document.querySelectorAll(".drawing-tool[data-tool]").forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.dataset.tool === tool
+    );
+  });
+
+  canvas.style.pointerEvents = tool === "cursor" ? "none" : "auto";
+  canvas.style.cursor = tool === "cursor" ? "default" : "crosshair";
+
+  resetDrawingInteraction();
+}
+
+document.querySelectorAll(".drawing-tool[data-tool]").forEach(button => {
+  button.addEventListener("click", event => {
+    event.stopPropagation();
+    setDrawingTool(button.dataset.tool);
+  });
+});
+
+canvas.addEventListener("pointerdown", event => {
+  if (state.drawingTool === "cursor") return;
+
+  const point = getPointerPosition(event);
+  if (!point) return;
+
+  event.preventDefault();
+  canvas.setPointerCapture?.(event.pointerId);
+
+  if (
+    state.drawingTool === "horizontal" ||
+    state.drawingTool === "vertical" ||
+    state.drawingTool === "text"
+  ) {
+    const drawing = createDrawingFromPoints(point, point);
+    if (drawing) state.drawings.push(drawing);
+    resetDrawingInteraction();
+    return;
+  }
+
+  state.drawingStart = point;
+  state.drawingPreview = {
+    type: state.drawingTool,
+    t1: point.time,
+    p1: point.price,
+    t2: point.time,
+    p2: point.price
+  };
+  redrawDrawings();
+});
+
+canvas.addEventListener("pointermove", event => {
+  if (!state.drawingStart) return;
+
+  const point = getPointerPosition(event);
+  if (!point) return;
+
+  state.drawingPreview = {
+    type: state.drawingTool,
+    t1: state.drawingStart.time,
+    p1: state.drawingStart.price,
+    t2: point.time,
+    p2: point.price
+  };
+
+  redrawDrawings();
+});
+
+canvas.addEventListener("pointerup", event => {
+  if (!state.drawingStart) return;
+
+  const point = getPointerPosition(event);
+  if (!point) {
+    resetDrawingInteraction();
+    return;
+  }
+
+  commitTwoPointDrawing(point);
+});
+
+canvas.addEventListener("pointercancel", resetDrawingInteraction);
+
+/* =========================================================
+   DRAWING TOOLBAR COLLAPSE
+   ========================================================= */
+
+document.getElementById("drawingCollapse").addEventListener("click", event => {
+  event.stopPropagation();
+  drawingToolbar.classList.toggle("collapsed");
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    resetDrawingInteraction();
+    setDrawingTool("cursor");
+  }
+
+  if (
+    (event.key === "Delete" || event.key === "Backspace") &&
+    state.drawingTool !== "cursor"
+  ) {
+    if (state.drawings.length) {
+      state.drawings.pop();
+      resetDrawingInteraction();
+    }
+  }
+});
 
 /* =========================================================
    DRAWINGS REDRAW

@@ -7,30 +7,40 @@
 
 <meta
   name="viewport"
-  content="width=device-width, initial-scale=1.0"
+  content="width=device-width,initial-scale=1.0"
 >
 
-<title>Trading Backtester</title>
+<title>
+Trading Backtester
+</title>
 
-<script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
+<script
+  src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"
+></script>
 
 <style>
 
 :root {
 
   --bg:#080c11;
-  --panel:#10161f;
-  --panel2:#151d27;
-  --panel3:#1b2430;
-  --border:#293443;
-  --text:#e8edf4;
-  --muted:#8793a3;
+
+  --panel:#0d131b;
+
+  --panel2:#101720;
+
+  --border:#202a35;
+
+  --text:#d6dde7;
+
+  --muted:#7d8999;
 
   --accent:#2962ff;
 
-  --green:#16a34a;
-  --red:#dc2626;
-  --yellow:#f59e0b;
+  --green:#36c98f;
+
+  --red:#ef5350;
+
+  --yellow:#f4c76b;
 
   --drawing-bg:#0d131b;
 
@@ -47,10 +57,14 @@
 html,
 body {
 
-  margin:0;
-
   width:100%;
   height:100%;
+
+  margin:0;
+
+  padding:0;
+
+  overflow:hidden;
 
   background:
     var(--bg);
@@ -59,25 +73,19 @@ body {
     var(--text);
 
   font-family:
-    Inter,
     Arial,
+    Helvetica,
     sans-serif;
 
 }
 
 
-body {
-
-  overflow:hidden;
-
-}
-
-
 button,
-select,
-input {
+input,
+select {
 
-  font:inherit;
+  font-family:
+    inherit;
 
 }
 
@@ -91,13 +99,15 @@ button {
 
 .app {
 
-  width:100vw;
-  height:100vh;
+  width:100%;
+  height:100%;
 
-  display:grid;
+  display:flex;
 
-  grid-template-rows:
-    58px 1fr;
+  flex-direction:column;
+
+  background:
+    var(--bg);
 
 }
 
@@ -107,6 +117,10 @@ button {
    ========================================================= */
 
 .header {
+
+  height:52px;
+
+  flex-shrink:0;
 
   display:flex;
 
@@ -210,12 +224,14 @@ button {
 
 .main {
 
+  flex:1;
+
+  min-height:0;
+
   display:grid;
 
   grid-template-columns:
     285px 1fr;
-
-  min-height:0;
 
 }
 
@@ -226,30 +242,34 @@ button {
 
 .sidebar {
 
-  overflow-y:auto;
+  min-width:0;
 
-  padding:12px;
+  overflow:auto;
 
   background:
-    var(--panel);
+    #0b1017;
 
   border-right:
     1px solid var(--border);
+
+  padding:12px;
 
 }
 
 
 .section {
 
-  margin-bottom:16px;
+  margin-bottom:14px;
 
 }
 
 
-.title {
+.section-title {
+
+  margin-bottom:8px;
 
   color:
-    var(--muted);
+    #aab5c4;
 
   font-size:10px;
 
@@ -259,71 +279,56 @@ button {
 
   letter-spacing:.08em;
 
-  margin-bottom:8px;
-
 }
 
 
-/* =========================================================
-   DATA
-   ========================================================= */
+label {
 
-.data-tabs {
+  display:block;
 
-  display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap:5px;
-
-  margin-bottom:8px;
-
-}
-
-
-.tab {
-
-  padding:8px;
-
-  border:
-    1px solid var(--border);
-
-  background:
-    var(--panel2);
+  margin-bottom:5px;
 
   color:
     var(--muted);
 
-  border-radius:6px;
+  font-size:10px;
 
 }
 
 
-.tab.active {
+input,
+select {
 
-  color:white;
+  width:100%;
+
+  height:32px;
+
+  padding:
+    0 9px;
+
+  border:
+    1px solid #293441;
+
+  border-radius:5px;
+
+  outline:none;
+
+  background:
+    #101720;
+
+  color:
+    var(--text);
+
+  font-size:11px;
+
+}
+
+
+input:focus,
+select:focus {
 
   border-color:
     var(--accent);
-
-  background:
-    rgba(41,98,255,.12);
-
-}
-
-
-.data-box {
-
-  padding:10px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:7px;
-
-  background:
-    #0d131b;
 
 }
 
@@ -335,65 +340,40 @@ button {
 }
 
 
-label {
-
-  display:block;
-
-  color:
-    var(--muted);
-
-  font-size:10px;
-
-  margin-bottom:4px;
-
-}
-
-
-select,
-input[type=date],
-input[type=file] {
-
-  width:100%;
-
-  padding:8px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:6px;
-
-  background:
-    #080d13;
-
-  color:
-    var(--text);
-
-}
-
-
 .primary {
 
   width:100%;
 
-  border:0;
+  height:34px;
 
-  border-radius:6px;
+  border:
+    1px solid #356eff;
 
-  padding:9px;
+  border-radius:5px;
 
   background:
     var(--accent);
 
   color:white;
 
+  font-size:11px;
+
   font-weight:700;
+
+}
+
+
+.primary:hover {
+
+  filter:
+    brightness(1.08);
 
 }
 
 
 .primary:disabled {
 
-  opacity:.55;
+  opacity:.5;
 
   cursor:not-allowed;
 
@@ -402,58 +382,7 @@ input[type=file] {
 
 .status-box {
 
-  margin-top:8px;
-
   padding:8px;
-
-  border:
-    1px solid var(--border);
-
-  border-radius:6px;
-
-  color:
-    var(--muted);
-
-  font-size:10px;
-
-  line-height:1.5;
-
-}
-
-
-.status-box.ok {
-
-  color:#8de0a4;
-
-}
-
-
-.status-box.error {
-
-  color:#ff9c9c;
-
-}
-
-
-/* =========================================================
-   TIMEFRAME
-   ========================================================= */
-
-.tools {
-
-  display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap:5px;
-
-}
-
-
-.tool {
-
-  padding:7px 5px;
 
   border:
     1px solid var(--border);
@@ -461,32 +390,39 @@ input[type=file] {
   border-radius:5px;
 
   background:
-    var(--panel2);
+    #101720;
 
   color:
     var(--muted);
 
   font-size:10px;
 
+  line-height:1.45;
+
 }
 
 
-.tool.active {
-
-  color:white;
+.status-box.ok {
 
   border-color:
-    var(--accent);
+    rgba(54,201,143,.35);
 
-  background:
-    rgba(41,98,255,.15);
+  color:
+    #79dcae;
 
 }
 
 
-/* =========================================================
-   STATS
-   ========================================================= */
+.status-box.error {
+
+  border-color:
+    rgba(239,83,80,.35);
+
+  color:
+    #ff8b88;
+
+}
+
 
 .stats {
 
@@ -495,7 +431,7 @@ input[type=file] {
   grid-template-columns:
     1fr 1fr;
 
-  gap:5px;
+  gap:7px;
 
 }
 
@@ -507,10 +443,10 @@ input[type=file] {
   border:
     1px solid var(--border);
 
-  border-radius:6px;
+  border-radius:5px;
 
   background:
-    var(--panel2);
+    #101720;
 
 }
 
@@ -529,120 +465,46 @@ input[type=file] {
 
   margin-top:3px;
 
-  font-size:13px;
+  color:
+    var(--text);
+
+  font-size:12px;
 
   font-weight:700;
 
 }
 
 
-/* =========================================================
-   WORKSPACE
-   ========================================================= */
-
-.workspace {
-
-  min-width:0;
-
-  min-height:0;
+.trade-buttons {
 
   display:grid;
 
-  grid-template-rows:
-    42px 1fr 50px;
-
-}
-
-
-/* =========================================================
-   TOP TOOLBAR
-   ========================================================= */
-
-.toolbar {
-
-  display:flex;
-
-  align-items:center;
+  grid-template-columns:
+    repeat(3,1fr);
 
   gap:5px;
 
-  padding:
-    5px 8px;
-
-  border-bottom:
-    1px solid var(--border);
-
-  background:
-    #0c1118;
-
 }
 
 
-.toolbar button {
-
-  min-width:32px;
+.trade-buttons button {
 
   height:30px;
 
-  padding:
-    5px 9px;
-
   border:
-    1px solid var(--border);
+    1px solid #2b3643;
 
   border-radius:5px;
 
   background:
-    var(--panel2);
+    #111923;
 
   color:
-    var(--text);
+    #aeb8c6;
 
-  font-size:10px;
+  font-size:9px;
 
-}
-
-
-.toolbar button:hover {
-
-  background:
-    var(--panel3);
-
-}
-
-
-.toolbar-spacer {
-
-  flex:1;
-
-}
-
-
-.tf-buttons {
-
-  display:flex;
-
-  gap:3px;
-
-}
-
-
-.tf {
-
-  min-width:37px;
-
-}
-
-
-.tf.active {
-
-  background:
-    rgba(41,98,255,.2);
-
-  border-color:
-    var(--accent);
-
-  color:white;
+  font-weight:700;
 
 }
 
@@ -669,12 +531,127 @@ input[type=file] {
 
 
 /* =========================================================
+   WORKSPACE
+   ========================================================= */
+
+.workspace {
+
+  min-width:0;
+
+  min-height:0;
+
+  display:flex;
+
+  flex-direction:column;
+
+}
+
+
+/* =========================================================
+   TOP TOOLBAR
+   ========================================================= */
+
+.toolbar {
+
+  height:44px;
+
+  flex-shrink:0;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:5px;
+
+  padding:
+    5px 8px;
+
+  background:
+    #0c1118;
+
+  border-bottom:
+    1px solid var(--border);
+
+}
+
+
+.toolbar-spacer {
+
+  flex:1;
+
+}
+
+
+.toolbar button {
+
+  height:30px;
+
+  padding:
+    0 10px;
+
+  border:
+    1px solid #2a3542;
+
+  border-radius:5px;
+
+  background:
+    #111923;
+
+  color:
+    #aeb8c6;
+
+  font-size:10px;
+
+}
+
+
+.toolbar button:hover {
+
+  color:white;
+
+  border-color:#3a4757;
+
+}
+
+
+.tf-buttons {
+
+  display:flex;
+
+  gap:3px;
+
+}
+
+
+.tf {
+
+  min-width:38px;
+
+}
+
+
+.tf.active {
+
+  color:white;
+
+  background:
+    rgba(41,98,255,.18);
+
+  border-color:
+    var(--accent);
+
+}
+
+
+/* =========================================================
    CHART
    ========================================================= */
 
 .chart-area {
 
   position:relative;
+
+  flex:1;
 
   min-width:0;
 
@@ -696,6 +673,10 @@ input[type=file] {
 
 }
 
+
+/* =========================================================
+   CHART MESSAGE
+   ========================================================= */
 
 .chart-message {
 
@@ -720,6 +701,263 @@ input[type=file] {
 
 
 /* =========================================================
+   BAR REPLAY MENU
+   ========================================================= */
+
+.replay-menu {
+
+  position:absolute;
+
+  top:12px;
+
+  left:50%;
+
+  z-index:40;
+
+  min-width:340px;
+
+  padding:6px;
+
+  background:
+    rgba(13,19,27,.97);
+
+  border:
+    1px solid var(--border);
+
+  border-radius:8px;
+
+  box-shadow:
+    0 10px 28px rgba(0,0,0,.42);
+
+  transform:
+    translateX(-50%);
+
+  user-select:none;
+
+}
+
+
+.replay-menu.dragging {
+
+  opacity:.94;
+
+  cursor:grabbing;
+
+}
+
+
+.replay-menu-handle {
+
+  height:20px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:8px;
+
+  color:#8794a6;
+
+  font-size:9px;
+
+  font-weight:700;
+
+  letter-spacing:.08em;
+
+  cursor:grab;
+
+  border-bottom:
+    1px solid #27313d;
+
+}
+
+
+.replay-menu-handle:active {
+
+  cursor:grabbing;
+
+}
+
+
+.replay-drag-dots {
+
+  letter-spacing:-2px;
+
+  transform:
+    rotate(90deg);
+
+  color:#5f6d7e;
+
+}
+
+
+.replay-menu-actions {
+
+  display:flex;
+
+  align-items:stretch;
+
+  gap:4px;
+
+  padding-top:6px;
+
+}
+
+
+.replay-action {
+
+  min-width:58px;
+
+  height:42px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:2px;
+
+  padding:
+    3px 7px;
+
+  border:
+    1px solid transparent;
+
+  border-radius:5px;
+
+  background:
+    transparent;
+
+  color:#aeb8c6;
+
+  font-size:9px;
+
+}
+
+
+.replay-action:hover {
+
+  color:#fff;
+
+  background:
+    rgba(255,255,255,.06);
+
+  border-color:#344151;
+
+}
+
+
+.replay-action.active {
+
+  color:#fff;
+
+  background:
+    rgba(41,98,255,.20);
+
+  border-color:
+    var(--accent);
+
+}
+
+
+.replay-action-icon {
+
+  height:18px;
+
+  display:grid;
+
+  place-items:center;
+
+  font-size:16px;
+
+  line-height:1;
+
+}
+
+
+.replay-speed-row {
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:flex-end;
+
+  gap:6px;
+
+  padding:
+    5px 3px 2px;
+
+  color:#718095;
+
+  font-size:9px;
+
+}
+
+
+.replay-speed-row select {
+
+  width:auto;
+
+  min-width:65px;
+
+  height:23px;
+
+  padding:
+    0 6px;
+
+  border:
+    1px solid #2c3745;
+
+  border-radius:4px;
+
+  background:
+    #101720;
+
+  color:#c7d0dc;
+
+  font-size:9px;
+
+  outline:none;
+
+}
+
+
+.replay-menu-status {
+
+  min-height:15px;
+
+  padding:
+    1px 3px 0;
+
+  color:#667487;
+
+  font-size:9px;
+
+  text-align:right;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+
+}
+
+
+#chart.replay-cut-mode {
+
+  cursor:crosshair;
+
+}
+
+
+/* =========================================================
    DRAWING TOOLBAR
    ========================================================= */
 
@@ -727,9 +965,9 @@ input[type=file] {
 
   position:absolute;
 
-  top:12px;
+  top:10px;
 
-  left:8px;
+  left:10px;
 
   z-index:30;
 
@@ -773,15 +1011,7 @@ input[type=file] {
 
   width:36px;
 
-  padding:
-    4px;
-
-}
-
-.drawing-toolbar.collapsed .drawing-tool[data-tool],
-.drawing-toolbar.collapsed .drawing-divider {
-
-  display:none;
+  padding:4px;
 
 }
 
@@ -872,7 +1102,8 @@ input[type=file] {
 
   height:1px;
 
-  margin:2px 0;
+  margin:
+    2px 0;
 
   background:
     #2a3542;
@@ -905,8 +1136,6 @@ input[type=file] {
 }
 
 
-/* TOOLTIP */
-
 .drawing-tool::after {
 
   content:
@@ -935,21 +1164,16 @@ input[type=file] {
     1px solid #344151;
 
   color:
-    #e8edf4;
+    #d6dde7;
 
-  font-size:10px;
-
-  pointer-events:none;
+  font-size:9px;
 
   opacity:0;
 
-  visibility:hidden;
+  pointer-events:none;
 
   transition:
     opacity .12s ease;
-
-  box-shadow:
-    0 5px 15px rgba(0,0,0,.3);
 
 }
 
@@ -958,13 +1182,11 @@ input[type=file] {
 
   opacity:1;
 
-  visibility:visible;
-
 }
 
 
 .drawing-toolbar.collapsed
-.drawing-tool::after {
+.drawing-tool[data-tool]::after {
 
   left:39px;
 
@@ -994,7 +1216,7 @@ input[type=file] {
 
 
 /* =========================================================
-   BOTTOM
+   BOTTOM STATUS
    ========================================================= */
 
 .bottom {
@@ -1002,8 +1224,6 @@ input[type=file] {
   display:flex;
 
   align-items:center;
-
-  gap:10px;
 
   padding:
     8px 12px;
@@ -1023,34 +1243,6 @@ input[type=file] {
     var(--muted);
 
   font-size:10px;
-
-}
-
-
-.progress {
-
-  flex:1;
-
-  height:3px;
-
-  background:
-    #27303b;
-
-  border-radius:2px;
-
-  overflow:hidden;
-
-}
-
-
-.progress-fill {
-
-  height:100%;
-
-  width:0;
-
-  background:
-    var(--accent);
 
 }
 
@@ -1092,8 +1284,24 @@ input[type=file] {
 
   }
 
-}
 
+  .replay-menu {
+
+    min-width:300px;
+
+    max-width:
+      calc(100% - 20px);
+
+  }
+
+
+  .replay-action {
+
+    min-width:50px;
+
+  }
+
+}
 
 </style>
 
@@ -1101,6 +1309,7 @@ input[type=file] {
 
 
 <body>
+
 
 <div class="app">
 
@@ -1150,309 +1359,290 @@ input[type=file] {
 <aside class="sidebar">
 
 
-<!-- =====================================================
-     DATA
-     ===================================================== -->
+<div class="section">
 
-<section class="section">
-
-<div class="title">
-Market Data
-</div>
+  <div class="section-title">
+    Market Data
+  </div>
 
 
-<div class="data-tabs">
+  <div class="field">
 
-<button
-  id="autoTab"
-  class="tab active"
->
-Automatic
-</button>
+    <label>
+      FX Pair
+    </label>
 
-<button
-  id="manualTab"
-  class="tab"
->
-Manual CSV
-</button>
+    <select id="pair">
 
-</div>
+      <option>
+        EUR/USD
+      </option>
 
+      <option>
+        GBP/USD
+      </option>
 
-<div
-  id="autoPanel"
-  class="data-box"
->
+      <option>
+        USD/JPY
+      </option>
 
+      <option>
+        USD/CHF
+      </option>
 
-<div class="field">
+      <option>
+        AUD/USD
+      </option>
 
-<label>
-FX Pair
-</label>
+      <option>
+        USD/CAD
+      </option>
 
-<select id="pair">
+      <option>
+        NZD/USD
+      </option>
 
-<option>EUR/USD</option>
-<option>GBP/USD</option>
-<option>USD/JPY</option>
-<option>USD/CHF</option>
-<option>AUD/USD</option>
-<option>USD/CAD</option>
-<option>NZD/USD</option>
+    </select>
 
-</select>
-
-</div>
+  </div>
 
 
-<div class="field">
+  <div class="field">
 
-<label>
-Data Date Start
-</label>
+    <label>
+      Output Size
+    </label>
 
-<input
-  id="startDate"
-  type="date"
->
+    <select id="outputsize">
 
-</div>
+      <option value="500">
+        500
+      </option>
 
+      <option value="1000">
+        1,000
+      </option>
 
-<div class="field">
+      <option value="2000">
+        2,000
+      </option>
 
-<label>
-Data Date End
-</label>
+      <option value="5000" selected>
+        5,000
+      </option>
 
-<input
-  id="endDate"
-  type="date"
->
+    </select>
 
-</div>
-
-
-<div class="field">
-
-<label>
-Candles
-</label>
-
-<select id="outputsize">
-
-<option value="1000">
-1,000
-</option>
-
-<option value="2500">
-2,500
-</option>
-
-<option
-  value="5000"
-  selected
->
-5,000
-</option>
-
-</select>
-
-</div>
+  </div>
 
 
-<button
-  id="loadData"
-  class="primary"
->
-Load Market Data
-</button>
+  <div class="field">
+
+    <label>
+      Start Date
+    </label>
+
+    <input
+      id="startDate"
+      type="date"
+    >
+
+  </div>
 
 
-<div
-  id="dataStatus"
-  class="status-box"
->
-Select market data and load it.
-</div>
+  <div class="field">
 
+    <label>
+      End Date
+    </label>
+
+    <input
+      id="endDate"
+      type="date"
+    >
+
+  </div>
+
+
+  <button
+    id="loadData"
+    class="primary"
+  >
+    Load Market Data
+  </button>
 
 </div>
 
 
-<div
-  id="manualPanel"
-  class="data-box"
-  style="display:none"
->
+<div class="section">
 
-<input
-  id="csv"
-  type="file"
-  accept=".csv,text/csv"
->
+  <div class="section-title">
+    Data Status
+  </div>
 
-
-<div
-  id="manualStatus"
-  class="status-box"
->
-CSV remains local.
-</div>
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     TIMEFRAME
-     ===================================================== -->
-
-<section class="section">
-
-<div class="title">
-Timeframe
-</div>
-
-
-<div class="tools">
-
-<button
-  class="tool tf-btn active"
-  data-tf="1"
->
-1m
-</button>
-
-<button
-  class="tool tf-btn"
-  data-tf="5"
->
-5m
-</button>
-
-<button
-  class="tool tf-btn"
-  data-tf="15"
->
-15m
-</button>
-
-<button
-  class="tool tf-btn"
-  data-tf="30"
->
-30m
-</button>
-
-<button
-  class="tool tf-btn"
-  data-tf="60"
->
-1H
-</button>
-
-<button
-  class="tool tf-btn"
-  data-tf="240"
->
-4H
-</button>
-
-<button
-  class="tool tf-btn"
-  data-tf="1440"
->
-1D
-</button>
-
-</div>
-
-</section>
-
-
-<!-- =====================================================
-     STATS
-     ===================================================== -->
-
-<section class="section">
-
-<div class="title">
-Backtest
-</div>
-
-
-<div class="stats">
-
-<div class="stat">
-
-<div class="stat-label">
-Candles
-</div>
-
-<div
-  id="candles"
-  class="stat-value"
->
-0
-</div>
+  <div
+    id="dataStatus"
+    class="status-box"
+  >
+    Waiting for data...
+  </div>
 
 </div>
 
 
-<div class="stat">
+<div class="section">
 
-<div class="stat-label">
-Position
-</div>
+  <div class="section-title">
+    Timeframe
+  </div>
 
-<div
-  id="position"
-  class="stat-value"
->
-FLAT
-</div>
+  <div class="stats">
 
-</div>
+    <div class="stat">
 
+      <div class="stat-label">
+        Active
+      </div>
 
-<div class="stat">
+      <div
+        id="activeTimeframe"
+        class="stat-value"
+      >
+        1m
+      </div>
 
-<div class="stat-label">
-Trades
-</div>
-
-<div
-  id="trades"
-  class="stat-value"
->
-0
-</div>
-
-</div>
+    </div>
 
 
-<div class="stat">
+    <div class="stat">
 
-<div class="stat-label">
-P&L
-</div>
+      <div class="stat-label">
+        Candles
+      </div>
 
-<div
-  id="pnl"
-  class="stat-value"
->
-0.00000
-</div>
+      <div
+        id="candleCount"
+        class="stat-value"
+      >
+        0
+      </div>
+
+    </div>
+
+  </div>
 
 </div>
 
+
+<div class="section">
+
+  <div class="section-title">
+    Trading
+  </div>
+
+
+  <div class="trade-buttons">
+
+    <button id="buy">
+      BUY
+    </button>
+
+    <button id="sell">
+      SELL
+    </button>
+
+    <button id="close">
+      CLOSE
+    </button>
+
+  </div>
+
 </div>
 
-</section>
+
+<div class="section">
+
+  <div class="section-title">
+    Statistics
+  </div>
+
+
+  <div class="stats">
+
+    <div class="stat">
+
+      <div class="stat-label">
+        Position
+      </div>
+
+      <div
+        id="position"
+        class="stat-value"
+      >
+        FLAT
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-label">
+        Trades
+      </div>
+
+      <div
+        id="trades"
+        class="stat-value"
+      >
+        0
+      </div>
+
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-label">
+        P&amp;L
+      </div>
+
+      <div
+        id="pnl"
+        class="stat-value"
+      >
+        0.00000
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="section">
+
+  <div class="section-title">
+    Manual CSV
+  </div>
+
+
+  <input
+    id="csvFile"
+    type="file"
+    accept=".csv,text/csv"
+  >
+
+  <div
+    id="manualStatus"
+    class="status-box"
+    style="margin-top:7px"
+  >
+    CSV import available.
+  </div>
+
+</div>
 
 
 </aside>
@@ -1466,30 +1656,6 @@ P&L
      ===================================================== -->
 
 <div class="toolbar">
-
-
-<button
-  id="prev"
-  title="Previous candle"
->
-◀
-</button>
-
-
-<button
-  id="next"
-  title="Next candle"
->
-▶
-</button>
-
-
-<button
-  id="play"
-  title="Play replay"
->
-▶ Play
-</button>
 
 
 <div class="toolbar-spacer"></div>
@@ -1550,21 +1716,21 @@ P&L
 
 
 <button
-  id="buy"
+  id="buyTop"
 >
 BUY
 </button>
 
 
 <button
-  id="sell"
+  id="sellTop"
 >
 SELL
 </button>
 
 
 <button
-  id="close"
+  id="closeTop"
 >
 CLOSE
 </button>
@@ -1584,6 +1750,186 @@ CLOSE
 
 
 <div id="chart"></div>
+
+
+<!-- =====================================================
+     BAR REPLAY MENU
+     ===================================================== -->
+
+<div
+  id="replayMenu"
+  class="replay-menu"
+>
+
+
+<div
+  id="replayMenuHandle"
+  class="replay-menu-handle"
+  title="Drag to move"
+>
+
+  <span>
+    BAR REPLAY
+  </span>
+
+  <span class="replay-drag-dots">
+    ⋮⋮
+  </span>
+
+</div>
+
+
+<div class="replay-menu-actions">
+
+
+<button
+  id="replayPlay"
+  class="replay-action"
+  title="Play / Pause candles"
+  aria-label="Play / Pause candles"
+>
+
+  <span
+    class="replay-action-icon"
+    id="replayPlayIcon"
+  >
+    ▶
+  </span>
+
+  <span>
+    Play
+  </span>
+
+</button>
+
+
+<button
+  id="replayForward"
+  class="replay-action"
+  title="One candle forward"
+  aria-label="One candle forward"
+>
+
+  <span class="replay-action-icon">
+    ›
+  </span>
+
+  <span>
+    +1
+  </span>
+
+</button>
+
+
+<button
+  id="replayBack"
+  class="replay-action"
+  title="One candle backward"
+  aria-label="One candle backward"
+>
+
+  <span class="replay-action-icon">
+    ‹
+  </span>
+
+  <span>
+    -1
+  </span>
+
+</button>
+
+
+<button
+  id="replayCut"
+  class="replay-action"
+  title="Cut point: click a candle on the chart"
+  aria-label="Cut point"
+>
+
+  <span class="replay-action-icon">
+    ✂
+  </span>
+
+  <span>
+    Cut
+  </span>
+
+</button>
+
+
+<button
+  id="replayReset"
+  class="replay-action"
+  title="Return chart to initial state"
+  aria-label="Reset replay"
+>
+
+  <span class="replay-action-icon">
+    ↩
+  </span>
+
+  <span>
+    Reset
+  </span>
+
+</button>
+
+
+</div>
+
+
+<div class="replay-speed-row">
+
+  <span>
+    Speed
+  </span>
+
+  <select
+    id="replaySpeed"
+    aria-label="Replay speed"
+  >
+
+    <option value="2000">
+      0.25x
+    </option>
+
+    <option value="1000">
+      0.5x
+    </option>
+
+    <option
+      value="500"
+      selected
+    >
+      1x
+    </option>
+
+    <option value="250">
+      2x
+    </option>
+
+    <option value="125">
+      4x
+    </option>
+
+    <option value="63">
+      8x
+    </option>
+
+  </select>
+
+</div>
+
+
+<div
+  id="replayMenuStatus"
+  class="replay-menu-status"
+>
+  Ready
+</div>
+
+
+</div>
 
 
 <!-- =====================================================
@@ -1608,30 +1954,13 @@ CLOSE
 <svg viewBox="0 0 24 24">
 
 <path
-  d="M5 3l6.8 16 2.2-6 5.8-2.2L5 3z"
+  d="M6 3l11 10-5 1 3 6-2 1-3-6-4 4z"
 ></path>
 
 </svg>
 
 </button>
 
-
-<div class="drawing-divider"></div>
-
-
-<!-- Settings -->
-
-<button
-  id="drawingSettingsToggle"
-  class="drawing-tool"
-  data-tooltip="Drawing Settings"
-  aria-label="Drawing Settings"
->
-<svg viewBox="0 0 24 24">
-<circle cx="12" cy="12" r="3"></circle>
-<path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.06.06-1.7 1.7-.06-.06a1.8 1.8 0 0 0-1.98-.36 1.8 1.8 0 0 0-1.1 1.66V22h-2.4v-.02a1.8 1.8 0 0 0-1.1-1.66 1.8 1.8 0 0 0-1.98.36l-.06.06-1.7-1.7.06-.06A1.8 1.8 0 0 0 8.16 17a1.8 1.8 0 0 0-1.66-1.1H6v-2.4h.02a1.8 1.8 0 0 0 1.66-1.1 1.8 1.8 0 0 0-.36-1.98l-.06-.06 1.7-1.7.06.06a1.8 1.8 0 0 0 1.98.36A1.8 1.8 0 0 0 12.1 7.4V6h2.4v1.4a1.8 1.8 0 0 0 1.1 1.66 1.8 1.8 0 0 0 1.98-.36l.06-.06 1.7 1.7-.06.06a1.8 1.8 0 0 0-.36 1.98 1.8 1.8 0 0 0 1.66 1.1H22v2.4h-1.4A1.8 1.8 0 0 0 19.4 15z"></path>
-</svg>
-</button>
 
 <!-- Horizontal -->
 
@@ -1754,9 +2083,9 @@ CLOSE
 
 <rect
   x="4"
-  y="5"
+  y="6"
   width="16"
-  height="14"
+  height="12"
 ></rect>
 
 </svg>
@@ -1768,46 +2097,39 @@ CLOSE
 
 <button
   class="drawing-tool"
-  data-tool="fib"
-  data-tooltip="Fib Retracement"
-  aria-label="Fib Retracement"
+  data-tool="fibonacci"
+  data-tooltip="Fibonacci"
+  aria-label="Fibonacci"
 >
 
 <svg viewBox="0 0 24 24">
 
 <line
   x1="4"
-  y1="5"
+  y1="6"
   x2="20"
-  y2="5"
+  y2="6"
 ></line>
 
 <line
   x1="4"
-  y1="9"
+  y1="10"
   x2="20"
-  y2="9"
+  y2="10"
 ></line>
 
 <line
   x1="4"
-  y1="13"
+  y1="14"
   x2="20"
-  y2="13"
+  y2="14"
 ></line>
 
 <line
   x1="4"
-  y1="17"
+  y1="18"
   x2="20"
-  y2="17"
-></line>
-
-<line
-  x1="4"
-  y1="21"
-  x2="20"
-  y2="21"
+  y2="18"
 ></line>
 
 </svg>
@@ -1827,39 +2149,19 @@ CLOSE
 <svg viewBox="0 0 24 24">
 
 <line
-  x1="5"
-  y1="19"
-  x2="19"
-  y2="5"
+  x1="4"
+  y1="12"
+  x2="20"
+  y2="12"
 ></line>
 
-<line
-  x1="5"
-  y1="16"
-  x2="5"
-  y2="22"
-></line>
+<polyline
+  points="7,9 4,12 7,15"
+></polyline>
 
-<line
-  x1="2"
-  y1="19"
-  x2="8"
-  y2="19"
-></line>
-
-<line
-  x1="16"
-  y1="5"
-  x2="22"
-  y2="5"
-></line>
-
-<line
-  x1="19"
-  y1="2"
-  x2="19"
-  y2="8"
-></line>
+<polyline
+  points="17,9 20,12 17,15"
+></polyline>
 
 </svg>
 
@@ -1879,13 +2181,13 @@ CLOSE
 
 <line
   x1="4"
-  y1="20"
+  y1="18"
   x2="19"
-  y2="5"
+  y2="6"
 ></line>
 
 <polyline
-  points="11,5 19,5 19,13"
+  points="12,6 19,6 19,13"
 ></polyline>
 
 </svg>
@@ -1904,9 +2206,19 @@ CLOSE
 
 <svg viewBox="0 0 24 24">
 
-<path
-  d="M5 5h14M12 5v14M8 19h8"
-></path>
+<line
+  x1="5"
+  y1="5"
+  x2="19"
+  y2="5"
+></line>
+
+<line
+  x1="12"
+  y1="5"
+  x2="12"
+  y2="19"
+></line>
 
 </svg>
 
@@ -1919,20 +2231,20 @@ CLOSE
 <!-- Undo -->
 
 <button
-  id="undoDrawing"
   class="drawing-tool"
+  data-tool="undo"
   data-tooltip="Undo"
   aria-label="Undo"
 >
 
 <svg viewBox="0 0 24 24">
 
-<path
-  d="M9 7l-5 5 5 5"
-></path>
+<polyline
+  points="9,7 4,12 9,17"
+></polyline>
 
 <path
-  d="M4 12h9a6 6 0 0 1 6 6"
+  d="M4 12h10a5 5 0 0 1 5 5"
 ></path>
 
 </svg>
@@ -1943,17 +2255,17 @@ CLOSE
 <!-- Clear -->
 
 <button
-  id="clearDrawings"
   class="drawing-tool"
-  data-tooltip="Clear All Drawings"
-  aria-label="Clear All Drawings"
+  data-tool="clear"
+  data-tooltip="Clear All"
+  aria-label="Clear All"
 >
 
 <svg viewBox="0 0 24 24">
 
-<path
-  d="M5 7h14"
-></path>
+<polyline
+  points="4,7 20,7"
+></polyline>
 
 <path
   d="M9 7V4h6v3"
@@ -1962,20 +2274,6 @@ CLOSE
 <path
   d="M7 7l1 13h8l1-13"
 ></path>
-
-<line
-  x1="10"
-  y1="10"
-  x2="10"
-  y2="17"
-></line>
-
-<line
-  x1="14"
-  y1="10"
-  x2="14"
-  y2="17"
-></line>
 
 </svg>
 
@@ -2008,95 +2306,6 @@ CLOSE
 </div>
 
 
-
-<div id="drawingSettings" class="drawing-settings" aria-hidden="true">
-  <div class="settings-head">
-    <div class="settings-title">Drawing Settings</div>
-    <button id="drawingSettingsClose" class="replay-btn" type="button">×</button>
-  </div>
-
-  <div class="settings-grid">
-    <div class="settings-field">
-      <label>Line Color</label>
-      <input id="drawColor" type="color" value="#d7dee8">
-    </div>
-
-    <div class="settings-field">
-      <label>Line Style</label>
-      <select id="drawStyle">
-        <option value="solid">Solid</option>
-        <option value="dashed">Dashed</option>
-        <option value="dotted">Dotted</option>
-      </select>
-    </div>
-
-    <div class="settings-field">
-      <label>Line Width <span id="drawWidthValue" class="settings-value">2</span></label>
-      <input id="drawWidth" type="range" min="1" max="5" step="1" value="2">
-    </div>
-
-    <div class="settings-field">
-      <label>Opacity <span id="drawOpacityValue" class="settings-value">100%</span></label>
-      <input id="drawOpacity" type="range" min="10" max="100" step="5" value="100">
-    </div>
-
-    <div class="settings-field">
-      <label>Fill Opacity <span id="drawFillOpacityValue" class="settings-value">10%</span></label>
-      <input id="drawFillOpacity" type="range" min="0" max="60" step="5" value="10">
-    </div>
-
-    <div class="settings-field">
-      <label>Text Size <span id="drawTextSizeValue" class="settings-value">13</span></label>
-      <input id="drawTextSize" type="range" min="9" max="24" step="1" value="13">
-    </div>
-
-    <div class="settings-field full">
-      <label>Fibonacci Levels</label>
-      <input id="fibLevels" type="text" value="0,0.236,0.382,0.5,0.618,0.786,1">
-    </div>
-
-    <div class="settings-field full">
-      <label class="settings-check">
-        <input id="drawMagnet" type="checkbox">
-        Magnet / Snap to nearest candle OHLC
-      </label>
-    </div>
-
-    <div class="settings-field full">
-      <label class="settings-check">
-        <input id="drawHandles" type="checkbox" checked>
-        Show anchor handles while drawing
-      </label>
-    </div>
-
-    <div class="settings-field full">
-      <label class="settings-check">
-        <input id="measureBars" type="checkbox" checked>
-        Measure: show bars
-      </label>
-    </div>
-
-    <div class="settings-field full">
-      <label class="settings-check">
-        <input id="measureTime" type="checkbox" checked>
-        Measure: show time
-      </label>
-    </div>
-
-    <div class="settings-field full">
-      <label class="settings-check">
-        <input id="measurePercent" type="checkbox" checked>
-        Measure: show percent
-      </label>
-    </div>
-  </div>
-
-  <div class="settings-note">
-    Settings apply to new drawings and also control how existing drawings are rendered.
-    Use ESC to cancel the current drawing. Delete removes the last drawing until selection mode is added in the next drawing-engine phase.
-  </div>
-</div>
-
 <canvas
   id="drawingCanvas"
 ></canvas>
@@ -2117,63 +2326,19 @@ Load market data to begin.
      BOTTOM
      ===================================================== -->
 
-
 <div class="bottom">
 
-  <div class="replay-controls">
-
-    <button id="replayStart" class="replay-btn" title="Go to first candle">⏮</button>
-    <button id="prev" class="replay-btn" title="Previous candle">◀</button>
-    <button id="play" class="replay-btn" title="Play / Pause">▶</button>
-    <button id="next" class="replay-btn" title="Next candle">▶</button>
-
-    <div class="replay-slider-wrap">
-      <input
-        id="replaySlider"
-        type="range"
-        min="0"
-        max="0"
-        value="0"
-        step="1"
-        title="Seek anywhere in the loaded dataset"
-      >
-      <span id="replayPercent" class="replay-percent">0%</span>
-    </div>
-
-    <input
-      id="replayIndex"
-      class="replay-index"
-      type="number"
-      min="1"
-      value="1"
-      title="Jump to candle number"
-    >
-
-    <input
-      id="replayJump"
-      class="replay-jump"
-      type="datetime-local"
-      title="Jump to date/time"
-    >
-
-    <select id="replaySpeed" class="replay-speed" title="Replay speed">
-      <option value="2000">0.5×</option>
-      <option value="1000">1×</option>
-      <option value="500" selected>2×</option>
-      <option value="250">4×</option>
-      <option value="100">10×</option>
-      <option value="50">20×</option>
-    </select>
-
-    <button id="replayEnd" class="replay-btn" title="Go to last candle">⏭</button>
-
-    <span id="replayInfo" class="replay-hint">No data</span>
-
-  </div>
+<div
+  id="replayInfo"
+  class="bottom-info"
+>
+Ready
+</div>
 
 </div>
-</section>
 
+
+</section>
 
 
 </main>
@@ -2206,6 +2371,16 @@ const state = {
 
   timer: null,
 
+  replaySpeed: 500,
+
+  replayCutIndex: -1,
+
+  replayMenuDragging: false,
+
+  replayMenuDragOffsetX: 0,
+
+  replayMenuDragOffsetY: 0,
+
   drawingTool: "cursor",
 
   drawings: [],
@@ -2214,24 +2389,7 @@ const state = {
 
   drawingPreview: null,
 
-  requestId: 0,
-
-  replayDelay: 500,
-
-  drawingSettings: {
-    color: "#d7dee8",
-    width: 2,
-    opacity: 100,
-    fillOpacity: 10,
-    style: "solid",
-    textSize: 13,
-    fibLevels: [0, .236, .382, .5, .618, .786, 1],
-    magnet: false,
-    showHandles: true,
-    measureBars: true,
-    measureTime: true,
-    measurePercent: true
-  }
+  requestId: 0
 
 };
 
@@ -2275,11 +2433,6 @@ const drawingToolbar =
     "drawingToolbar"
   );
 
-const drawingSettings =
-  document.getElementById(
-    "drawingSettings"
-  );
-
 
 /* =========================================================
    CHART
@@ -2312,66 +2465,53 @@ const chart =
 
       },
 
-      crosshair: {
-
-        mode:
-          LightweightCharts
-            .CrosshairMode
-            .Normal
-
-      },
-
       rightPriceScale: {
 
         borderColor:
-          "#293443",
-
-        scaleMargins: {
-
-          top:.08,
-
-          bottom:.08
-
-        }
+          "#202a35"
 
       },
 
       timeScale: {
 
         borderColor:
-          "#293443",
+          "#202a35",
 
-        timeVisible:true,
+        timeVisible:
+          true,
 
-        secondsVisible:false,
+        secondsVisible:
+          false
 
-        rightOffset:8,
+      },
 
-        barSpacing:8,
+      crosshair: {
 
-        minBarSpacing:2
+        mode:
+          LightweightCharts.CrosshairMode.Normal
 
       },
 
       handleScroll: {
 
-        mouseWheel:true,
+        mouseWheel:
+          true,
 
-        pressedMouseMove:true,
-
-        horzTouchDrag:true,
-
-        vertTouchDrag:true
+        pressedMouseMove:
+          true
 
       },
 
       handleScale: {
 
-        axisPressedMouseMove:true,
+        axisPressedMouseMove:
+          true,
 
-        mouseWheel:true,
+        mouseWheel:
+          true,
 
-        pinch:true
+        pinch:
+          true
 
       }
 
@@ -2382,17 +2522,20 @@ const chart =
 const series =
   chart.addCandlestickSeries({
 
-    upColor:"#16a34a",
+    upColor:
+      "#26a69a",
 
-    downColor:"#dc2626",
+    downColor:
+      "#ef5350",
 
-    borderUpColor:"#16a34a",
+    borderVisible:
+      false,
 
-    borderDownColor:"#dc2626",
+    wickUpColor:
+      "#26a69a",
 
-    wickUpColor:"#16a34a",
-
-    wickDownColor:"#dc2626"
+    wickDownColor:
+      "#ef5350"
 
   });
 
@@ -2426,40 +2569,29 @@ function resize() {
   );
 
 
-  const ratio =
-    window.devicePixelRatio ||
-    1;
-
-
   canvas.width =
-    Math.floor(
-      chartArea.clientWidth *
-      ratio
-    );
+    width *
+    window.devicePixelRatio;
 
 
   canvas.height =
-    Math.floor(
-      chartArea.clientHeight *
-      ratio
-    );
+    height *
+    window.devicePixelRatio;
 
 
   canvas.style.width =
-    chartArea.clientWidth +
-    "px";
+    `${width}px`;
 
 
   canvas.style.height =
-    chartArea.clientHeight +
-    "px";
+    `${height}px`;
 
 
   ctx.setTransform(
-    ratio,
+    window.devicePixelRatio,
     0,
     0,
-    ratio,
+    window.devicePixelRatio,
     0,
     0
   );
@@ -2593,6 +2725,40 @@ function updateTimeframeUI() {
 
       }
     );
+
+
+  const active =
+    document.getElementById(
+      "activeTimeframe"
+    );
+
+
+  if (active) {
+
+    const labels = {
+
+      1:"1m",
+
+      5:"5m",
+
+      15:"15m",
+
+      30:"30m",
+
+      60:"1H",
+
+      240:"4H",
+
+      1440:"1D"
+
+    };
+
+
+    active.textContent =
+      labels[state.timeframe] ||
+      `${state.timeframe}m`;
+
+  }
 
 }
 
@@ -2874,6 +3040,25 @@ async function loadAutomatic(
       state.candles.length - 1;
 
 
+    state.replayCutIndex =
+      -1;
+
+
+    replayCut.classList.remove(
+      "active"
+    );
+
+
+    chartElement.classList.remove(
+      "replay-cut-mode"
+    );
+
+
+    setReplayStatus(
+      "Ready"
+    );
+
+
     state.position =
       null;
 
@@ -2893,29 +3078,15 @@ async function loadAutomatic(
 
     updateReplay();
 
-    updateTimeframeUI();
-
-
-    const cacheText =
-      data.cached
-        ? " • cache"
-        : " • fresh";
-
 
     status.textContent =
-      `${data.pair} • ${data.count.toLocaleString()} candles • ${interval}${cacheText}`;
-
+      `${state.candles.length.toLocaleString()} candles loaded successfully.`;
 
     status.className =
       "status-box ok";
 
 
-  } catch (error) {
-
-    console.error(
-      error
-    );
-
+  } catch(error) {
 
     if (
       requestId !==
@@ -2952,6 +3123,10 @@ async function loadAutomatic(
 }
 
 
+/* =========================================================
+   LOAD BUTTON
+   ========================================================= */
+
 document
   .getElementById(
     "loadData"
@@ -2967,266 +3142,19 @@ document
 
 
 /* =========================================================
-   MANUAL CSV
+   CSV IMPORT
    ========================================================= */
-
-function parseCSV(
-  text
-) {
-
-  const lines =
-    text
-      .replace(/\r/g, "")
-      .split("\n")
-      .map(
-        x =>
-          x.trim()
-      )
-      .filter(Boolean);
-
-
-  if (
-    lines.length < 2
-  ) {
-
-    throw new Error(
-      "CSV is empty."
-    );
-
-  }
-
-
-  const headers =
-    lines[0]
-      .split(",")
-      .map(
-        x =>
-          x.trim()
-            .toLowerCase()
-      );
-
-
-  const find =
-    names => {
-
-      for (
-        const name of
-        names
-      ) {
-
-        const index =
-          headers.indexOf(
-            name
-          );
-
-
-        if (
-          index !== -1
-        ) {
-
-          return index;
-
-        }
-
-      }
-
-
-      return -1;
-
-    };
-
-
-  const ti =
-    find([
-      "time",
-      "timestamp",
-      "datetime",
-      "date"
-    ]);
-
-
-  const oi =
-    find([
-      "open"
-    ]);
-
-
-  const hi =
-    find([
-      "high"
-    ]);
-
-
-  const li =
-    find([
-      "low"
-    ]);
-
-
-  const ci =
-    find([
-      "close"
-    ]);
-
-
-  if (
-    ti < 0 ||
-    oi < 0 ||
-    hi < 0 ||
-    li < 0 ||
-    ci < 0
-  ) {
-
-    throw new Error(
-      "CSV requires time, open, high, low and close."
-    );
-
-  }
-
-
-  const result = [];
-
-
-  for (
-    let i = 1;
-    i < lines.length;
-    i++
-  ) {
-
-    const parts =
-      lines[i]
-        .split(",");
-
-
-    const timestamp =
-      new Date(
-        parts[ti]
-      ).getTime();
-
-
-    const open =
-      Number(
-        parts[oi]
-      );
-
-
-    const high =
-      Number(
-        parts[hi]
-      );
-
-
-    const low =
-      Number(
-        parts[li]
-      );
-
-
-    const close =
-      Number(
-        parts[ci]
-      );
-
-
-    if (
-      !Number.isFinite(timestamp) ||
-      !Number.isFinite(open) ||
-      !Number.isFinite(high) ||
-      !Number.isFinite(low) ||
-      !Number.isFinite(close)
-    ) {
-
-      continue;
-
-    }
-
-
-    if (
-      open <= 0 ||
-      high <= 0 ||
-      low <= 0 ||
-      close <= 0
-    ) {
-
-      continue;
-
-    }
-
-
-    result.push({
-
-      time:
-        Math.floor(
-          timestamp / 1000
-        ),
-
-      open,
-
-      high,
-
-      low,
-
-      close
-
-    });
-
-  }
-
-
-  result.sort(
-    (a,b) =>
-      a.time - b.time
-  );
-
-
-  const unique = [];
-
-
-  let previous =
-    null;
-
-
-  for (
-    const candle of
-    result
-  ) {
-
-    if (
-      candle.time ===
-      previous
-    ) {
-
-      continue;
-
-    }
-
-
-    unique.push(
-      candle
-    );
-
-
-    previous =
-      candle.time;
-
-  }
-
-
-  return unique;
-
-}
-
 
 document
   .getElementById(
-    "csv"
+    "csvFile"
   )
   .addEventListener(
     "change",
     async event => {
 
       const file =
-        event.target.files?.[0];
+        event.target.files[0];
 
 
       if (!file) {
@@ -3242,29 +3170,262 @@ document
           await file.text();
 
 
-        const candles =
-          parseCSV(
-            text
-          );
+        const lines =
+          text
+            .split(/\r?\n/)
+            .map(
+              line =>
+                line.trim()
+            )
+            .filter(
+              Boolean
+            );
 
 
         if (
-          !candles.length
+          lines.length < 2
         ) {
 
           throw new Error(
-            "No valid candles found in CSV."
+            "CSV file is empty."
           );
 
         }
 
 
+        const header =
+          lines[0]
+            .toLowerCase()
+            .split(",")
+            .map(
+              value =>
+                value.trim()
+            );
+
+
+        const timeIndex =
+          header.indexOf("time") >= 0
+            ? header.indexOf("time")
+            : header.indexOf("date");
+
+
+        const openIndex =
+          header.indexOf("open");
+
+
+        const highIndex =
+          header.indexOf("high");
+
+
+        const lowIndex =
+          header.indexOf("low");
+
+
+        const closeIndex =
+          header.indexOf("close");
+
+
+        if (
+          timeIndex < 0 ||
+          openIndex < 0 ||
+          highIndex < 0 ||
+          lowIndex < 0 ||
+          closeIndex < 0
+        ) {
+
+          throw new Error(
+            "CSV must contain time/date, open, high, low and close columns."
+          );
+
+        }
+
+
+        const candles =
+          [];
+
+
+        for (
+          let i=1;
+          i<lines.length;
+          i++
+        ) {
+
+          const row =
+            lines[i]
+              .split(",")
+              .map(
+                value =>
+                  value.trim()
+              );
+
+
+          const rawTime =
+            row[timeIndex];
+
+
+          const parsedDate =
+            Date.parse(
+              rawTime
+            );
+
+
+          let time;
+
+
+          if (
+            Number.isFinite(
+              Number(rawTime)
+            )
+          ) {
+
+            const number =
+              Number(rawTime);
+
+
+            time =
+              number > 10000000000
+                ? Math.floor(number / 1000)
+                : number;
+
+          } else {
+
+            time =
+              Math.floor(
+                parsedDate / 1000
+              );
+
+          }
+
+
+          const open =
+            Number(
+              row[openIndex]
+            );
+
+
+          const high =
+            Number(
+              row[highIndex]
+            );
+
+
+          const low =
+            Number(
+              row[lowIndex]
+            );
+
+
+          const close =
+            Number(
+              row[closeIndex]
+            );
+
+
+          if (
+            !Number.isFinite(time) ||
+            !Number.isFinite(open) ||
+            !Number.isFinite(high) ||
+            !Number.isFinite(low) ||
+            !Number.isFinite(close)
+          ) {
+
+            continue;
+
+          }
+
+
+          candles.push({
+
+            time,
+
+            open,
+
+            high,
+
+            low,
+
+            close
+
+          });
+
+        }
+
+
+        candles.sort(
+          (a,b) =>
+            a.time - b.time
+        );
+
+
+        const unique =
+          [];
+
+
+        const seen =
+          new Set();
+
+
+        for (
+          const candle of candles
+        ) {
+
+          if (
+            seen.has(
+              candle.time
+            )
+          ) {
+
+            continue;
+
+          }
+
+
+          seen.add(
+            candle.time
+          );
+
+
+          unique.push(
+            candle
+          );
+
+        }
+
+
+        if (
+          !unique.length
+        ) {
+
+          throw new Error(
+            "No valid OHLC candles found."
+          );
+
+        }
+
+
+        stopReplay();
+
+
         state.candles =
-          candles;
+          unique;
 
 
         state.currentIndex =
-          candles.length - 1;
+          unique.length - 1;
+
+
+        state.replayCutIndex =
+          -1;
+
+
+        replayCut.classList.remove(
+          "active"
+        );
+
+
+        chartElement.classList.remove(
+          "replay-cut-mode"
+        );
 
 
         state.position =
@@ -3322,276 +3483,1052 @@ document
 
 
 /* =========================================================
-   REPLAY
+   BAR REPLAY
    ========================================================= */
 
-function clampReplayIndex(index) {
-  if (!state.candles.length) return -1;
-  return Math.max(0, Math.min(
-    state.candles.length - 1,
-    Math.round(Number(index) || 0)
-  ));
-}
-
-function renderReplay(keepPosition = true) {
-  if (!state.candles.length) {
-    updateReplay();
-    return;
-  }
-
-  state.currentIndex = clampReplayIndex(state.currentIndex);
-
-  const visible = state.candles.slice(
-    0,
-    state.currentIndex + 1
+const replayMenu =
+  document.getElementById(
+    "replayMenu"
   );
 
-  series.setData(visible);
 
-  /*
-   * The replay engine intentionally exposes only candles up to
-   * currentIndex. Future candles are therefore hidden.
-   */
+const replayMenuHandle =
+  document.getElementById(
+    "replayMenuHandle"
+  );
+
+
+const replayPlay =
+  document.getElementById(
+    "replayPlay"
+  );
+
+
+const replayForward =
+  document.getElementById(
+    "replayForward"
+  );
+
+
+const replayBack =
+  document.getElementById(
+    "replayBack"
+  );
+
+
+const replayCut =
+  document.getElementById(
+    "replayCut"
+  );
+
+
+const replayReset =
+  document.getElementById(
+    "replayReset"
+  );
+
+
+const replayPlayIcon =
+  document.getElementById(
+    "replayPlayIcon"
+  );
+
+
+const replaySpeed =
+  document.getElementById(
+    "replaySpeed"
+  );
+
+
+const replayMenuStatus =
+  document.getElementById(
+    "replayMenuStatus"
+  );
+
+
+function setReplayStatus(
+  text
+) {
+
+  replayMenuStatus.textContent =
+    text;
+
+}
+
+
+function renderReplay() {
+
+  if (
+    !state.candles.length
+  ) {
+
+    series.setData([]);
+
+    updateReplay();
+
+    redrawDrawings();
+
+    return;
+
+  }
+
+
+  const safeIndex =
+    Math.max(
+      0,
+      Math.min(
+        state.currentIndex,
+        state.candles.length - 1
+      )
+    );
+
+
+  state.currentIndex =
+    safeIndex;
+
+
+  const visible =
+    state.candles.slice(
+      0,
+      safeIndex + 1
+    );
+
+
+  series.setData(
+    visible
+  );
+
+
   updateReplay();
+
   redrawDrawings();
 
-  if (!keepPosition) {
-    chart.timeScale().fitContent();
-  }
 }
 
-function seekReplay(index, options = {}) {
-  if (!state.candles.length) return;
 
-  stopReplay();
+function next() {
 
-  const nextIndex = clampReplayIndex(index);
+  if (
+    !state.candles.length
+  ) {
 
-  state.currentIndex = nextIndex;
-
-  renderReplay(options.keepPosition !== false);
-
-  /*
-   * Keep the current replay candle near the right edge without
-   * destroying the user's zoom level.
-   */
-  try {
-    chart.timeScale().scrollToPosition(0, false);
-  } catch {}
-
-  updateStats();
-}
-
-function next(step = 1) {
-  if (!state.candles.length) return;
-
-  const target = state.currentIndex + Math.max(1, Number(step) || 1);
-
-  if (target >= state.candles.length - 1) {
-    state.currentIndex = state.candles.length - 1;
-    renderReplay();
-    stopReplay();
     return;
+
   }
 
-  state.currentIndex = target;
-  renderReplay();
+
+  if (
+    state.currentIndex <
+    state.candles.length - 1
+  ) {
+
+    state.currentIndex++;
+
+    renderReplay();
+
+  } else {
+
+    stopReplay();
+
+    setReplayStatus(
+      "End of replay"
+    );
+
+  }
+
 }
 
-function previous(step = 1) {
-  if (!state.candles.length) return;
 
-  state.currentIndex = Math.max(
-    0,
-    state.currentIndex - Math.max(1, Number(step) || 1)
-  );
+function previous() {
 
-  renderReplay();
+  if (
+    !state.candles.length
+  ) {
+
+    return;
+
+  }
+
+
+  if (
+    state.currentIndex >
+    0
+  ) {
+
+    state.currentIndex--;
+
+    renderReplay();
+
+    setReplayStatus(
+      "One candle back"
+    );
+
+  }
+
 }
+
 
 function startReplay() {
+
   if (
     state.playing ||
     !state.candles.length
   ) {
+
     return;
+
   }
 
-  if (state.currentIndex >= state.candles.length - 1) {
-    state.currentIndex = 0;
-    renderReplay();
-  }
 
-  state.playing = true;
-
-  const playButton =
-    document.getElementById("play");
-
-  playButton.textContent = "⏸";
-  playButton.classList.add("active");
-
-  const loop = () => {
-    if (!state.playing) return;
+  if (
+    state.currentIndex >=
+    state.candles.length - 1
+  ) {
 
     if (
-      state.currentIndex >=
-      state.candles.length - 1
+      state.replayCutIndex >= 0
     ) {
-      stopReplay();
-      return;
-    }
 
-    next(1);
+      state.currentIndex =
+        state.replayCutIndex;
 
-    if (state.playing) {
-      state.timer = setTimeout(
-        loop,
-        state.replayDelay
+      renderReplay();
+
+    } else {
+
+      setReplayStatus(
+        "Choose a cut point first"
       );
-    }
-  };
 
-  loop();
+      return;
+
+    }
+
+  }
+
+
+  state.playing =
+    true;
+
+
+  replayPlay.classList.add(
+    "active"
+  );
+
+
+  replayPlayIcon.textContent =
+    "Ⅱ";
+
+
+  setReplayStatus(
+    "Playing"
+  );
+
+
+  const loop =
+    () => {
+
+      if (
+        !state.playing
+      ) {
+
+        return;
+
+      }
+
+
+      if (
+        state.currentIndex >=
+        state.candles.length - 1
+      ) {
+
+        stopReplay();
+
+        setReplayStatus(
+          "Replay finished"
+        );
+
+        return;
+
+      }
+
+
+      next();
+
+
+      if (
+        state.playing
+      ) {
+
+        state.timer =
+          setTimeout(
+            loop,
+            state.replaySpeed
+          );
+
+      }
+
+    };
+
+
+  state.timer =
+    setTimeout(
+      loop,
+      state.replaySpeed
+    );
+
 }
+
 
 function stopReplay() {
-  state.playing = false;
 
-  const playButton =
-    document.getElementById("play");
+  state.playing =
+    false;
 
-  playButton.textContent = "▶";
-  playButton.classList.remove("active");
 
-  if (state.timer) {
-    clearTimeout(state.timer);
-    state.timer = null;
+  replayPlay.classList.remove(
+    "active"
+  );
+
+
+  replayPlayIcon.textContent =
+    "▶";
+
+
+  if (
+    state.timer
+  ) {
+
+    clearTimeout(
+      state.timer
+    );
+
+
+    state.timer =
+      null;
+
   }
+
 }
 
-function jumpReplayToDate(value) {
-  if (!value || !state.candles.length) return;
 
-  const timestamp =
-    Math.floor(new Date(value).getTime() / 1000);
+function cutReplayAtIndex(
+  index
+) {
 
-  if (!Number.isFinite(timestamp)) return;
+  if (
+    !state.candles.length
+  ) {
 
-  let lo = 0;
-  let hi = state.candles.length - 1;
+    return;
 
-  while (lo < hi) {
-    const mid = Math.floor((lo + hi) / 2);
+  }
 
-    if (state.candles[mid].time < timestamp) {
-      lo = mid + 1;
+
+  const safeIndex =
+    Math.max(
+      0,
+      Math.min(
+        Number(index),
+        state.candles.length - 1
+      )
+    );
+
+
+  stopReplay();
+
+
+  state.replayCutIndex =
+    safeIndex;
+
+
+  state.currentIndex =
+    safeIndex;
+
+
+  renderReplay();
+
+
+  replayCut.classList.remove(
+    "active"
+  );
+
+
+  chartElement.classList.remove(
+    "replay-cut-mode"
+  );
+
+
+  const candle =
+    state.candles[safeIndex];
+
+
+  const date =
+    candle
+      ? new Date(
+          candle.time * 1000
+        )
+      : null;
+
+
+  setReplayStatus(
+
+    date
+
+      ? `Cut: ${date.toLocaleString()}`
+
+      : "Cut point selected"
+
+  );
+
+}
+
+
+function findNearestCandleIndex(
+  time
+) {
+
+  if (
+    !state.candles.length
+  ) {
+
+    return -1;
+
+  }
+
+
+  let low =
+    0;
+
+
+  let high =
+    state.candles.length - 1;
+
+
+  while (
+    low <= high
+  ) {
+
+    const mid =
+      Math.floor(
+        (low + high) / 2
+      );
+
+
+    const midTime =
+      Number(
+        state.candles[mid].time
+      );
+
+
+    if (
+      midTime ===
+      time
+    ) {
+
+      return mid;
+
+    }
+
+
+    if (
+      midTime <
+      time
+    ) {
+
+      low =
+        mid + 1;
+
     } else {
-      hi = mid;
+
+      high =
+        mid - 1;
+
     }
+
   }
 
-  /*
-   * Pick the nearest candle rather than always choosing the next one.
-   */
-  const a = lo;
-  const b = Math.max(0, lo - 1);
 
-  const chosen =
-    Math.abs(state.candles[a].time - timestamp) <
-    Math.abs(state.candles[b].time - timestamp)
-      ? a
-      : b;
+  if (
+    low <= 0
+  ) {
 
-  seekReplay(chosen);
+    return 0;
+
+  }
+
+
+  if (
+    low >=
+    state.candles.length
+  ) {
+
+    return (
+      state.candles.length - 1
+    );
+
+  }
+
+
+  const before =
+    state.candles[
+      low - 1
+    ];
+
+
+  const after =
+    state.candles[
+      low
+    ];
+
+
+  return (
+
+    Math.abs(
+      Number(before.time) -
+      time
+    )
+
+    <=
+
+    Math.abs(
+      Number(after.time) -
+      time
+    )
+
+  )
+
+    ? low - 1
+
+    : low;
+
 }
 
-document
-  .getElementById("next")
-  .addEventListener(
-    "click",
-    () => next(1)
-  );
 
-document
-  .getElementById("prev")
-  .addEventListener(
-    "click",
-    () => previous(1)
-  );
+function handleReplayCutClick(
+  event
+) {
 
-document
-  .getElementById("play")
-  .addEventListener(
-    "click",
-    () => {
-      if (state.playing) {
-        stopReplay();
-      } else {
-        startReplay();
-      }
+  if (
+
+    state.drawingTool !==
+      "cursor" ||
+
+    !replayCut.classList.contains(
+      "active"
+    ) ||
+
+    !state.candles.length
+
+  ) {
+
+    return;
+
+  }
+
+
+  const rect =
+    chartElement.getBoundingClientRect();
+
+
+  const x =
+    event.clientX -
+    rect.left;
+
+
+  if (
+    x < 0 ||
+    x > rect.width
+  ) {
+
+    return;
+
+  }
+
+
+  const time =
+    coordinateToTime(
+      x
+    );
+
+
+  if (
+    time === null
+  ) {
+
+    return;
+
+  }
+
+
+  const index =
+    findNearestCandleIndex(
+      time
+    );
+
+
+  if (
+    index >= 0
+  ) {
+
+    cutReplayAtIndex(
+      index
+    );
+
+  }
+
+}
+
+
+replayPlay.addEventListener(
+  "click",
+  event => {
+
+    event.stopPropagation();
+
+
+    if (
+      state.playing
+    ) {
+
+      stopReplay();
+
+      setReplayStatus(
+        "Paused"
+      );
+
+    } else {
+
+      startReplay();
+
     }
-  );
 
-document
-  .getElementById("replayStart")
-  .addEventListener(
-    "click",
-    () => seekReplay(0)
-  );
+  }
+);
 
-document
-  .getElementById("replayEnd")
-  .addEventListener(
-    "click",
-    () => {
-      if (state.candles.length) {
-        seekReplay(state.candles.length - 1);
-      }
+
+replayForward.addEventListener(
+  "click",
+  event => {
+
+    event.stopPropagation();
+
+    stopReplay();
+
+    next();
+
+  }
+);
+
+
+replayBack.addEventListener(
+  "click",
+  event => {
+
+    event.stopPropagation();
+
+    stopReplay();
+
+    previous();
+
+  }
+);
+
+
+replayCut.addEventListener(
+  "click",
+  event => {
+
+    event.stopPropagation();
+
+
+    if (
+      !state.candles.length
+    ) {
+
+      return;
+
     }
-  );
 
-document
-  .getElementById("replaySlider")
-  .addEventListener(
-    "input",
-    event => {
-      seekReplay(Number(event.target.value));
+
+    stopReplay();
+
+
+    replayCut.classList.toggle(
+      "active"
+    );
+
+
+    const active =
+      replayCut.classList.contains(
+        "active"
+      );
+
+
+    chartElement.classList.toggle(
+      "replay-cut-mode",
+      active
+    );
+
+
+    setReplayStatus(
+
+      active
+
+        ? "Click a candle on the chart"
+
+        : "Cut cancelled"
+
+    );
+
+  }
+);
+
+
+replayReset.addEventListener(
+  "click",
+  event => {
+
+    event.stopPropagation();
+
+
+    stopReplay();
+
+
+    replayCut.classList.remove(
+      "active"
+    );
+
+
+    chartElement.classList.remove(
+      "replay-cut-mode"
+    );
+
+
+    state.replayCutIndex =
+      -1;
+
+
+    state.currentIndex =
+      state.candles.length
+
+        ? state.candles.length - 1
+
+        : -1;
+
+
+    renderReplay();
+
+
+    if (
+      state.candles.length
+    ) {
+
+      chart.timeScale()
+        .fitContent();
+
     }
-  );
 
-document
-  .getElementById("replayIndex")
-  .addEventListener(
-    "change",
-    event => {
-      const requested =
-        Number(event.target.value) - 1;
 
-      seekReplay(requested);
+    setReplayStatus(
+      "Initial chart restored"
+    );
+
+  }
+);
+
+
+replaySpeed.addEventListener(
+  "change",
+  event => {
+
+    state.replaySpeed =
+      Number(
+        event.target.value
+      ) || 500;
+
+
+    if (
+      state.playing
+    ) {
+
+      stopReplay();
+
+      startReplay();
+
     }
+
+
+    setReplayStatus(
+
+      `Speed: ${
+        event.target
+          .options[
+            event.target.selectedIndex
+          ].text
+      }`
+
+    );
+
+  }
+);
+
+
+chartElement.addEventListener(
+  "click",
+  handleReplayCutClick
+);
+
+
+/* =========================================================
+   DRAGGABLE REPLAY MENU
+   ========================================================= */
+
+replayMenuHandle.addEventListener(
+  "pointerdown",
+  event => {
+
+    event.preventDefault();
+
+    event.stopPropagation();
+
+
+    const menuRect =
+      replayMenu.getBoundingClientRect();
+
+
+    state.replayMenuDragging =
+      true;
+
+
+    state.replayMenuDragOffsetX =
+      event.clientX -
+      menuRect.left;
+
+
+    state.replayMenuDragOffsetY =
+      event.clientY -
+      menuRect.top;
+
+
+    replayMenu.classList.add(
+      "dragging"
+    );
+
+
+    replayMenuHandle.setPointerCapture(
+      event.pointerId
+    );
+
+  }
+);
+
+
+replayMenuHandle.addEventListener(
+  "pointermove",
+  event => {
+
+    if (
+      !state.replayMenuDragging
+    ) {
+
+      return;
+
+    }
+
+
+    const areaRect =
+      chartArea.getBoundingClientRect();
+
+
+    const menuRect =
+      replayMenu.getBoundingClientRect();
+
+
+    const maxLeft =
+      Math.max(
+        0,
+        areaRect.width -
+        menuRect.width
+      );
+
+
+    const maxTop =
+      Math.max(
+        0,
+        areaRect.height -
+        menuRect.height
+      );
+
+
+    const left =
+      Math.max(
+        0,
+        Math.min(
+
+          event.clientX -
+          areaRect.left -
+          state.replayMenuDragOffsetX,
+
+          maxLeft
+
+        )
+      );
+
+
+    const top =
+      Math.max(
+        0,
+        Math.min(
+
+          event.clientY -
+          areaRect.top -
+          state.replayMenuDragOffsetY,
+
+          maxTop
+
+        )
+      );
+
+
+    replayMenu.style.left =
+      `${left}px`;
+
+
+    replayMenu.style.top =
+      `${top}px`;
+
+
+    replayMenu.style.right =
+      "auto";
+
+
+    replayMenu.style.bottom =
+      "auto";
+
+
+    replayMenu.style.transform =
+      "none";
+
+  }
+);
+
+
+function finishReplayMenuDrag(
+  event
+) {
+
+  if (
+    !state.replayMenuDragging
+  ) {
+
+    return;
+
+  }
+
+
+  state.replayMenuDragging =
+    false;
+
+
+  replayMenu.classList.remove(
+    "dragging"
   );
 
-document
-  .getElementById("replayJump")
-  .addEventListener(
-    "change",
-    event => {
-      jumpReplayToDate(event.target.value);
-    }
-  );
 
-document
-  .getElementById("replaySpeed")
-  .addEventListener(
-    "change",
-    event => {
-      state.replayDelay =
-        Math.max(
-          25,
-          Number(event.target.value) || 500
-        );
-    }
-  );
+  try {
+
+    replayMenuHandle.releasePointerCapture(
+      event.pointerId
+    );
+
+  } catch (_) {
+
+    // Pointer capture may already be released.
+
+  }
+
+}
+
+
+replayMenuHandle.addEventListener(
+  "pointerup",
+  finishReplayMenuDrag
+);
+
+
+replayMenuHandle.addEventListener(
+  "pointercancel",
+  finishReplayMenuDrag
+);
+
+
+/* =========================================================
+   REPLAY INFO
+   ========================================================= */
+
+function updateReplay() {
+
+  const info =
+    document.getElementById(
+      "replayInfo"
+    );
+
+
+  if (
+    !state.candles.length ||
+    state.currentIndex < 0
+  ) {
+
+    info.textContent =
+      "No data";
+
+    return;
+
+  }
+
+
+  const candle =
+    state.candles[
+      state.currentIndex
+    ];
+
+
+  if (!candle) {
+
+    return;
+
+  }
+
+
+  const date =
+    new Date(
+      candle.time * 1000
+    );
+
+
+  const mode =
+    state.replayCutIndex >= 0
+
+      ? `Replay cut at ${
+          state.replayCutIndex + 1
+        }`
+
+      : "Initial chart";
+
+
+  info.textContent =
+
+    `${mode} • Candle ${
+      state.currentIndex + 1
+    }/${
+      state.candles.length.toLocaleString()
+    } • ${
+      date.toLocaleString()
+    }`;
+
+}
+
 
 /* =========================================================
    TRADING
@@ -3614,10 +4551,7 @@ function openPosition(
     currentCandle();
 
 
-  if (
-    !candle ||
-    state.position
-  ) {
+  if (!candle) {
 
     return;
 
@@ -3629,10 +4563,7 @@ function openPosition(
     side,
 
     entry:
-      candle.close,
-
-    time:
-      candle.time
+      candle.close
 
   };
 
@@ -3644,12 +4575,7 @@ function openPosition(
 
 function closePosition() {
 
-  const candle =
-    currentCandle();
-
-
   if (
-    !candle ||
     !state.position
   ) {
 
@@ -3658,22 +4584,38 @@ function closePosition() {
   }
 
 
-  const position =
-    state.position;
+  const candle =
+    currentCandle();
 
 
-  const direction =
-    position.side === "LONG"
-      ? 1
-      : -1;
+  if (!candle) {
+
+    return;
+
+  }
 
 
-  const pnl =
-    (
-      candle.close -
-      position.entry
-    ) *
-    direction;
+  const entry =
+    state.position.entry;
+
+
+  const exit =
+    candle.close;
+
+
+  let pnl =
+    exit - entry;
+
+
+  if (
+    state.position.side ===
+    "SHORT"
+  ) {
+
+    pnl =
+      entry - exit;
+
+  }
 
 
   state.pnl +=
@@ -3683,13 +4625,11 @@ function closePosition() {
   state.trades.push({
 
     side:
-      position.side,
+      state.position.side,
 
-    entry:
-      position.entry,
+    entry,
 
-    exit:
-      candle.close,
+    exit,
 
     pnl
 
@@ -3705,53 +4645,21 @@ function closePosition() {
 }
 
 
-document
-  .getElementById(
-    "buy"
-  )
-  .addEventListener(
-    "click",
-    () =>
-      openPosition(
-        "LONG"
-      )
-  );
-
-
-document
-  .getElementById(
-    "sell"
-  )
-  .addEventListener(
-    "click",
-    () =>
-      openPosition(
-        "SHORT"
-      )
-  );
-
-
-document
-  .getElementById(
-    "close"
-  )
-  .addEventListener(
-    "click",
-    closePosition
-  );
-
-
-/* =========================================================
-   STATS
-   ========================================================= */
-
 function updateStats() {
 
-  document.getElementById(
-    "candles"
-  ).textContent =
-    state.candles.length
-      .toLocaleString();
+  const candleCount =
+    document.getElementById(
+      "candleCount"
+    );
+
+
+  if (candleCount) {
+
+    candleCount.textContent =
+      state.candles.length
+        .toLocaleString();
+
+  }
 
 
   document.getElementById(
@@ -3776,609 +4684,823 @@ function updateStats() {
 }
 
 
+document
+  .getElementById(
+    "buy"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      openPosition(
+        "LONG"
+      );
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "sell"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      openPosition(
+        "SHORT"
+      );
+
+    }
+  );
+
+
+document
+  .getElementById(
+    "close"
+  )
+  .addEventListener(
+    "click",
+    closePosition
+  );
+
+
 /* =========================================================
-   REPLAY INFO
+   TOP TRADE BUTTONS
    ========================================================= */
 
-function updateReplay() {
+document
+  .getElementById(
+    "buyTop"
+  )
+  .addEventListener(
+    "click",
+    () => {
 
-  const info =
-    document.getElementById("replayInfo");
+      openPosition(
+        "LONG"
+      );
 
-  const slider =
-    document.getElementById("replaySlider");
+    }
+  );
 
-  const indexInput =
-    document.getElementById("replayIndex");
 
-  const jumpInput =
-    document.getElementById("replayJump");
+document
+  .getElementById(
+    "sellTop"
+  )
+  .addEventListener(
+    "click",
+    () => {
 
-  const percentLabel =
-    document.getElementById("replayPercent");
+      openPosition(
+        "SHORT"
+      );
 
-  if (
-    !state.candles.length ||
-    state.currentIndex < 0
-  ) {
-    info.textContent = "No data";
-    slider.max = "0";
-    slider.value = "0";
-    indexInput.value = "0";
-    percentLabel.textContent = "0%";
-    jumpInput.value = "";
-    return;
-  }
+    }
+  );
 
-  const candle =
-    state.candles[
-      clampReplayIndex(state.currentIndex)
-    ];
 
-  const percent =
-    state.candles.length > 1
-      ? (
-          state.currentIndex /
-          (state.candles.length - 1)
-        ) * 100
-      : 100;
+document
+  .getElementById(
+    "closeTop"
+  )
+  .addEventListener(
+    "click",
+    closePosition
+  );
 
-  const date =
-    new Date(candle.time * 1000);
 
-  info.textContent =
-    `${(state.currentIndex + 1).toLocaleString()} / ${state.candles.length.toLocaleString()} • ${date.toLocaleString()}`;
+/* =========================================================
+   DRAWING TOOL SELECTION
+   ========================================================= */
 
-  slider.max =
-    String(state.candles.length - 1);
+function setDrawingTool(
+  tool
+) {
 
-  slider.value =
-    String(state.currentIndex);
+  state.drawingTool =
+    tool;
 
-  indexInput.max =
-    String(state.candles.length);
 
-  indexInput.value =
-    String(state.currentIndex + 1);
+  document
+    .querySelectorAll(
+      ".drawing-tool[data-tool]"
+    )
+    .forEach(
+      button => {
 
-  percentLabel.textContent =
-    `${percent.toFixed(1)}%`;
+        button.classList.toggle(
+          "active",
+          button.dataset.tool ===
+          tool
+        );
 
-  /*
-   * datetime-local uses local browser time. This is only a navigation
-   * control; the source candle timestamp remains unchanged.
-   */
-  const local =
-    new Date(
-      candle.time * 1000 -
-      date.getTimezoneOffset() * 60000
+      }
     );
 
-  jumpInput.value =
-    local.toISOString().slice(0, 16);
+
+  if (
+    tool === "cursor"
+  ) {
+
+    canvas.style.pointerEvents =
+      "none";
+
+    canvas.style.cursor =
+      "default";
+
+  } else {
+
+    canvas.style.pointerEvents =
+      "auto";
+
+    canvas.style.cursor =
+      "crosshair";
+
+  }
+
+
+  state.drawingStart =
+    null;
+
+
+  state.drawingPreview =
+    null;
+
+
+  redrawDrawings();
+
 }
 
 
+document
+  .querySelectorAll(
+    ".drawing-tool[data-tool]"
+  )
+  .forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        event => {
+
+          event.stopPropagation();
+
+
+          const tool =
+            button.dataset.tool;
+
+
+          if (
+            tool === "undo"
+          ) {
+
+            if (
+              state.drawings.length
+            ) {
+
+              state.drawings.pop();
+
+              redrawDrawings();
+
+            }
+
+            return;
+
+          }
+
+
+          if (
+            tool === "clear"
+          ) {
+
+            state.drawings =
+              [];
+
+            state.drawingStart =
+              null;
+
+            state.drawingPreview =
+              null;
+
+            redrawDrawings();
+
+            return;
+
+          }
+
+
+          setDrawingTool(
+            tool
+          );
+
+        }
+      );
+
+    }
+  );
+
 
 /* =========================================================
-   DRAWING SETTINGS
+   COLLAPSE DRAWING TOOLBAR
    ========================================================= */
 
-function hexToRgba(hex, alpha) {
-  const clean = String(hex || "#d7dee8").replace("#", "");
+document
+  .getElementById(
+    "drawingCollapse"
+  )
+  .addEventListener(
+    "click",
+    event => {
+
+      event.stopPropagation();
+
+
+      drawingToolbar.classList.toggle(
+        "collapsed"
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   COORDINATE CONVERSION
+   ========================================================= */
+
+function coordinateToTime(
+  x
+) {
+
   const value =
-    clean.length === 3
-      ? clean.split("").map(ch => ch + ch).join("")
-      : clean;
-
-  const number = parseInt(value, 16);
-
-  if (!Number.isFinite(number)) {
-    return `rgba(215,222,232,${alpha})`;
-  }
-
-  return `rgba(${(number >> 16) & 255},${(number >> 8) & 255},${number & 255},${alpha})`;
-}
-
-function applyDrawingSettingsToUI() {
-  const s = state.drawingSettings;
-
-  document.getElementById("drawColor").value = s.color;
-  document.getElementById("drawStyle").value = s.style;
-  document.getElementById("drawWidth").value = s.width;
-  document.getElementById("drawOpacity").value = s.opacity;
-  document.getElementById("drawFillOpacity").value = s.fillOpacity;
-  document.getElementById("drawTextSize").value = s.textSize;
-  document.getElementById("fibLevels").value =
-    s.fibLevels.join(",");
-
-  document.getElementById("drawMagnet").checked = s.magnet;
-  document.getElementById("drawHandles").checked = s.showHandles;
-  document.getElementById("measureBars").checked = s.measureBars;
-  document.getElementById("measureTime").checked = s.measureTime;
-  document.getElementById("measurePercent").checked = s.measurePercent;
-
-  updateDrawingSettingLabels();
-}
-
-function updateDrawingSettingLabels() {
-  document.getElementById("drawWidthValue").textContent =
-    state.drawingSettings.width;
-
-  document.getElementById("drawOpacityValue").textContent =
-    `${state.drawingSettings.opacity}%`;
-
-  document.getElementById("drawFillOpacityValue").textContent =
-    `${state.drawingSettings.fillOpacity}%`;
-
-  document.getElementById("drawTextSizeValue").textContent =
-    state.drawingSettings.textSize;
-}
-
-function readDrawingSettings() {
-  const s = state.drawingSettings;
-
-  s.color =
-    document.getElementById("drawColor").value || "#d7dee8";
-
-  s.style =
-    document.getElementById("drawStyle").value || "solid";
-
-  s.width =
-    Math.max(
-      1,
-      Math.min(
-        5,
-        Number(document.getElementById("drawWidth").value) || 2
-      )
-    );
-
-  s.opacity =
-    Math.max(
-      10,
-      Math.min(
-        100,
-        Number(document.getElementById("drawOpacity").value) || 100
-      )
-    );
-
-  s.fillOpacity =
-    Math.max(
-      0,
-      Math.min(
-        60,
-        Number(document.getElementById("drawFillOpacity").value) || 0
-      )
-    );
-
-  s.textSize =
-    Math.max(
-      9,
-      Math.min(
-        24,
-        Number(document.getElementById("drawTextSize").value) || 13
-      )
-    );
-
-  const levels =
-    document
-      .getElementById("fibLevels")
-      .value
-      .split(",")
-      .map(value => Number(value.trim()))
-      .filter(value => Number.isFinite(value));
-
-  if (levels.length >= 2) {
-    s.fibLevels = levels;
-  }
-
-  s.magnet =
-    document.getElementById("drawMagnet").checked;
-
-  s.showHandles =
-    document.getElementById("drawHandles").checked;
-
-  s.measureBars =
-    document.getElementById("measureBars").checked;
-
-  s.measureTime =
-    document.getElementById("measureTime").checked;
-
-  s.measurePercent =
-    document.getElementById("measurePercent").checked;
-
-  updateDrawingSettingLabels();
-  redrawDrawings();
-}
-
-document
-  .getElementById("drawingSettingsToggle")
-  .addEventListener(
-    "click",
-    event => {
-      event.stopPropagation();
-
-      const open =
-        drawingSettings.classList.toggle("open");
-
-      drawingSettings.setAttribute(
-        "aria-hidden",
-        String(!open)
+    chart.timeScale()
+      .coordinateToTime(
+        x
       );
 
-      if (open) {
-        applyDrawingSettingsToUI();
-      }
-    }
-  );
 
-document
-  .getElementById("drawingSettingsClose")
-  .addEventListener(
-    "click",
-    event => {
-      event.stopPropagation();
-      drawingSettings.classList.remove("open");
-      drawingSettings.setAttribute(
-        "aria-hidden",
-        "true"
+  if (
+    value === null ||
+    value === undefined
+  ) {
+
+    return null;
+
+  }
+
+
+  if (
+    typeof value ===
+    "object"
+  ) {
+
+    if (
+      "timestamp" in value
+    ) {
+
+      return Number(
+        value.timestamp
       );
+
     }
-  );
 
-[
-  "drawColor",
-  "drawStyle",
-  "drawWidth",
-  "drawOpacity",
-  "drawFillOpacity",
-  "drawTextSize",
-  "fibLevels",
-  "drawMagnet",
-  "drawHandles",
-  "measureBars",
-  "measureTime",
-  "measurePercent"
-].forEach(id => {
-  document
-    .getElementById(id)
-    .addEventListener(
-      "input",
-      readDrawingSettings
+
+    if (
+      "year" in value
+    ) {
+
+      return Math.floor(
+        Date.UTC(
+          value.year,
+          value.month - 1,
+          value.day
+        ) / 1000
+      );
+
+    }
+
+  }
+
+
+  const number =
+    Number(value);
+
+
+  return Number.isFinite(
+    number
+  )
+    ? number
+    : null;
+
+}
+
+
+function coordinateToPrice(
+  y
+) {
+
+  const value =
+    series.coordinateToPrice(
+      y
     );
 
-  document
-    .getElementById(id)
-    .addEventListener(
-      "change",
-      readDrawingSettings
-    );
-});
 
-applyDrawingSettingsToUI();
+  return Number.isFinite(
+    value
+  )
+    ? value
+    : null;
+
+}
+
+
+function timeToX(
+  time
+) {
+
+  const value =
+    chart.timeScale()
+      .timeToCoordinate(
+        time
+      );
+
+
+  return value === null
+    ? null
+    : value;
+
+}
+
+
+function priceToY(
+  price
+) {
+
+  const value =
+    series.priceToCoordinate(
+      price
+    );
+
+
+  return value === null
+    ? null
+    : value;
+
+}
+
 
 /* =========================================================
-   DRAWING INTERACTION ENGINE
+   POINTER POSITION
    ========================================================= */
 
-const TWO_POINT_TOOLS = new Set([
-  "trend",
-  "ray",
-  "rectangle",
-  "fib",
-  "measure",
-  "arrow"
-]);
+function getPointerPosition(
+  event
+) {
 
-function coordinateToTime(x) {
-  const value = chart.timeScale().coordinateToTime(x);
+  const rect =
+    canvas.getBoundingClientRect();
 
-  if (value === null || value === undefined) return null;
 
-  if (typeof value === "object") {
-    if ("timestamp" in value) return Number(value.timestamp);
-    if ("year" in value) {
-      return Math.floor(Date.UTC(
-        value.year,
-        value.month - 1,
-        value.day
-      ) / 1000);
-    }
+  const x =
+    event.clientX -
+    rect.left;
+
+
+  const y =
+    event.clientY -
+    rect.top;
+
+
+  const time =
+    coordinateToTime(
+      x
+    );
+
+
+  const price =
+    coordinateToPrice(
+      y
+    );
+
+
+  if (
+    time === null ||
+    price === null
+  ) {
+
+    return null;
+
   }
 
-  const number = Number(value);
-  return Number.isFinite(number) ? number : null;
-}
 
-function coordinateToPrice(y) {
-  const value = series.coordinateToPrice(y);
-  return Number.isFinite(value) ? value : null;
-}
+  return {
 
-function timeToX(time) {
-  const value = chart.timeScale().timeToCoordinate(time);
-  return value === null ? null : value;
-}
-
-function priceToY(price) {
-  const value = series.priceToCoordinate(price);
-  return value === null ? null : value;
-}
-
-function snapPointerToCandle(point) {
-  if (!state.drawingSettings.magnet || !state.candles.length) {
-    return point;
-  }
-
-  let lo = 0;
-  let hi = state.candles.length - 1;
-
-  while (lo < hi) {
-    const mid = Math.floor((lo + hi) / 2);
-
-    if (state.candles[mid].time < point.time) {
-      lo = mid + 1;
-    } else {
-      hi = mid;
-    }
-  }
-
-  const candidates = [
-    Math.max(0, lo - 1),
-    lo
-  ];
-
-  let best = point;
-  let bestDistance = Infinity;
-
-  for (const index of candidates) {
-    const candle = state.candles[index];
-
-    for (const price of [
-      candle.open,
-      candle.high,
-      candle.low,
-      candle.close
-    ]) {
-      const py = priceToY(price);
-
-      if (py === null) continue;
-
-      const distance = Math.abs(py - point.y);
-
-      if (distance < bestDistance && distance <= 18) {
-        bestDistance = distance;
-        best = {
-          x: timeToX(candle.time) ?? point.x,
-          y: py,
-          time: candle.time,
-          price
-        };
-      }
-    }
-  }
-
-  return best;
-}
-
-function getPointerPosition(event) {
-  const rect = canvas.getBoundingClientRect();
-  const x = event.clientX - rect.left;
-  const y = event.clientY - rect.top;
-  const time = coordinateToTime(x);
-  const price = coordinateToPrice(y);
-
-  if (time === null || price === null) return null;
-
-  return snapPointerToCandle({
     x,
+
     y,
+
     time,
+
     price
-  });
-}
 
-function resetDrawingInteraction() {
-  state.drawingStart = null;
-  state.drawingPreview = null;
-  redrawDrawings();
-}
-
-function createDrawingFromPoints(start, end) {
-  const type = state.drawingTool;
-  const drawing = {
-    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    type,
-    t1: start.time,
-    p1: start.price,
-    t2: end.time,
-    p2: end.price,
-    color: state.drawingSettings.color,
-    width: state.drawingSettings.width,
-    opacity: state.drawingSettings.opacity,
-    fillOpacity: state.drawingSettings.fillOpacity,
-    style: state.drawingSettings.style,
-    textSize: state.drawingSettings.textSize,
-    fibLevels: [...state.drawingSettings.fibLevels]
   };
 
-  if (type === "horizontal") {
-    drawing.t2 = drawing.t1;
-    drawing.p2 = drawing.p1;
-  }
-
-  if (type === "vertical") {
-    drawing.t2 = drawing.t1;
-    drawing.p2 = drawing.p1;
-  }
-
-  if (type === "text") {
-    const text = window.prompt("Enter text:");
-    if (!text || !text.trim()) return null;
-    drawing.text = text.trim();
-    drawing.t2 = drawing.t1;
-    drawing.p2 = drawing.p1;
-  }
-
-  return drawing;
 }
 
-function commitTwoPointDrawing(end) {
-  if (!state.drawingStart) return;
 
-  const start = state.drawingStart;
-  const distance = Math.hypot(
-    end.x - start.x,
-    end.y - start.y
+/* =========================================================
+   DRAWING FINISH
+   ========================================================= */
+
+function finishDrawing(
+  event
+) {
+
+  if (
+    !state.drawingStart
+  ) {
+
+    return;
+
+  }
+
+
+  const point =
+    getPointerPosition(
+      event
+    );
+
+
+  if (!point) {
+
+    return;
+
+  }
+
+
+  let drawing = {
+
+    type:
+      state.drawingTool,
+
+    t1:
+      state.drawingStart.time,
+
+    p1:
+      state.drawingStart.price,
+
+    t2:
+      point.time,
+
+    p2:
+      point.price
+
+  };
+
+
+  state.drawings.push(
+    drawing
   );
 
-  if (distance < 5) {
-    resetDrawingInteraction();
-    return;
-  }
 
-  const drawing = createDrawingFromPoints(start, end);
+  state.drawingStart =
+    null;
 
-  if (drawing) {
-    state.drawings.push(drawing);
-  }
 
-  resetDrawingInteraction();
-}
+  state.drawingPreview =
+    null;
 
-function setDrawingTool(tool) {
-  state.drawingTool = tool;
-
-  document.querySelectorAll(".drawing-tool[data-tool]").forEach(button => {
-    button.classList.toggle(
-      "active",
-      button.dataset.tool === tool
-    );
-  });
-
-  canvas.style.pointerEvents = tool === "cursor" ? "none" : "auto";
-  canvas.style.cursor = tool === "cursor" ? "default" : "crosshair";
-
-  resetDrawingInteraction();
-}
-
-document.querySelectorAll(".drawing-tool[data-tool]").forEach(button => {
-  button.addEventListener("click", event => {
-    event.stopPropagation();
-    setDrawingTool(button.dataset.tool);
-  });
-});
-
-canvas.addEventListener("pointerdown", event => {
-  if (state.drawingTool === "cursor") return;
-
-  const point = getPointerPosition(event);
-  if (!point) return;
-
-  event.preventDefault();
-  canvas.setPointerCapture?.(event.pointerId);
-
-  if (
-    state.drawingTool === "horizontal" ||
-    state.drawingTool === "vertical" ||
-    state.drawingTool === "text"
-  ) {
-    const drawing = createDrawingFromPoints(point, point);
-    if (drawing) state.drawings.push(drawing);
-    resetDrawingInteraction();
-    return;
-  }
-
-  state.drawingStart = point;
-  state.drawingPreview = {
-    type: state.drawingTool,
-    t1: point.time,
-    p1: point.price,
-    t2: point.time,
-    p2: point.price
-  };
-  redrawDrawings();
-});
-
-canvas.addEventListener("pointermove", event => {
-  if (!state.drawingStart) return;
-
-  const point = getPointerPosition(event);
-  if (!point) return;
-
-  state.drawingPreview = {
-    type: state.drawingTool,
-    t1: state.drawingStart.time,
-    p1: state.drawingStart.price,
-    t2: point.time,
-    p2: point.price
-  };
 
   redrawDrawings();
-});
 
-canvas.addEventListener("pointerup", event => {
-  if (!state.drawingStart) return;
+}
 
-  const point = getPointerPosition(event);
-  if (!point) {
-    resetDrawingInteraction();
-    return;
-  }
-
-  commitTwoPointDrawing(point);
-});
-
-canvas.addEventListener("pointercancel", resetDrawingInteraction);
 
 /* =========================================================
-   DRAWING TOOLBAR COLLAPSE
+   POINTER DOWN
    ========================================================= */
 
-document.getElementById("drawingCollapse").addEventListener("click", event => {
-  event.stopPropagation();
-  drawingToolbar.classList.toggle("collapsed");
-});
+canvas.addEventListener(
+  "pointerdown",
+  event => {
 
-document.addEventListener("keydown", event => {
-  if (event.key === "Escape") {
-    resetDrawingInteraction();
-    setDrawingTool("cursor");
-  }
+    if (
+      state.drawingTool ===
+      "cursor"
+    ) {
 
-  if (
-    (event.key === "Delete" || event.key === "Backspace") &&
-    state.drawingTool !== "cursor"
-  ) {
-    if (state.drawings.length) {
-      state.drawings.pop();
-      resetDrawingInteraction();
+      return;
+
     }
+
+
+    const point =
+      getPointerPosition(
+        event
+      );
+
+
+    if (!point) {
+
+      return;
+
+    }
+
+
+    event.preventDefault();
+
+
+    canvas.setPointerCapture(
+      event.pointerId
+    );
+
+
+    state.drawingStart =
+      point;
+
+
+    state.drawingPreview = {
+
+      type:
+        state.drawingTool,
+
+      t1:
+        point.time,
+
+      p1:
+        point.price,
+
+      t2:
+        point.time,
+
+      p2:
+        point.price
+
+    };
+
+
+    if (
+      state.drawingTool ===
+      "horizontal"
+    ) {
+
+      finishDrawing(
+        event
+      );
+
+    }
+
+
+    if (
+      state.drawingTool ===
+      "vertical"
+    ) {
+
+      finishDrawing(
+        event
+      );
+
+    }
+
+
+    if (
+      state.drawingTool ===
+      "text"
+    ) {
+
+      finishDrawing(
+        event
+      );
+
+    }
+
+
+    redrawDrawings();
+
   }
-});
+);
+
 
 /* =========================================================
-   DRAWINGS REDRAW
+   POINTER MOVE
    ========================================================= */
+
+canvas.addEventListener(
+  "pointermove",
+  event => {
+
+    if (
+      !state.drawingStart
+    ) {
+
+      return;
+
+    }
+
+
+    const point =
+      getPointerPosition(
+        event
+      );
+
+
+    if (!point) {
+
+      return;
+
+    }
+
+
+    state.drawingPreview = {
+
+      type:
+        state.drawingTool,
+
+      t1:
+        state.drawingStart.time,
+
+      p1:
+        state.drawingStart.price,
+
+      t2:
+        point.time,
+
+      p2:
+        point.price
+
+    };
+
+
+    redrawDrawings();
+
+  }
+);
+
+
+/* =========================================================
+   POINTER UP
+   ========================================================= */
+
+canvas.addEventListener(
+  "pointerup",
+  event => {
+
+    if (
+      !state.drawingStart
+    ) {
+
+      return;
+
+    }
+
+
+    if (
+      state.drawingTool ===
+      "horizontal" ||
+
+      state.drawingTool ===
+      "vertical" ||
+
+      state.drawingTool ===
+      "text"
+    ) {
+
+      return;
+
+    }
+
+
+    finishDrawing(
+      event
+    );
+
+  }
+);
+
+
+/* =========================================================
+   ESCAPE CANCEL
+   ========================================================= */
+
+window.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.key ===
+      "Escape"
+    ) {
+
+      state.drawingStart =
+        null;
+
+      state.drawingPreview =
+        null;
+
+
+      if (
+        replayCut.classList.contains(
+          "active"
+        )
+      ) {
+
+        replayCut.classList.remove(
+          "active"
+        );
+
+        chartElement.classList.remove(
+          "replay-cut-mode"
+        );
+
+        setReplayStatus(
+          "Cut cancelled"
+        );
+
+      }
+
+
+      redrawDrawings();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   DRAWING RENDER
+   ========================================================= */
+
+function drawLine(
+  x1,
+  y1,
+  x2,
+  y2,
+  options={}
+) {
+
+  ctx.save();
+
+
+  ctx.strokeStyle =
+    options.color ||
+    "#8da2bd";
+
+
+  ctx.lineWidth =
+    options.width ||
+    1.2;
+
+
+  ctx.setLineDash(
+    options.dash ||
+    []
+  );
+
+
+  ctx.beginPath();
+
+
+  ctx.moveTo(
+    x1,
+    y1
+  );
+
+
+  ctx.lineTo(
+    x2,
+    y2
+  );
+
+
+  ctx.stroke();
+
+
+  ctx.restore();
+
+}
+
 
 function redrawDrawings() {
 
-  const width =
-    chartArea.clientWidth;
-
-
-  const height =
-    chartArea.clientHeight;
-
-
   if (
-    width <= 0 ||
-    height <= 0
+    !canvas.width ||
+    !canvas.height
   ) {
 
     return;
 
   }
+
+
+  const width =
+    canvas.clientWidth;
+
+
+  const height =
+    canvas.clientHeight;
 
 
   ctx.clearRect(
@@ -4389,1216 +5511,452 @@ function redrawDrawings() {
   );
 
 
-  for (
-    const drawing of
-    state.drawings
-  ) {
-
-    drawObject(
-      drawing,
-      false
-    );
-
-  }
+  const all =
+    state.drawings.slice();
 
 
   if (
     state.drawingPreview
   ) {
 
-    drawObject(
-      state.drawingPreview,
-      true
+    all.push(
+      state.drawingPreview
     );
 
   }
 
-}
 
-
-/* =========================================================
-   DRAW OBJECT
-   ========================================================= */
-
-function drawObject(
-  d,
-  preview=false
-) {
-
-  const x1 =
-    timeToX(
-      d.t1
-    );
-
-
-  const y1 =
-    priceToY(
-      d.p1
-    );
-
-
-  const x2 =
-    timeToX(
-      d.t2
-    );
-
-
-  const y2 =
-    priceToY(
-      d.p2
-    );
-
-
-  if (
-    x1 === null ||
-    y1 === null
+  for (
+    const drawing of all
   ) {
 
-    return;
-
-  }
-
-
-  ctx.save();
+    const x1 =
+      timeToX(
+        drawing.t1
+      );
 
 
-  const settings =
-    state.drawingSettings;
-
-  const color =
-    d.color ||
-    settings.color;
-
-  const width =
-    Number(d.width) ||
-    settings.width;
-
-  const opacity =
-    Number(d.opacity ?? settings.opacity) / 100;
-
-  const fillOpacity =
-    Number(d.fillOpacity ?? settings.fillOpacity) / 100;
-
-  const lineStyle =
-    d.style ||
-    settings.style;
-
-  ctx.lineWidth =
-    preview
-      ? Math.max(1, width - .5)
-      : width;
-
-  ctx.strokeStyle =
-    preview
-      ? "rgba(125,156,255,.9)"
-      : hexToRgba(color, opacity);
-
-  ctx.fillStyle =
-    hexToRgba(color, fillOpacity);
-
-  if (lineStyle === "dashed") {
-    ctx.setLineDash([8, 5]);
-  } else if (lineStyle === "dotted") {
-    ctx.setLineDash([2, 4]);
-  } else {
-    ctx.setLineDash([]);
-  }
+    const x2 =
+      timeToX(
+        drawing.t2
+      );
 
 
-  /* =====================================================
-     HORIZONTAL
-     ===================================================== */
-
-  if (
-    d.type ===
-    "horizontal"
-  ) {
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-      0,
-      y1
-    );
-
-    ctx.lineTo(
-      chartArea.clientWidth,
-      y1
-    );
-
-    ctx.stroke();
-
-  }
+    const y1 =
+      priceToY(
+        drawing.p1
+      );
 
 
-  /* =====================================================
-     VERTICAL
-     ===================================================== */
+    const y2 =
+      priceToY(
+        drawing.p2
+      );
 
-  else if (
-    d.type ===
-    "vertical"
-  ) {
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-      x1,
-      0
-    );
-
-    ctx.lineTo(
-      x1,
-      chartArea.clientHeight
-    );
-
-    ctx.stroke();
-
-  }
-
-
-  /* =====================================================
-     TREND
-     ===================================================== */
-
-  else if (
-    d.type ===
-    "trend"
-  ) {
 
     if (
+      x1 === null ||
       x2 === null ||
+      y1 === null ||
       y2 === null
     ) {
 
-      ctx.restore();
-
-      return;
+      continue;
 
     }
 
 
-    ctx.beginPath();
-
-    ctx.moveTo(
-      x1,
-      y1
-    );
-
-    ctx.lineTo(
-      x2,
-      y2
-    );
-
-    ctx.stroke();
-
-
-    if (preview && state.drawingSettings.showHandles) {
-      drawPointHandle(
-        x1,
-        y1,
-        true
-      );
-
-      drawPointHandle(
-        x2,
-        y2,
-        true
-      );
-    }
-
-  }
-
-
-  /* =====================================================
-     RAY
-     ===================================================== */
-
-  else if (
-    d.type ===
-    "ray"
-  ) {
-
-    if (
-      x2 === null ||
-      y2 === null
+    switch (
+      drawing.type
     ) {
 
-      ctx.restore();
+      case "horizontal":
 
-      return;
-
-    }
-
-
-    const dx =
-      x2 - x1;
-
-
-    const dy =
-      y2 - y1;
-
-
-    if (
-      Math.abs(dx) < .0001
-    ) {
-
-      ctx.beginPath();
-
-      ctx.moveTo(
-        x1,
-        y1
-      );
-
-      ctx.lineTo(
-        x1,
-        chartArea.clientHeight
-      );
-
-      ctx.stroke();
-
-    } else {
-
-      let endX;
-
-      let endY;
-
-
-      if (
-        dx > 0
-      ) {
-
-        endX =
-          chartArea.clientWidth;
-
-      } else {
-
-        endX =
-          0;
-
-      }
-
-
-      endY =
-        y1 +
-        (
-          endX -
-          x1
-        ) *
-        (
-          dy /
-          dx
+        drawLine(
+          0,
+          y1,
+          width,
+          y1
         );
 
-
-      ctx.beginPath();
-
-      ctx.moveTo(
-        x1,
-        y1
-      );
-
-      ctx.lineTo(
-        endX,
-        endY
-      );
-
-      ctx.stroke();
-
-    }
-
-  }
+        break;
 
 
-  /* =====================================================
-     RECTANGLE
-     ===================================================== */
+      case "vertical":
 
-  else if (
-    d.type ===
-    "rectangle"
-  ) {
-
-    if (
-      x2 === null ||
-      y2 === null
-    ) {
-
-      ctx.restore();
-
-      return;
-
-    }
-
-
-    const left =
-      Math.min(
-        x1,
-        x2
-      );
-
-
-    const top =
-      Math.min(
-        y1,
-        y2
-      );
-
-
-    const width =
-      Math.abs(
-        x2 - x1
-      );
-
-
-    const height =
-      Math.abs(
-        y2 - y1
-      );
-
-
-    ctx.fillStyle =
-      preview
-        ? "rgba(41,98,255,.07)"
-        : "rgba(41,98,255,.10)";
-
-
-    ctx.fillRect(
-      left,
-      top,
-      width,
-      height
-    );
-
-
-    ctx.strokeRect(
-      left,
-      top,
-      width,
-      height
-    );
-
-  }
-
-
-  /* =====================================================
-     FIBONACCI
-     ===================================================== */
-
-  else if (
-    d.type ===
-    "fib"
-  ) {
-
-    if (
-      x2 === null ||
-      y2 === null
-    ) {
-
-      ctx.restore();
-
-      return;
-
-    }
-
-
-    const levels =
-      Array.isArray(d.fibLevels) &&
-      d.fibLevels.length >= 2
-        ? d.fibLevels
-        : state.drawingSettings.fibLevels;
-
-
-    const left =
-      Math.min(
-        x1,
-        x2
-      );
-
-
-    const right =
-      Math.max(
-        x1,
-        x2
-      );
-
-
-    for (
-      const level of
-      levels
-    ) {
-
-      const price =
-        d.p1 +
-        (
-          d.p2 -
-          d.p1
-        ) *
-        level;
-
-
-      const y =
-        priceToY(
-          price
+        drawLine(
+          x1,
+          0,
+          x1,
+          height
         );
 
-
-      if (
-        y === null
-      ) {
-
-        continue;
-
-      }
+        break;
 
 
-      ctx.beginPath();
+      case "trend":
 
-      ctx.moveTo(
-        left,
-        y
-      );
+        drawLine(
+          x1,
+          y1,
+          x2,
+          y2
+        );
 
-      ctx.lineTo(
-        right,
-        y
-      );
-
-      ctx.stroke();
+        break;
 
 
-      ctx.fillStyle =
-        "#aeb8c6";
+      case "ray": {
+
+        let endX =
+          width;
 
 
-      ctx.font =
-        "10px Arial";
+        let endY =
+          y2;
 
 
-      ctx.fillText(
-        `${(
-          level * 100
-        ).toFixed(1)}%`,
-        left + 4,
-        y - 4
-      );
+        if (
+          x2 !== x1
+        ) {
 
-    }
-
-  }
-
-
-  /* =====================================================
-     MEASURE
-     ===================================================== */
-
-  else if (
-    d.type ===
-    "measure"
-  ) {
-
-    if (
-      x2 === null ||
-      y2 === null
-    ) {
-
-      ctx.restore();
-
-      return;
-
-    }
-
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-      x1,
-      y1
-    );
-
-    ctx.lineTo(
-      x2,
-      y2
-    );
-
-    ctx.stroke();
-
-
-    const change =
-      d.p1 !== 0
-        ? (
+          const slope =
             (
-              d.p2 -
-              d.p1
+              y2 - y1
             ) /
-            d.p1
-          ) *
-          100
-        : 0;
+            (
+              x2 - x1
+            );
 
 
-    const distance =
-      Math.abs(
-        d.t2 -
-        d.t1
-      );
+          endY =
+            y1 +
+            slope *
+            (
+              endX - x1
+            );
 
+        }
 
-    const hours =
-      distance /
-      3600;
 
+        drawLine(
+          x1,
+          y1,
+          endX,
+          endY
+        );
 
-    const bars =
-      estimateBars(
-        d.t1,
-        d.t2
-      );
-
-
-    ctx.fillStyle =
-      "#e0e6ef";
-
-
-    ctx.font =
-      "11px Arial";
-
-
-    const parts = [];
-
-    if (state.drawingSettings.measurePercent) {
-      parts.push(
-        `${change >= 0 ? "+" : ""}${change.toFixed(2)}%`
-      );
-    }
-
-    if (state.drawingSettings.measureTime) {
-      parts.push(
-        `${hours.toFixed(2)}h`
-      );
-    }
-
-    if (state.drawingSettings.measureBars) {
-      parts.push(
-        `${bars} bars`
-      );
-    }
-
-    const text =
-      parts.join(" • ");
-
-    const labelX =
-      x2 + 7;
-
-    const labelY =
-      y2 - 7;
-
-    ctx.fillText(
-      text,
-      labelX,
-      labelY
-    );
-
-  }
-
-
-  /* =====================================================
-     ARROW
-     ===================================================== */
-
-  else if (
-    d.type ===
-    "arrow"
-  ) {
-
-    if (
-      x2 === null ||
-      y2 === null
-    ) {
-
-      ctx.restore();
-
-      return;
-
-    }
-
-
-    drawArrow(
-      x1,
-      y1,
-      x2,
-      y2
-    );
-
-  }
-
-
-  /* =====================================================
-     TEXT
-     ===================================================== */
-
-  else if (
-    d.type ===
-    "text"
-  ) {
-
-    ctx.fillStyle =
-      "#e8edf4";
-
-
-    ctx.font =
-      `${Number(d.textSize || state.drawingSettings.textSize)}px Arial`;
-
-
-    ctx.fillText(
-      d.text ||
-      "Text",
-      x1,
-      y1
-    );
-
-  }
-
-
-  ctx.restore();
-
-}
-
-
-/* =========================================================
-   POINT HANDLE
-   ========================================================= */
-
-function drawPointHandle(
-  x,
-  y,
-  preview
-) {
-
-  ctx.save();
-
-
-  ctx.fillStyle =
-    preview
-      ? "#7d9cff"
-      : "#d7dee8";
-
-
-  ctx.beginPath();
-
-  ctx.arc(
-    x,
-    y,
-    2.5,
-    0,
-    Math.PI * 2
-  );
-
-  ctx.fill();
-
-
-  ctx.restore();
-
-}
-
-
-/* =========================================================
-   ARROW DRAWING
-   ========================================================= */
-
-function drawArrow(
-  x1,
-  y1,
-  x2,
-  y2
-) {
-
-  const angle =
-    Math.atan2(
-      y2 - y1,
-      x2 - x1
-    );
-
-
-  const size =
-    9;
-
-
-  ctx.beginPath();
-
-  ctx.moveTo(
-    x1,
-    y1
-  );
-
-  ctx.lineTo(
-    x2,
-    y2
-  );
-
-  ctx.stroke();
-
-
-  ctx.beginPath();
-
-  ctx.moveTo(
-    x2,
-    y2
-  );
-
-
-  ctx.lineTo(
-    x2 -
-      size *
-      Math.cos(
-        angle -
-        Math.PI / 6
-      ),
-
-    y2 -
-      size *
-      Math.sin(
-        angle -
-        Math.PI / 6
-      )
-  );
-
-
-  ctx.lineTo(
-    x2 -
-      size *
-      Math.cos(
-        angle +
-        Math.PI / 6
-      ),
-
-    y2 -
-      size *
-      Math.sin(
-        angle +
-        Math.PI / 6
-      )
-  );
-
-
-  ctx.closePath();
-
-
-  ctx.fillStyle =
-    ctx.strokeStyle;
-
-
-  ctx.fill();
-
-}
-
-
-/* =========================================================
-   ESTIMATE BARS
-   ========================================================= */
-
-function estimateBars(
-  t1,
-  t2
-) {
-
-  if (
-    !state.candles.length
-  ) {
-
-    return 0;
-
-  }
-
-
-  const distance =
-    Math.abs(
-      t2 -
-      t1
-    );
-
-
-  if (
-    distance <= 0
-  ) {
-
-    return 0;
-
-  }
-
-
-  const intervalMinutes =
-    state.timeframe;
-
-
-  const secondsPerBar =
-    intervalMinutes *
-    60;
-
-
-  return Math.round(
-    distance /
-    secondsPerBar
-  );
-
-}
-
-
-/* =========================================================
-   UNDO
-   ========================================================= */
-
-document
-  .getElementById(
-    "undoDrawing"
-  )
-  .addEventListener(
-    "click",
-    event => {
-
-      event.stopPropagation();
-
-
-      if (
-        state.drawings.length
-      ) {
-
-        state.drawings.pop();
+        break;
 
       }
 
 
-      state.drawingStart =
-        null;
+      case "rectangle":
+
+        ctx.save();
 
 
-      state.drawingPreview =
-        null;
+        ctx.strokeStyle =
+          "#8da2bd";
 
 
-      redrawDrawings();
+        ctx.lineWidth =
+          1.2;
+
+
+        ctx.strokeRect(
+
+          Math.min(
+            x1,
+            x2
+          ),
+
+          Math.min(
+            y1,
+            y2
+          ),
+
+          Math.abs(
+            x2 - x1
+          ),
+
+          Math.abs(
+            y2 - y1
+          )
+
+        );
+
+
+        ctx.restore();
+
+        break;
+
+
+      case "fibonacci": {
+
+        const levels =
+          [
+            0,
+            .236,
+            .382,
+            .5,
+            .618,
+            .786,
+            1
+          ];
+
+
+        const top =
+          y1;
+
+
+        const bottom =
+          y2;
+
+
+        for (
+          const level of levels
+        ) {
+
+          const y =
+            top +
+            (
+              bottom - top
+            ) *
+            level;
+
+
+          drawLine(
+            Math.min(
+              x1,
+              x2
+            ),
+            y,
+            Math.max(
+              x1,
+              x2
+            ),
+            y
+          );
+
+        }
+
+
+        break;
+
+      }
+
+
+      case "measure": {
+
+        drawLine(
+          x1,
+          y1,
+          x2,
+          y2,
+          {
+            dash:
+              [4,3]
+          }
+        );
+
+
+        ctx.save();
+
+
+        ctx.fillStyle =
+          "#aeb8c6";
+
+
+        ctx.font =
+          "10px Arial";
+
+
+        const dx =
+          x2 - x1;
+
+
+        const dy =
+          y2 - y1;
+
+
+        const distance =
+          Math.sqrt(
+            dx * dx +
+            dy * dy
+          );
+
+
+        ctx.fillText(
+          `${distance.toFixed(1)} px`,
+          x2 + 6,
+          y2 - 6
+        );
+
+
+        ctx.restore();
+
+        break;
+
+      }
+
+
+      case "arrow": {
+
+        drawLine(
+          x1,
+          y1,
+          x2,
+          y2
+        );
+
+
+        const angle =
+          Math.atan2(
+            y2 - y1,
+            x2 - x1
+          );
+
+
+        const size =
+          7;
+
+
+        drawLine(
+          x2,
+          y2,
+          x2 -
+            size *
+            Math.cos(
+              angle - Math.PI / 6
+            ),
+          y2 -
+            size *
+            Math.sin(
+              angle - Math.PI / 6
+            )
+        );
+
+
+        drawLine(
+          x2,
+          y2,
+          x2 -
+            size *
+            Math.cos(
+              angle + Math.PI / 6
+            ),
+          y2 -
+            size *
+            Math.sin(
+              angle + Math.PI / 6
+            )
+        );
+
+        break;
+
+      }
+
+
+      case "text":
+
+        ctx.save();
+
+
+        ctx.fillStyle =
+          "#c7d0dc";
+
+
+        ctx.font =
+          "12px Arial";
+
+
+        ctx.fillText(
+          "Text",
+          x1 + 5,
+          y1 - 5
+        );
+
+
+        ctx.restore();
+
+        break;
 
     }
-  );
+
+  }
+
+}
 
 
 /* =========================================================
-   CLEAR DRAWINGS
+   INITIAL SYSTEM STATUS
    ========================================================= */
 
-document
-  .getElementById(
-    "clearDrawings"
-  )
-  .addEventListener(
-    "click",
-    event => {
+async function checkSystem() {
 
-      event.stopPropagation();
+  const status =
+    document.getElementById(
+      "systemStatus"
+    );
 
-
-      state.drawings =
-        [];
-
-
-      state.drawingStart =
-        null;
-
-
-      state.drawingPreview =
-        null;
-
-
-      redrawDrawings();
-
-    }
-  );
-
-
-/* =========================================================
-   TABS
-   ========================================================= */
-
-document
-  .getElementById(
-    "autoTab"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      document
-        .getElementById(
-          "autoTab"
-        )
-        .classList.add(
-          "active"
-        );
-
-
-      document
-        .getElementById(
-          "manualTab"
-        )
-        .classList.remove(
-          "active"
-        );
-
-
-      document
-        .getElementById(
-          "autoPanel"
-        )
-        .style.display =
-        "block";
-
-
-      document
-        .getElementById(
-          "manualPanel"
-        )
-        .style.display =
-        "none";
-
-    }
-  );
-
-
-document
-  .getElementById(
-    "manualTab"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      document
-        .getElementById(
-          "manualTab"
-        )
-        .classList.add(
-          "active"
-        );
-
-
-      document
-        .getElementById(
-          "autoTab"
-        )
-        .classList.remove(
-          "active"
-        );
-
-
-      document
-        .getElementById(
-          "autoPanel"
-        )
-        .style.display =
-        "none";
-
-
-      document
-        .getElementById(
-          "manualPanel"
-        )
-        .style.display =
-        "block";
-
-    }
-  );
-
-
-/* =========================================================
-   HEALTH
-   ========================================================= */
-
-async function health() {
 
   try {
 
     const response =
       await fetch(
-        "/api/health"
-      );
+        "/api/health",
+        {
 
+          method:
+            "GET",
 
-    const data =
-      await response.json();
+          headers: {
 
+            Accept:
+              "application/json"
 
-    const status =
-      document.getElementById(
-        "systemStatus"
-      );
+          }
 
-
-    const dot =
-      document.getElementById(
-        "statusDot"
+        }
       );
 
 
     if (
-      data.ok &&
-      data.automaticData
+      response.ok
     ) {
 
       status.textContent =
-        "Automatic FX data online";
-
-
-      dot.style.background =
-        "#16a34a";
+        "System Online";
 
     } else {
 
       status.textContent =
-        "Manual mode";
-
-
-      dot.style.background =
-        "#f59e0b";
+        "API Error";
 
     }
 
-  } catch {
+  } catch(error) {
 
-    document.getElementById(
-      "systemStatus"
-    ).textContent =
-      "Backend unavailable";
-
-
-    document.getElementById(
-      "statusDot"
-    ).style.background =
-      "#dc2626";
+    status.textContent =
+      "Offline";
 
   }
 
 }
-
-
-/* =========================================================
-   KEYBOARD
-   ========================================================= */
-
-document.addEventListener(
-  "keydown",
-  event => {
-
-    const tag =
-      event.target?.tagName;
-
-
-    if (
-      tag === "INPUT" ||
-      tag === "SELECT" ||
-      tag === "TEXTAREA"
-    ) {
-
-      return;
-
-    }
-
-
-    if (
-      event.key ===
-      "ArrowRight"
-    ) {
-
-      next(
-        event.ctrlKey || event.metaKey
-          ? 50
-          : event.shiftKey
-            ? 10
-            : 1
-      );
-
-    }
-
-
-    if (
-      event.key ===
-      "ArrowLeft"
-    ) {
-
-      previous(
-        event.ctrlKey || event.metaKey
-          ? 50
-          : event.shiftKey
-            ? 10
-            : 1
-      );
-
-    }
-
-
-    if (
-      event.code ===
-      "Space"
-    ) {
-
-      event.preventDefault();
-
-
-      if (
-        state.playing
-      ) {
-
-        stopReplay();
-
-      } else {
-
-        startReplay();
-
-      }
-
-    }
-
-
-    if (
-      event.key ===
-      "Escape"
-    ) {
-
-      setDrawingTool(
-        "cursor"
-      );
-
-    }
-
-  }
-);
 
 
 /* =========================================================
    INITIALIZE
    ========================================================= */
 
-setDrawingTool(
-  "cursor"
-);
-
+resize();
 
 updateTimeframeUI();
 
-updateStats();
-
-updateReplay();
-
-health();
-
-resize();
-
-
-/* =========================================================
-   AUTO LOAD
-   ========================================================= */
+checkSystem();
 
 loadAutomatic();
-
 
 </script>
 

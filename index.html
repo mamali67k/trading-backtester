@@ -983,6 +983,236 @@ input[type=file] {
 
 
 /* =========================================================
+   SETTINGS PANEL (shared by Drawing Settings & Chart Settings)
+   ========================================================= */
+
+.drawing-settings {
+
+  position:absolute;
+
+  top:12px;
+
+  left:60px;
+
+  z-index:35;
+
+  width:250px;
+
+  max-height:calc(100% - 24px);
+
+  overflow-y:auto;
+
+  background:
+    rgba(13,19,27,.98);
+
+  border:
+    1px solid var(--border);
+
+  border-radius:8px;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.4);
+
+  display:none;
+
+  padding:10px;
+
+  font-size:12px;
+
+  color:
+    var(--text);
+
+}
+
+
+.drawing-settings.open {
+
+  display:block;
+
+}
+
+
+.settings-head {
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  margin-bottom:8px;
+
+}
+
+
+.settings-title {
+
+  font-weight:600;
+
+  font-size:13px;
+
+  color:
+    var(--text);
+
+}
+
+
+.settings-grid {
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:8px;
+
+}
+
+
+.settings-field {
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:4px;
+
+}
+
+
+.settings-field label {
+
+  color:
+    var(--muted);
+
+  font-size:11px;
+
+  display:flex;
+
+  justify-content:space-between;
+
+}
+
+
+.settings-field input[type="color"] {
+
+  width:100%;
+
+  height:26px;
+
+  padding:0;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:5px;
+
+  background:
+    var(--panel2);
+
+}
+
+
+.settings-field select,
+.settings-field input[type="text"] {
+
+  width:100%;
+
+  padding:5px 6px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius:5px;
+
+  background:
+    var(--panel2);
+
+  color:
+    var(--text);
+
+  font-size:12px;
+
+}
+
+
+.settings-field input[type="range"] {
+
+  width:100%;
+
+}
+
+
+.settings-value {
+
+  color:
+    var(--text);
+
+  font-weight:600;
+
+}
+
+
+.settings-check {
+
+  display:flex !important;
+
+  flex-direction:row !important;
+
+  align-items:center;
+
+  gap:6px;
+
+  color:
+    var(--text) !important;
+
+  cursor:pointer;
+
+}
+
+
+.settings-check input {
+
+  margin:0;
+
+}
+
+
+.settings-note {
+
+  margin-top:10px;
+
+  padding-top:8px;
+
+  border-top:
+    1px solid var(--border);
+
+  color:
+    var(--muted);
+
+  font-size:10.5px;
+
+  line-height:1.5;
+
+}
+
+
+.settings-row {
+
+  display:flex;
+
+  gap:8px;
+
+}
+
+
+.settings-row .settings-field {
+
+  flex:1;
+
+}
+
+
+/* =========================================================
    DRAWING CANVAS
    ========================================================= */
 
@@ -1644,6 +1874,23 @@ CLOSE
 </svg>
 </button>
 
+
+<!-- Chart Settings -->
+
+<button
+  id="chartSettingsToggle"
+  class="drawing-tool"
+  data-tooltip="Chart Settings"
+  aria-label="Chart Settings"
+>
+<svg viewBox="0 0 24 24">
+<path d="M4 19V5"></path>
+<path d="M10 19V9"></path>
+<path d="M16 19v-6"></path>
+<path d="M20 19V4"></path>
+</svg>
+</button>
+
 <!-- Horizontal -->
 
 <button
@@ -2196,6 +2443,150 @@ CLOSE
   </div>
 </div>
 
+<div id="chartSettings" class="drawing-settings" aria-hidden="true">
+  <div class="settings-head">
+    <div class="settings-title">Chart Settings</div>
+    <button id="chartSettingsClose" class="replay-btn" type="button">×</button>
+  </div>
+
+  <div class="settings-grid">
+
+    <div class="settings-field full">
+      <label style="font-weight:600;color:var(--text);">Crosshair</label>
+    </div>
+
+    <div class="settings-row">
+      <div class="settings-field">
+        <label>Color</label>
+        <input id="crosshairColor" type="color" value="#758696">
+      </div>
+      <div class="settings-field">
+        <label>Style</label>
+        <select id="crosshairStyle">
+          <option value="solid">Solid</option>
+          <option value="dashed" selected>Dashed</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="settings-field">
+      <label>Width <span id="crosshairWidthValue" class="settings-value">1</span></label>
+      <input id="crosshairWidth" type="range" min="1" max="4" step="1" value="1">
+    </div>
+
+    <div class="settings-field full">
+      <label class="settings-check">
+        <input id="crosshairSnap" type="checkbox" checked>
+        Snap crosshair to candle
+      </label>
+    </div>
+
+    <div class="settings-field full">
+      <label style="font-weight:600;color:var(--text);">Price &amp; Time Scale</label>
+    </div>
+
+    <div class="settings-field full">
+      <label class="settings-check">
+        <input id="priceAutoScale" type="checkbox" checked>
+        Auto-scale price axis
+      </label>
+    </div>
+
+    <div class="settings-field full">
+      <label class="settings-check">
+        <input id="priceLogScale" type="checkbox">
+        Logarithmic price scale
+      </label>
+    </div>
+
+    <div class="settings-field">
+      <label>Price Margins <span id="priceMarginValue" class="settings-value">8%</span></label>
+      <input id="priceMargin" type="range" min="2" max="25" step="1" value="8">
+    </div>
+
+    <div class="settings-field">
+      <label>Bar Spacing <span id="barSpacingValue" class="settings-value">8</span></label>
+      <input id="barSpacing" type="range" min="2" max="30" step="1" value="8">
+    </div>
+
+    <div class="settings-field full">
+      <label style="font-weight:600;color:var(--text);">Candle Appearance</label>
+    </div>
+
+    <div class="settings-field full">
+      <label>Series Type</label>
+      <select id="seriesType">
+        <option value="candlestick" selected>Candlestick</option>
+        <option value="hollow">Hollow Candle</option>
+        <option value="bar">Bar</option>
+        <option value="line">Line</option>
+        <option value="area">Area</option>
+      </select>
+    </div>
+
+    <div class="settings-row">
+      <div class="settings-field">
+        <label>Up Color</label>
+        <input id="upColor" type="color" value="#16a34a">
+      </div>
+      <div class="settings-field">
+        <label>Down Color</label>
+        <input id="downColor" type="color" value="#dc2626">
+      </div>
+    </div>
+
+    <div class="settings-field full">
+      <label style="font-weight:600;color:var(--text);">Grid</label>
+    </div>
+
+    <div class="settings-field full">
+      <label class="settings-check">
+        <input id="gridVertical" type="checkbox" checked>
+        Show vertical grid lines
+      </label>
+    </div>
+
+    <div class="settings-field full">
+      <label class="settings-check">
+        <input id="gridHorizontal" type="checkbox" checked>
+        Show horizontal grid lines
+      </label>
+    </div>
+
+    <div class="settings-field">
+      <label>Grid Color</label>
+      <input id="gridColor" type="color" value="#17202a">
+    </div>
+
+    <div class="settings-field full">
+      <label style="font-weight:600;color:var(--text);">Chart Behavior</label>
+    </div>
+
+    <div class="settings-field full">
+      <label class="settings-check">
+        <input id="scrollEnabled" type="checkbox" checked>
+        Enable scroll / drag to pan
+      </label>
+    </div>
+
+    <div class="settings-field full">
+      <label class="settings-check">
+        <input id="scaleEnabled" type="checkbox" checked>
+        Enable mouse-wheel / pinch zoom
+      </label>
+    </div>
+
+    <div class="settings-field full">
+      <button id="resetChartSettings" class="replay-btn" type="button" style="width:100%;">Reset to Defaults</button>
+    </div>
+
+  </div>
+
+  <div class="settings-note">
+    Changes apply instantly to the live chart. Settings are saved per browser and restored automatically next time you open this pair.
+  </div>
+</div>
+
 <canvas
   id="drawingCanvas"
 ></canvas>
@@ -2284,6 +2675,29 @@ Load market data to begin.
 
 
 /* =========================================================
+   CHART SETTINGS DEFAULTS
+   ========================================================= */
+
+const DEFAULT_CHART_SETTINGS = {
+  crosshairColor: "#758696",
+  crosshairStyle: "dashed",
+  crosshairWidth: 1,
+  crosshairSnap: true,
+  priceAutoScale: true,
+  priceLogScale: false,
+  priceMargin: 8,
+  barSpacing: 8,
+  seriesType: "candlestick",
+  upColor: "#16a34a",
+  downColor: "#dc2626",
+  gridVertical: true,
+  gridHorizontal: true,
+  gridColor: "#17202a",
+  scrollEnabled: true,
+  scaleEnabled: true
+};
+
+/* =========================================================
    STATE
    ========================================================= */
 
@@ -2347,7 +2761,9 @@ const state = {
     measureBars: true,
     measureTime: true,
     measurePercent: true
-  }
+  },
+
+  chartSettings: { ...DEFAULT_CHART_SETTINGS }
 
 };
 
@@ -2495,7 +2911,7 @@ const chart =
   );
 
 
-const series =
+let series =
   chart.addCandlestickSeries({
 
     upColor:"#16a34a",
@@ -2511,6 +2927,263 @@ const series =
     wickDownColor:"#dc2626"
 
   });
+
+let activeSeriesType = "candlestick";
+
+
+/* =========================================================
+   CHART SETTINGS ENGINE
+   ========================================================= */
+
+const CHART_SETTINGS_KEY = "tb:chartSettings";
+
+function loadChartSettings() {
+  try {
+    const raw = localStorage.getItem(CHART_SETTINGS_KEY);
+    if (raw) {
+      Object.assign(state.chartSettings, JSON.parse(raw));
+    }
+  } catch (error) {
+    console.warn("Unable to load chart settings:", error);
+  }
+}
+
+function saveChartSettings() {
+  try {
+    localStorage.setItem(CHART_SETTINGS_KEY, JSON.stringify(state.chartSettings));
+  } catch (error) {
+    console.warn("Unable to save chart settings:", error);
+  }
+}
+
+function getCurrentVisibleCandles() {
+  if (!state.candles.length) return [];
+  return state.candles.slice(0, state.currentIndex + 1);
+}
+
+function applySeriesData(candles) {
+  if (!candles || !candles.length) {
+    series.setData([]);
+    return;
+  }
+
+  if (activeSeriesType === "line" || activeSeriesType === "area") {
+    series.setData(
+      candles.map(c => ({ time: c.time, value: c.close }))
+    );
+  } else {
+    series.setData(candles);
+  }
+}
+
+function createSeriesForType(type, upColor, downColor) {
+  switch (type) {
+    case "bar":
+      return chart.addBarSeries({
+        upColor,
+        downColor
+      });
+
+    case "line":
+      return chart.addLineSeries({
+        color: upColor,
+        lineWidth: 2
+      });
+
+    case "area":
+      return chart.addAreaSeries({
+        lineColor: upColor,
+        topColor: hexToRgba(upColor, .35),
+        bottomColor: hexToRgba(upColor, .02)
+      });
+
+    case "hollow":
+      return chart.addCandlestickSeries({
+        upColor: "rgba(0,0,0,0)",
+        downColor,
+        borderUpColor: upColor,
+        borderDownColor: downColor,
+        wickUpColor: upColor,
+        wickDownColor: downColor,
+        borderVisible: true
+      });
+
+    case "candlestick":
+    default:
+      return chart.addCandlestickSeries({
+        upColor,
+        downColor,
+        borderUpColor: upColor,
+        borderDownColor: downColor,
+        wickUpColor: upColor,
+        wickDownColor: downColor
+      });
+  }
+}
+
+function applySeriesTypeAndColors() {
+  const s = state.chartSettings;
+
+  if (activeSeriesType !== s.seriesType) {
+    chart.removeSeries(series);
+    series = createSeriesForType(s.seriesType, s.upColor, s.downColor);
+    activeSeriesType = s.seriesType;
+    applySeriesData(getCurrentVisibleCandles());
+    return;
+  }
+
+  if (s.seriesType === "line") {
+    series.applyOptions({ color: s.upColor });
+  } else if (s.seriesType === "area") {
+    series.applyOptions({
+      lineColor: s.upColor,
+      topColor: hexToRgba(s.upColor, .35),
+      bottomColor: hexToRgba(s.upColor, .02)
+    });
+  } else if (s.seriesType === "hollow") {
+    series.applyOptions({
+      upColor: "rgba(0,0,0,0)",
+      downColor: s.downColor,
+      borderUpColor: s.upColor,
+      borderDownColor: s.downColor,
+      wickUpColor: s.upColor,
+      wickDownColor: s.downColor
+    });
+  } else {
+    series.applyOptions({
+      upColor: s.upColor,
+      downColor: s.downColor,
+      borderUpColor: s.upColor,
+      borderDownColor: s.downColor,
+      wickUpColor: s.upColor,
+      wickDownColor: s.downColor
+    });
+  }
+}
+
+function applyCrosshairSettings() {
+  const s = state.chartSettings;
+
+  const lineStyle = s.crosshairStyle === "dashed"
+    ? LightweightCharts.LineStyle.Dashed
+    : LightweightCharts.LineStyle.Solid;
+
+  chart.applyOptions({
+    crosshair: {
+      mode: s.crosshairSnap
+        ? LightweightCharts.CrosshairMode.Magnet
+        : LightweightCharts.CrosshairMode.Normal,
+      vertLine: {
+        color: s.crosshairColor,
+        width: s.crosshairWidth,
+        style: lineStyle
+      },
+      horzLine: {
+        color: s.crosshairColor,
+        width: s.crosshairWidth,
+        style: lineStyle
+      }
+    }
+  });
+}
+
+function applyPriceScaleSettings() {
+  const s = state.chartSettings;
+  const margin = s.priceMargin / 100;
+
+  chart.priceScale("right").applyOptions({
+    autoScale: s.priceAutoScale,
+    mode: s.priceLogScale
+      ? LightweightCharts.PriceScaleMode.Logarithmic
+      : LightweightCharts.PriceScaleMode.Normal,
+    scaleMargins: {
+      top: margin,
+      bottom: margin
+    }
+  });
+}
+
+function applyTimeScaleSettings() {
+  chart.timeScale().applyOptions({
+    barSpacing: state.chartSettings.barSpacing
+  });
+}
+
+function applyGridSettings() {
+  const s = state.chartSettings;
+
+  chart.applyOptions({
+    grid: {
+      vertLines: {
+        visible: s.gridVertical,
+        color: s.gridColor
+      },
+      horzLines: {
+        visible: s.gridHorizontal,
+        color: s.gridColor
+      }
+    }
+  });
+}
+
+function applyBehaviorSettings() {
+  const s = state.chartSettings;
+
+  chart.applyOptions({
+    handleScroll: {
+      mouseWheel: s.scrollEnabled,
+      pressedMouseMove: s.scrollEnabled,
+      horzTouchDrag: s.scrollEnabled,
+      vertTouchDrag: s.scrollEnabled
+    },
+    handleScale: {
+      axisPressedMouseMove: s.scaleEnabled,
+      mouseWheel: s.scaleEnabled,
+      pinch: s.scaleEnabled
+    }
+  });
+}
+
+function applyAllChartSettings() {
+  applyCrosshairSettings();
+  applyPriceScaleSettings();
+  applyTimeScaleSettings();
+  applyGridSettings();
+  applyBehaviorSettings();
+  applySeriesTypeAndColors();
+}
+
+function populateChartSettingsUI() {
+  const s = state.chartSettings;
+
+  document.getElementById("crosshairColor").value = s.crosshairColor;
+  document.getElementById("crosshairStyle").value = s.crosshairStyle;
+  document.getElementById("crosshairWidth").value = s.crosshairWidth;
+  document.getElementById("crosshairWidthValue").textContent = s.crosshairWidth;
+  document.getElementById("crosshairSnap").checked = s.crosshairSnap;
+
+  document.getElementById("priceAutoScale").checked = s.priceAutoScale;
+  document.getElementById("priceLogScale").checked = s.priceLogScale;
+  document.getElementById("priceMargin").value = s.priceMargin;
+  document.getElementById("priceMarginValue").textContent = `${s.priceMargin}%`;
+
+  document.getElementById("barSpacing").value = s.barSpacing;
+  document.getElementById("barSpacingValue").textContent = s.barSpacing;
+
+  document.getElementById("seriesType").value = s.seriesType;
+  document.getElementById("upColor").value = s.upColor;
+  document.getElementById("downColor").value = s.downColor;
+
+  document.getElementById("gridVertical").checked = s.gridVertical;
+  document.getElementById("gridHorizontal").checked = s.gridHorizontal;
+  document.getElementById("gridColor").value = s.gridColor;
+
+  document.getElementById("scrollEnabled").checked = s.scrollEnabled;
+  document.getElementById("scaleEnabled").checked = s.scaleEnabled;
+}
+
+loadChartSettings();
+applyAllChartSettings();
 
 
 /* =========================================================
@@ -2747,7 +3420,7 @@ function renderChart(
     !state.candles.length
   ) {
 
-    series.setData([]);
+    applySeriesData([]);
 
     message.style.display =
       "grid";
@@ -2770,7 +3443,7 @@ function renderChart(
     );
 
 
-  series.setData(
+  applySeriesData(
     visible
   );
 
@@ -3465,12 +4138,7 @@ function renderReplay(keepPosition = true) {
     state.currentIndex + 1
   );
 
-  series.setData(visible);
-
-  /*
-   * The replay engine intentionally exposes only candles up to
-   * currentIndex. Future candles are therefore hidden.
-   */
+  applySeriesData(visible);
   updateReplay();
   redrawDrawings();
 
@@ -4127,6 +4795,8 @@ document
 
       if (open) {
         applyDrawingSettingsToUI();
+        chartSettingsPanel.classList.remove("open");
+        chartSettingsPanel.setAttribute("aria-hidden", "true");
       }
     }
   );
@@ -4144,6 +4814,152 @@ document
       );
     }
   );
+
+
+/* =========================================================
+   CHART SETTINGS UI WIRING
+   ========================================================= */
+
+const chartSettingsPanel =
+  document.getElementById("chartSettings");
+
+document
+  .getElementById("chartSettingsToggle")
+  .addEventListener("click", event => {
+    event.stopPropagation();
+
+    const open =
+      chartSettingsPanel.classList.toggle("open");
+
+    chartSettingsPanel.setAttribute(
+      "aria-hidden",
+      String(!open)
+    );
+
+    if (open) {
+      populateChartSettingsUI();
+      drawingSettings.classList.remove("open");
+      drawingSettings.setAttribute("aria-hidden", "true");
+    }
+  });
+
+document
+  .getElementById("chartSettingsClose")
+  .addEventListener("click", event => {
+    event.stopPropagation();
+    chartSettingsPanel.classList.remove("open");
+    chartSettingsPanel.setAttribute("aria-hidden", "true");
+  });
+
+document.getElementById("crosshairColor").addEventListener("input", event => {
+  state.chartSettings.crosshairColor = event.target.value;
+  applyCrosshairSettings();
+  saveChartSettings();
+});
+
+document.getElementById("crosshairStyle").addEventListener("change", event => {
+  state.chartSettings.crosshairStyle = event.target.value;
+  applyCrosshairSettings();
+  saveChartSettings();
+});
+
+document.getElementById("crosshairWidth").addEventListener("input", event => {
+  state.chartSettings.crosshairWidth = Number(event.target.value);
+  document.getElementById("crosshairWidthValue").textContent =
+    state.chartSettings.crosshairWidth;
+  applyCrosshairSettings();
+  saveChartSettings();
+});
+
+document.getElementById("crosshairSnap").addEventListener("change", event => {
+  state.chartSettings.crosshairSnap = event.target.checked;
+  applyCrosshairSettings();
+  saveChartSettings();
+});
+
+document.getElementById("priceAutoScale").addEventListener("change", event => {
+  state.chartSettings.priceAutoScale = event.target.checked;
+  applyPriceScaleSettings();
+  saveChartSettings();
+});
+
+document.getElementById("priceLogScale").addEventListener("change", event => {
+  state.chartSettings.priceLogScale = event.target.checked;
+  applyPriceScaleSettings();
+  saveChartSettings();
+});
+
+document.getElementById("priceMargin").addEventListener("input", event => {
+  state.chartSettings.priceMargin = Number(event.target.value);
+  document.getElementById("priceMarginValue").textContent =
+    `${state.chartSettings.priceMargin}%`;
+  applyPriceScaleSettings();
+  saveChartSettings();
+});
+
+document.getElementById("barSpacing").addEventListener("input", event => {
+  state.chartSettings.barSpacing = Number(event.target.value);
+  document.getElementById("barSpacingValue").textContent =
+    state.chartSettings.barSpacing;
+  applyTimeScaleSettings();
+  saveChartSettings();
+});
+
+document.getElementById("seriesType").addEventListener("change", event => {
+  state.chartSettings.seriesType = event.target.value;
+  applySeriesTypeAndColors();
+  saveChartSettings();
+});
+
+document.getElementById("upColor").addEventListener("input", event => {
+  state.chartSettings.upColor = event.target.value;
+  applySeriesTypeAndColors();
+  saveChartSettings();
+});
+
+document.getElementById("downColor").addEventListener("input", event => {
+  state.chartSettings.downColor = event.target.value;
+  applySeriesTypeAndColors();
+  saveChartSettings();
+});
+
+document.getElementById("gridVertical").addEventListener("change", event => {
+  state.chartSettings.gridVertical = event.target.checked;
+  applyGridSettings();
+  saveChartSettings();
+});
+
+document.getElementById("gridHorizontal").addEventListener("change", event => {
+  state.chartSettings.gridHorizontal = event.target.checked;
+  applyGridSettings();
+  saveChartSettings();
+});
+
+document.getElementById("gridColor").addEventListener("input", event => {
+  state.chartSettings.gridColor = event.target.value;
+  applyGridSettings();
+  saveChartSettings();
+});
+
+document.getElementById("scrollEnabled").addEventListener("change", event => {
+  state.chartSettings.scrollEnabled = event.target.checked;
+  applyBehaviorSettings();
+  saveChartSettings();
+});
+
+document.getElementById("scaleEnabled").addEventListener("change", event => {
+  state.chartSettings.scaleEnabled = event.target.checked;
+  applyBehaviorSettings();
+  saveChartSettings();
+});
+
+document.getElementById("resetChartSettings").addEventListener("click", event => {
+  event.stopPropagation();
+  state.chartSettings = { ...DEFAULT_CHART_SETTINGS };
+  populateChartSettingsUI();
+  applyAllChartSettings();
+  saveChartSettings();
+});
 
 [
   "drawColor",
